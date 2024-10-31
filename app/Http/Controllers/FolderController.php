@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Crypt;
+use Illuminate\Support\Facades\Crypt;
 
 class FolderController extends Controller
 {

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use Throwable;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 class AccountController extends Controller
 {
     /**
