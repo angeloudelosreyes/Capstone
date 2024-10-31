@@ -7,6 +7,8 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\DriveController;
 use App\Http\Controllers\SharedController;
 use App\Http\Controllers\AccountController;
+use Illuminate\Support\Facades\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,7 @@ Route::group([], function() {
                 Route::post('/store', 'store')->name('files.store');
                 Route::post('/store/decrypt', 'decryptStore')->name('files.decrypt.store');
                 Route::post('/update', 'update')->name('files.update');
+                Route::post('/files/rename', 'rename')->name('files.rename');
                 Route::get('/destroy/{id}', 'destroy')->name('files.destroy');
             });
         });
@@ -61,6 +64,7 @@ Route::group([], function() {
                 Route::get('/sharedShow/{id}', 'sharedShow')->name('drive.sharedShow');
                 Route::get('/edit/{id}', 'edit')->name('drive.edit');
                 Route::post('/update/{id}', 'update')->name('drive.update');
+                Route::post('/rename/{id}', [DriveController::class, 'rename'])->name('drive.rename');
             });
         });
 

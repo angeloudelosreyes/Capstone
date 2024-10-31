@@ -32,6 +32,7 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)" onclick="share_file('{{Crypt::encryptString($data->id)}}')"><i class="bx bx-share me-2"></i> Share</a></li>
                                         <li><a class="dropdown-item download-button" href="javascript:void(0)" data-file-id="{{ Crypt::encryptString($data->id) }}"><i class="bx bx-download me-2"></i> Download</a></li>
                                         <li><a class="dropdown-item" href="{{route('drive.edit',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)" onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i class="bx bx-rename me-2"></i> Rename</a></li>
                                         <li><a class="dropdown-item" href="{{route('drive.destroy',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-trash me-2"></i> Delete</a></li>
                                     </ul>
                                 </div>
@@ -214,5 +215,51 @@
                 downloadFile(fileId);
             });
         });
+
+        function renameFile(fileId, oldName) {
+    Swal.fire({
+        title: 'Rename File',
+        input: 'text',
+        inputLabel: 'Enter the new file name',
+        inputValue: oldName,
+        showCancelButton: true,
+        confirmButtonText: 'Rename',
+        showLoaderOnConfirm: true,
+        preConfirm: (newName) => {
+            if (!newName.trim()) {
+                Swal.showValidationMessage('File name cannot be empty');
+                return;
+            }
+            return fetch('{{ route('files.rename') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    oldName: oldName,
+                    newName: newName,
+                    folder_id: '{{ $folderId }}'
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.type === 'success') {
+    Swal.fire('Renamed!', 'File has been renamed successfully.', 'success').then(() => {
+        location.reload(); // Reload the page after successful rename
+    });
+}
+            })
+            .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.', 'error'));
+        }
+    });
+}
+
+
     </script>
 @endsection

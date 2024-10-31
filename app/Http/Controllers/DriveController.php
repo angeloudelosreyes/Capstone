@@ -310,4 +310,46 @@ class DriveController extends Controller
             ]);
         }
     }
+
+    public function rename(Request $request, string $id)
+{
+    // Decrypt the ID to get the actual database ID
+    $decryptedId = Crypt::decryptString($id);
+
+    // Validate the incoming request to ensure a new name is provided
+    $request->validate([
+        'new_name' => 'required|string|max:255',
+    ]);
+
+    // Fetch the file record from the database
+    $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+
+    if (!$fileRecord) {
+        return response()->json(['type' => 'error', 'message' => 'File not found.']);
+    }
+
+    // Get the current folder title and the old file name
+    $folder = DB::table('users_folder')->where('id', $fileRecord->users_folder_id)->first();
+    $oldFileName = $fileRecord->files;
+    $newFileName = $request->input('new_name');
+    $userId = $fileRecord->users_id;
+
+    // Construct the file path in storage
+    $oldFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $oldFileName;
+    $newFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $newFileName;
+
+    // Check if the old file exists
+    if (Storage::exists($oldFilePath)) {
+        // Rename the file in storage
+        Storage::move($oldFilePath, $newFilePath);
+
+        // Update the file name in the database
+        DB::table('users_folder_files')->where('id', $decryptedId)->update(['files' => $newFileName]);
+
+        return response()->json(['type' => 'success', 'message' => 'File renamed successfully.']);
+    } else {
+        return response()->json(['type' => 'error', 'message' => 'File does not exist in storage.']);
+    }
+}
+
 }

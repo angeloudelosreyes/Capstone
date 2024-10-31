@@ -280,4 +280,61 @@ class FilesController extends Controller
     {
         //
     }
+
+    public function rename(Request $request)
+    {
+        $request->validate([
+            'oldName' => 'required|string',
+            'newName' => 'required|string',
+            'folder_id' => 'required|string',
+        ]);
+
+        try {
+            $folderId = Crypt::decryptString($request->input('folder_id'));
+            $userId = auth()->user()->id;
+
+            // Fetch the folder title to build the path
+            $folder = DB::table('users_folder')->where('id', $folderId)->first();
+            if (!$folder) {
+                return back()->with([
+                    'message' => 'Folder not found.',
+                    'type'    => 'error',
+                    'title'   => 'System Notification'
+                ]);
+            }
+
+            $directory = "public/users/$userId/{$folder->title}";
+            $oldFilePath = "$directory/{$request->oldName}";
+            $newFilePath = "$directory/{$request->newName}";
+
+            // Check if the old file exists
+            if (Storage::exists($oldFilePath)) {
+                Storage::move($oldFilePath, $newFilePath);
+
+                // Update the filename in the database
+                DB::table('users_folder_files')
+                    ->where(['users_folder_id' => $folderId, 'files' => $request->oldName])
+                    ->update(['files' => $request->newName]);
+
+                    return response()->json([
+                        'message' => 'File has been renamed.',
+                        'type'    => 'success',
+                        'title'   => 'System Notification'
+                    ]);
+            } else {
+                return back()->with([
+                    'message' => 'File does not exist.',
+                    'type'    => 'error',
+                    'title'   => 'System Notification'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return back()->with([
+                'message' => 'An error occurred during the renaming process.',
+                'type'    => 'error',
+                'title'   => 'System Notification'
+            ]);
+        }
+    }
+
 }

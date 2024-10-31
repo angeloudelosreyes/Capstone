@@ -25,6 +25,11 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)" onclick="share_file('{{Crypt::encryptString($data->id)}}')"><i class="bx bx-share me-2"></i> Share</a></li>
                                         <li><a class="dropdown-item" href="{{route('drive.download',['id' => Crypt::encryptString($data->id)])}}" ><i class="bx bx-download me-2"></i> Download</a></li>
                                         <li><a class="dropdown-item" href="{{route('drive.edit',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)" onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')">
+                                                <i class="bx bx-edit-alt me-2"></i> Rename
+                                            </a>
+                                        </li>
                                         <li><a class="dropdown-item" href="{{route('drive.destroy',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-trash me-2"></i> Delete</a></li>
                                     </ul>
                                 </div>
@@ -52,4 +57,84 @@
             {{$query->links()}}
         @endif
     </div>
+
+     <!-- Rename Modal -->
+     <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="renameForm" action="{{ route('drive.rename', 'id') }}" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="fileId">
+                        <div class="mb-3">
+                            <label for="new_name" class="form-label">New File Name</label>
+                            <input type="text" class="form-control" name="new_name" id="new_name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Rename</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showRenameModal(id, oldName) {
+            document.getElementById('fileId').value = id;
+            document.getElementById('new_name').value = oldName; // Set the current name as default
+            var modal = new bootstrap.Modal(document.getElementById('renameModal'));
+            modal.show();
+            // Update the form action URL with the encrypted ID
+            document.getElementById('renameForm').action = "{{ route('drive.rename', '') }}" + '/' + id;
+        }
+        function renameFile(fileId, oldName) {
+            Swal.fire({
+                title: 'Rename File',
+                input: 'text',
+                inputLabel: 'Enter the new file name',
+                inputValue: oldName,
+                showCancelButton: true,
+                confirmButtonText: 'Rename',
+                showLoaderOnConfirm: true,
+                preConfirm: (newName) => {
+                    if (!newName.trim()) {
+                        Swal.showValidationMessage('File name cannot be empty');
+                        return;
+                    }
+                    return fetch(`{{ url('drive/rename') }}/${fileId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            new_name: newName
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.type === 'success') {
+                            Swal.fire('Renamed!', 'File has been renamed successfully.', 'success').then(() => {
+                                location.reload(); // Reload the page after successful rename
+                            });
+                        } else {
+                            Swal.fire('Error!', data.message, 'error');
+                        }
+                    })
+                    .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.', 'error'));
+                }
+            });
+        }
+    </script>
 @endsection
