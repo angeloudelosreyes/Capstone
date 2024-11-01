@@ -23,6 +23,14 @@
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li><a class="dropdown-item open-file-button" href="javascript:void(0)" data-file-id="{{ Crypt::encryptString($data->id) }}" data-protected="{{ $data->protected }}" data-password="{{ $data->password }}"><i class="bx bx-link me-2"></i> Open File</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)" onclick="share_file('{{Crypt::encryptString($data->id)}}')"><i class="bx bx-share me-2"></i> Share</a></li>
+                                        <li>
+                                        <a class="dropdown-item rename-file-button" href="javascript:void(0)"
+                                        data-file-id="{{ Crypt::encryptString($data->id) }}"
+                                        data-file-name="{{ $data->files }}">
+                                        <i class="bx bx-edit me-2"></i> Rename
+                                        </a>
+                                        </li>
+                                        
                                         <li><a class="dropdown-item download-button" href="javascript:void(0)" data-file-id="{{ Crypt::encryptString($data->id) }}" data-protected="{{ $data->protected }}" data-password="{{ $data->password }}"><i class="bx bx-download me-2"></i> Download</a></li>
                                     </ul>
                                 </div>
@@ -69,6 +77,25 @@
             </div>
         </div>
     </div>
+
+   <!-- Rename Modal -->
+<div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="newFileName" class="form-control" placeholder="Enter new file name">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmRenameButton">Rename</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('custom_js')
     <script>
@@ -159,5 +186,65 @@
             text: '{{ session('error') }}'
         });
         @endif
+
+        document.querySelectorAll('.rename-file-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const fileId = this.getAttribute('data-file-id');
+        const fileName = this.getAttribute('data-file-name'); // Get the file name
+
+        // Set the current file name in the input field
+        $('#newFileName').val(fileName);
+
+        $('#renameModal').modal('show');
+
+        // Handle rename confirmation
+        $('#confirmRenameButton').off('click').on('click', function() {
+            const newFileName = $('#newFileName').val().trim();
+            if (!newFileName) {
+                alert('New file name is required');
+                return;
+            }
+
+            // Send the rename request to the server
+            fetch(`{{ url('drive/rename') }}/${fileId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ new_name: newFileName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                $('#renameModal').modal('hide');
+                if (data.type === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Renamed',
+                        text: data.message,
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error renaming file:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to rename file.',
+                });
+            });
+        });
+    });
+});
+
+
     </script>
 @endsection

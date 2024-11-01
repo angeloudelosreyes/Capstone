@@ -64,7 +64,7 @@ Route::group([], function() {
                 Route::get('/sharedShow/{id}', 'sharedShow')->name('drive.sharedShow');
                 Route::get('/edit/{id}', 'edit')->name('drive.edit');
                 Route::post('/update/{id}', 'update')->name('drive.update');
-                Route::post('/rename/{id}', [DriveController::class, 'rename'])->name('drive.rename');
+                Route::post('/rename/{id}', 'rename')->name('drive.rename');
             });
         });
 
