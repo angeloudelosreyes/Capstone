@@ -13,12 +13,19 @@
         @else
             <h5 class="mb-4 text-uppercase fw-bolder">{{ $title }}</h5>
 
+
+
             <!-- Add Create Button -->
             <div class="col-12 mb-3 d-flex justify-content-start">
                 <button class="btn btn-secondary me-2" onclick="window.history.back();">
                     <i class="ri-arrow-left-line"></i> Back
                 </button>
-                <button class="btn btn-primary" id="createFileButton">Create New File</button>
+                <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
+                    style="min-width: 160px;">
+                    <i class="ri-file-add-line fs-5 me-1"></i> Create New File
+                </button> <button onclick="createFolderModal()" class="btn btn-primary text-uppercase mx-2">
+                    <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Folder
+                </button>
             </div>
             @foreach ($query as $data)
                 <div class="col-md-2 col-6 folder-card">
@@ -284,7 +291,7 @@
                             }
                         })
                         .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
-                        'error'));
+                            'error'));
                 }
             });
         }
