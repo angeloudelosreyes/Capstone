@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('container')
     <div class="row">
+
+        
         @if(count($query) == 0)
             <div class="col-12 mb-3">
                 <button class="btn btn-primary" id="createFileButton">Create New File</button>
@@ -12,7 +14,10 @@
             <h5 class="mb-4 text-uppercase fw-bolder">{{$title}}</h5>
 
             <!-- Add Create Button -->
-            <div class="col-12 mb-3">
+            <div class="col-12 mb-3 d-flex justify-content-start">
+                <button class="btn btn-secondary me-2" onclick="window.history.back();">
+                    <i class="ri-arrow-left-line"></i> Back
+                </button>
                 <button class="btn btn-primary" id="createFileButton">Create New File</button>
             </div>
             @foreach($query as $data)
