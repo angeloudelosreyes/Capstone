@@ -32,11 +32,11 @@ class FolderController extends Controller
     {
         $request->validate([
             'title' => ['required']
-        ],[
+        ], [
             'title.required' => 'This field is required'
         ]);
 
-        $directory = 'public/users/'.auth()->user()->id.'/'.$request->title;
+        $directory = 'public/users/' . auth()->user()->id . '/' . $request->title;
         // Storage::exists() eto yong way para macheck mo sa file system mo kong existing na ba directory na ina upload mo.
         if (!Storage::exists($directory)) {
             // Storage::makeDirectory(),  eto naman yong way para makapag create ka ng directory if hindi pa existing yung directory na gusto mo gawin.
@@ -81,8 +81,8 @@ class FolderController extends Controller
      */
     public function update(Request $request)
     {
-        $old = 'public/users/'.auth()->user()->id.'/'.$request->old;
-        $new = 'public/users/'.auth()->user()->id.'/'.$request->new;
+        $old = 'public/users/' . auth()->user()->id . '/' . $request->old;
+        $new = 'public/users/' . auth()->user()->id . '/' . $request->new;
         if (Storage::exists($old)) {
             // Storage:move()  eto yong ginagamit para ma move mo anywhere sa file system mo yong file na ginagamit mo.
             Storage::move($old, $new);
@@ -99,8 +99,6 @@ class FolderController extends Controller
                 'title'   => 'System Notification'
             ]);
         }
-
-
     }
 
     /**
@@ -110,7 +108,7 @@ class FolderController extends Controller
     {
 
         $query = DB::table('users_folder')->where(['id' => Crypt::decryptString($id)])->first();
-        $directory = 'public/users/'.auth()->user()->id.'/'.$query->title;
+        $directory = 'public/users/' . auth()->user()->id . '/' . $query->title;
         if (Storage::exists($directory)) {
 
             // Storage::deleteDirectory() eto naman yong ginagamit kong saan e gusto mo idelete yong directory naman na ginawa mo

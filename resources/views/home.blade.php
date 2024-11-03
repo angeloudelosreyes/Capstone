@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('container')
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <input type="text" id="folderSearch" class="form-control" placeholder="Search Folders...">
+        </div>
+    </div>
     <div class="row">
         @if (count($query) == 0)
             <div class="col-12">
@@ -96,7 +101,8 @@
                         <input type="hidden" name="folder" id="encryptedFolderTitle">
                         <div class="mb-3">
                             <label for="encryptedFiles" class="form-label">Select Files</label>
-                            <input type="file" class="form-control" id="encryptedFiles" name="files[]" multiple required>
+                            <input type="file" class="form-control" id="encryptedFiles" name="files[]" multiple
+                                required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -147,5 +153,20 @@
     </script>
     <script>
         $('.home').addClass('active')
+    </script>
+    <script>
+        document.getElementById('folderSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const folders = document.querySelectorAll('.folder-card');
+
+            folders.forEach(folder => {
+                const folderName = folder.querySelector('.folder-name').textContent.toLowerCase();
+                if (folderName.includes(searchTerm)) {
+                    folder.style.display = 'block';
+                } else {
+                    folder.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection

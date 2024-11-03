@@ -100,85 +100,85 @@ class FilesController extends Controller
     }
 
     public function store(Request $request)
-{
-    Log::info('Store function called.');
+    {
+        Log::info('Store function called.');
 
-    $validator = Validator::make($request->all(), [
-        'files.*' => ['required', 'mimes:pdf,docx'],
-        'isEncrypted' => ['nullable', 'boolean'],
-        'password' => ['nullable', 'string']
-    ]);
+        $validator = Validator::make($request->all(), [
+            'files.*' => ['required', 'mimes:pdf,docx'],
+            'isEncrypted' => ['nullable', 'boolean'],
+            'password' => ['nullable', 'string']
+        ]);
 
-    if ($validator->fails()) {
-        Log::error('Validation failed: ' . json_encode($validator->errors()));
-        return back()->withErrors($validator)->withInput();
-    }
+        if ($validator->fails()) {
+            Log::error('Validation failed: ' . json_encode($validator->errors()));
+            return back()->withErrors($validator)->withInput();
+        }
 
-    $id = auth()->user()->id;
-    $folder_id = Crypt::decryptString($request->folder_id);
-    $title = $request->folder;
-    $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
-    $password = $isEncrypted ? $request->password : null;
+        $id = auth()->user()->id;
+        $folder_id = Crypt::decryptString($request->folder_id);
+        $title = $request->folder;
+        $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
+        $password = $isEncrypted ? $request->password : null;
 
-    Log::info('User ID: ' . $id);
-    Log::info('Folder ID: ' . $folder_id);
-    Log::info('Folder Title: ' . $title);
-    Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
-    if ($isEncrypted) {
-        Log::info('Password: ' . $password);
-    }
+        Log::info('User ID: ' . $id);
+        Log::info('Folder ID: ' . $folder_id);
+        Log::info('Folder Title: ' . $title);
+        Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
+        if ($isEncrypted) {
+            Log::info('Password: ' . $password);
+        }
 
-    if ($request->hasFile('files')) {
-        $files = $request->file('files');
-        foreach ($files as $file) {
-            $name = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension();
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $file) {
+                $name = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
 
-            // Check for duplicate file name in the same folder
-            $duplicateFile = DB::table('users_folder_files')
-                ->where('users_folder_id', $folder_id)
-                ->where('files', $name)
-                ->exists();
+                // Check for duplicate file name in the same folder
+                $duplicateFile = DB::table('users_folder_files')
+                    ->where('users_folder_id', $folder_id)
+                    ->where('files', $name)
+                    ->exists();
 
-            if ($duplicateFile) {
-                return back()->with([
-                    'message' => 'A file with the same name already exists in this folder.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
+                if ($duplicateFile) {
+                    return back()->with([
+                        'message' => 'A file with the same name already exists in this folder.',
+                        'type' => 'error',
+                        'title' => 'System Notification'
+                    ]);
+                }
+
+                $path = $file->storeAs("public/users/$id/$title", $name);
+                $fileSize = $file->getSize();
+
+                Log::info('File uploaded: ' . $name);
+                Log::info('File path: ' . $path);
+                Log::info('File size: ' . $fileSize);
+
+                DB::table('users_folder_files')->insert([
+                    'users_id' => $id,
+                    'users_folder_id' => $folder_id,
+                    'files' => $name,
+                    'size' => $fileSize,
+                    'extension' => $extension,
+                    'protected' => $isEncrypted ? 'YES' : 'NO',
+                    'password' => $password
                 ]);
             }
-
-            $path = $file->storeAs("public/users/$id/$title", $name);
-            $fileSize = $file->getSize();
-
-            Log::info('File uploaded: ' . $name);
-            Log::info('File path: ' . $path);
-            Log::info('File size: ' . $fileSize);
-
-            DB::table('users_folder_files')->insert([
-                'users_id' => $id,
-                'users_folder_id' => $folder_id,
-                'files' => $name,
-                'size' => $fileSize,
-                'extension' => $extension,
-                'protected' => $isEncrypted ? 'YES' : 'NO',
-                'password' => $password
+            return back()->with([
+                'message' => 'New file has been uploaded.',
+                'type' => 'success',
+                'title' => 'System Notification'
+            ]);
+        } else {
+            Log::error('No files uploaded.');
+            return back()->with([
+                'message' => 'Upload failed.',
+                'type' => 'error',
+                'title' => 'System Notification'
             ]);
         }
-        return back()->with([
-            'message' => 'New file has been uploaded.',
-            'type' => 'success',
-            'title' => 'System Notification'
-        ]);
-    } else {
-        Log::error('No files uploaded.');
-        return back()->with([
-            'message' => 'Upload failed.',
-            'type' => 'error',
-            'title' => 'System Notification'
-        ]);
     }
-}
 
     public function decryptStore(Request $request)
     {
@@ -341,11 +341,11 @@ class FilesController extends Controller
                     ->where(['users_folder_id' => $folderId, 'files' => $request->oldName])
                     ->update(['files' => $request->newName]);
 
-                    return response()->json([
-                        'message' => 'File has been renamed.',
-                        'type'    => 'success',
-                        'title'   => 'System Notification'
-                    ]);
+                return response()->json([
+                    'message' => 'File has been renamed.',
+                    'type'    => 'success',
+                    'title'   => 'System Notification'
+                ]);
             } else {
                 return back()->with([
                     'message' => 'File does not exist.',
@@ -361,5 +361,4 @@ class FilesController extends Controller
             ]);
         }
     }
-
 }

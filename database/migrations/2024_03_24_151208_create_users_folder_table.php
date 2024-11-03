@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->index(['users_id','title']);
+            $table->index(['users_id', 'title']);
         });
     }
 
