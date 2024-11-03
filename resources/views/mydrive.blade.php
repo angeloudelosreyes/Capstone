@@ -1,14 +1,20 @@
 @extends('layouts.app')
 @section('container')
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <input type="text" id="fileSearch" class="form-control" placeholder="Search Files...">
+        </div>
+    </div>
+
     <div class="row">
-        @if(count($query) == 0)
+        @if (count($query) == 0)
             <div class="col-12">
                 <div class="alert alert-warning">You haven't created a folder yet.</div>
             </div>
         @else
-            <h5 class="mb-4 text-uppercase fw-bolder">{{$title}}</h5>
+            <h5 class="mb-4 text-uppercase fw-bolder">{{ $title }}</h5>
 
-            @foreach($query as $data)
+            @foreach ($query as $data)
                 <div class="col-md-2 col-6 folder-card">
                     <div class="card bg-light shadow-none" id="folder-1">
                         <div class="card-body">
@@ -17,49 +23,64 @@
                                 </div>
                                 <div class="dropdown">
                                     <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ri-more-2-fill fs-16 align-bottom"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="{{route('drive.show',['id' => Crypt::encryptString($data->id)])}}" ><i class="bx bx-link me-2"></i> Open File</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)" onclick="share_file('{{Crypt::encryptString($data->id)}}')"><i class="bx bx-share me-2"></i> Share</a></li>
-                                        <li><a class="dropdown-item" href="{{route('drive.download',['id' => Crypt::encryptString($data->id)])}}" ><i class="bx bx-download me-2"></i> Download</a></li>
-                                        <li><a class="dropdown-item" href="{{route('drive.edit',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                    class="bx bx-link me-2"></i> Open File</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="share_file('{{ Crypt::encryptString($data->id) }}')"><i
+                                                    class="bx bx-share me-2"></i> Share</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.download', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                    class="bx bx-download me-2"></i> Download</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.edit', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                    class="bx bx-edit me-2"></i> Edit</a></li>
                                         <li>
-                                            <a class="dropdown-item" href="javascript:void(0)" onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')">
+                                            <a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')">
                                                 <i class="bx bx-edit-alt me-2"></i> Rename
                                             </a>
                                         </li>
-                                        <li><a class="dropdown-item" href="{{route('drive.destroy',['id' => Crypt::encryptString($data->id)])}}"><i class="bx bx-trash me-2"></i> Delete</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                    class="bx bx-trash me-2"></i> Delete</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="text-center">
-                                <div class="mb-2">
-                                    @if($data->extension == 'txt')
-                                        <i class="ri-file-2-fill align-bottom text-default display-5"></i>
-                                    @elseif($data->extension == 'pdf')
-                                        <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                    @elseif($data->extension == 'docx')
-                                        <i class="ri-file-word-fill align-bottom text-success display-5"></i>
-                                    @else
-                                        <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                    @endif
-                                </div>
-                                <h6 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"class="fs-15 folder-name">{{$data->files}}</h6>
+                                <a href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"
+                                    class="text-decoration-none">
+                                    <div class="mb-2 folder-icon">
+                                        @if ($data->extension == 'txt')
+                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
+                                        @elseif($data->extension == 'pdf')
+                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                        @elseif($data->extension == 'docx')
+                                            <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                        @else
+                                            <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                        @endif
+                                    </div>
+                                    <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        class="fs-15 folder-name">{{ $data->files }}</h6>
+                                </a>
                             </div>
 
                         </div>
                     </div>
                 </div>
             @endforeach
-            {{$query->links()}}
+            {{ $query->links() }}
         @endif
     </div>
 
-     <!-- Rename Modal -->
-     <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+    <!-- Rename Modal -->
+    <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form id="renameForm" action="{{ route('drive.rename', 'id') }}" method="POST">
                 @csrf
@@ -93,6 +114,7 @@
             // Update the form action URL with the encrypted ID
             document.getElementById('renameForm').action = "{{ route('drive.rename', '') }}" + '/' + id;
         }
+
         function renameFile(fileId, oldName) {
             Swal.fire({
                 title: 'Rename File',
@@ -108,33 +130,50 @@
                         return;
                     }
                     return fetch(`{{ url('drive/rename') }}/${fileId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            new_name: newName
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                new_name: newName
+                            })
                         })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.type === 'success') {
-                            Swal.fire('Renamed!', 'File has been renamed successfully.', 'success').then(() => {
-                                location.reload(); // Reload the page after successful rename
-                            });
-                        } else {
-                            Swal.fire('Error!', data.message, 'error');
-                        }
-                    })
-                    .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.', 'error'));
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.type === 'success') {
+                                Swal.fire('Renamed!', 'File has been renamed successfully.', 'success')
+                                    .then(() => {
+                                        location.reload(); // Reload the page after successful rename
+                                    });
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
+                            'error'));
                 }
             });
         }
+    </script>
+    <script>
+        document.getElementById('fileSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const files = document.querySelectorAll('.folder-card');
+
+            files.forEach(file => {
+                const fileName = file.querySelector('.folder-name').textContent.toLowerCase();
+                if (fileName.includes(searchTerm)) {
+                    file.style.display = 'block';
+                } else {
+                    file.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection
