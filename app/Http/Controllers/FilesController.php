@@ -46,6 +46,16 @@ class FilesController extends Controller
         $isProtected = $request->input('isProtected', false);
         $password = $isProtected ? $request->input('password') : null;
 
+        // Check for duplicate file name in the same folder
+        $duplicateFile = DB::table('users_folder_files')
+            ->where('users_folder_id', $folderId)
+            ->where('files', $fileName . '.' . $fileType)
+            ->exists();
+
+        if ($duplicateFile) {
+            return response()->json(['error' => 'File with the same name already exists in this folder'], 400);
+        }
+
         $folder = DB::table('users_folder')->where('id', $folderId)->first();
         if (!$folder) {
             return response()->json(['error' => 'Folder not found'], 404);

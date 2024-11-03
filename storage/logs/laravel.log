@@ -2816,3 +2816,19 @@
 #48 C:\\Users\\renek\\Desktop\\client\\SYSTEM\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\renek\\\\...')
 #49 {main}
 "} 
+[2024-11-03 08:02:10] local.INFO: Store function called.  
+[2024-11-03 08:02:10] local.INFO: User ID: 5  
+[2024-11-03 08:02:10] local.INFO: Folder ID: 11  
+[2024-11-03 08:02:10] local.INFO: Folder Title: test  
+[2024-11-03 08:02:10] local.INFO: Is Encrypted: NO  
+[2024-11-03 08:02:10] local.INFO: File uploaded: ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-03 08:02:10] local.INFO: File path: public/users/5/test/ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-03 08:02:10] local.INFO: File size: 20917  
+[2024-11-03 08:02:30] local.INFO: Store function called.  
+[2024-11-03 08:02:30] local.INFO: User ID: 5  
+[2024-11-03 08:02:30] local.INFO: Folder ID: 11  
+[2024-11-03 08:02:30] local.INFO: Folder Title: test  
+[2024-11-03 08:02:30] local.INFO: Is Encrypted: NO  
+[2024-11-03 08:02:30] local.INFO: File uploaded: ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-03 08:02:30] local.INFO: File path: public/users/5/test/ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-03 08:02:30] local.INFO: File size: 20917  
