@@ -2832,3 +2832,16 @@
 [2024-11-03 08:02:30] local.INFO: File uploaded: ITE 307_SAS 23 - PT Rating Sheet (1).docx  
 [2024-11-03 08:02:30] local.INFO: File path: public/users/5/test/ITE 307_SAS 23 - PT Rating Sheet (1).docx  
 [2024-11-03 08:02:30] local.INFO: File size: 20917  
+[2024-11-03 08:14:02] local.INFO: Store function called.  
+[2024-11-03 08:14:02] local.INFO: User ID: 5  
+[2024-11-03 08:14:02] local.INFO: Folder ID: 11  
+[2024-11-03 08:14:02] local.INFO: Folder Title: test  
+[2024-11-03 08:14:02] local.INFO: Is Encrypted: NO  
+[2024-11-03 08:14:02] local.INFO: File uploaded: grace.pdf  
+[2024-11-03 08:14:02] local.INFO: File path: public/users/5/test/grace.pdf  
+[2024-11-03 08:14:02] local.INFO: File size: 44852  
+[2024-11-03 08:17:05] local.INFO: Store function called.  
+[2024-11-03 08:17:05] local.INFO: User ID: 5  
+[2024-11-03 08:17:05] local.INFO: Folder ID: 11  
+[2024-11-03 08:17:05] local.INFO: Folder Title: test  
+[2024-11-03 08:17:05] local.INFO: Is Encrypted: NO  

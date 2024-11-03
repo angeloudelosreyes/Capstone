@@ -45,12 +45,12 @@
                                     @elseif($data->extension == 'pdf')
                                         <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
                                     @elseif($data->extension == 'docx')
-                                        <i class="ri-file-word-fill align-bottom text-success display-5"></i>
+                                        <i class="ri-file-word-fill align-bottom text-primary display-5"></i> <!-- Changed to text-primary for blue color -->
                                     @else
                                         <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                     @endif
                                 </div>
-                                <h6 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"class="fs-15 folder-name">{{$data->files}}</h6>
+                                <h6 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" class="fs-15 folder-name">{{ $data->files }}</h6>
                             </div>
 
                         </div>
