@@ -7,6 +7,7 @@ use App\Http\Controllers\FolderController;
 use App\Http\Controllers\DriveController;
 use App\Http\Controllers\SharedController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\SubfolderController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -25,17 +26,17 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Route::group([], function() {
+Route::group([], function () {
     Auth::routes();
-    Route::middleware('auth')->group(function() {
+    Route::middleware('auth')->group(function () {
         Route::controller(HomeController::class)->group(function () {
-            Route::prefix('home')->group(function() {
+            Route::prefix('home')->group(function () {
                 Route::get('/', 'index')->name('home');
             });
         });
 
         Route::controller(FolderController::class)->group(function () {
-            Route::prefix('folder')->group(function() {
+            Route::prefix('folder')->group(function () {
                 Route::post('/store', 'store')->name('folder.store');
                 Route::post('/update', 'update')->name('folder.update');
                 Route::get('/show/{id}', 'show')->name('folder.show');
@@ -44,8 +45,8 @@ Route::group([], function() {
         });
 
         Route::controller(FilesController::class)->group(function () {
-            Route::prefix('files')->group(function() {
-                Route::post('/files/create','create')->name('files.create');
+            Route::prefix('files')->group(function () {
+                Route::post('/files/create', 'create')->name('files.create');
                 Route::post('/store', 'store')->name('files.store');
                 Route::post('/store/decrypt', 'decryptStore')->name('files.decrypt.store');
                 Route::post('/update', 'update')->name('files.update');
@@ -55,7 +56,7 @@ Route::group([], function() {
         });
 
         Route::controller(DriveController::class)->group(function () {
-            Route::prefix('drive')->group(function() {
+            Route::prefix('drive')->group(function () {
                 Route::get('/', 'index')->name('drive');
                 Route::get('/show/{id}', 'show')->name('drive.show');
                 Route::get('/download/{id}', 'download')->name('drive.download');
@@ -69,14 +70,14 @@ Route::group([], function() {
         });
 
         Route::controller(SharedController::class)->group(function () {
-            Route::prefix('shared')->group(function() {
+            Route::prefix('shared')->group(function () {
                 Route::get('/', 'index')->name('shared');
                 Route::post('/store', 'store')->name('shared.store');
             });
         });
 
         Route::controller(AccountController::class)->group(function () {
-            Route::prefix('account')->group(function() {
+            Route::prefix('account')->group(function () {
                 Route::get('/', 'index')->name('account');
                 Route::get('/profile', 'profile')->name('account.profile');
                 Route::post('/update/profile', 'update_profile')->name('account.profile.update');
@@ -86,5 +87,9 @@ Route::group([], function() {
                 Route::get('/destroy/{id}', 'destroy')->name('account.destroy');
             });
         });
+
+        Route::resource('subfolders', SubfolderController::class);
+        Route::post('/subfolder/create', [SubfolderController::class, 'store'])->name('subfolder.store');
+        Route::get('/folder/{id}/create-subfolder', [SubfolderController::class, 'showCreateSubfolderForm'])->name('subfolder.create-form');
     });
 });

@@ -33,7 +33,8 @@
                                         {{ auth()->user()->name }}</h4>
                                     <p class="text-muted mb-0">Here's what's happening with your portal today.</p>
                                 </div>
-                                @if (request()->is('home') || request()->is('folder/show/*'))
+                                {{-- @if (request()->is('home') || request()->is('folder/show/*')) --}}
+                                @if (request()->is('home'))
                                     <div class="mt-3 text-uppercase fs-5 mt-lg-0">
                                         <button onclick="createFolderModal()" class="btn btn-primary text-uppercase">
                                             <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Folder

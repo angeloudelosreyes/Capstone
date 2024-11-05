@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('container')
+    @include('includes.create-sub-folder-modal')
+
     <div class="row">
 
 
@@ -23,9 +25,11 @@
                 <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
                     style="min-width: 160px;">
                     <i class="ri-file-add-line fs-5 me-1"></i> Create New File
-                    {{-- </button> <button onclick="createFolderModal()" class="btn btn-primary text-uppercase mx-2">
-                    <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Folder
-                </button> --}}
+                </button>
+                <button class="btn btn-primary text-uppercase mx-2" onclick="createSubFolder('{{ $folderId }}')">
+                    <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Sub Folder
+                </button>
+
             </div>
             @foreach ($query as $data)
                 <div class="col-md-2 col-6 folder-card">
@@ -84,6 +88,55 @@
                     </div>
                 </div>
             @endforeach
+            {{-- @foreach ($query as $subfolder)
+                <div class="col-md-2 col-6 folder-card">
+                    <div class="card bg-light shadow-none" id="folder-{{ $subfolder->id }}">
+                        <div class="card-body">
+                            <div class="d-flex mb-1">
+                                <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1"></div>
+                                <div class="dropdown">
+                                    <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.show', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
+                                                    class="bx bx-link me-2"></i> Open Subfolder</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="share_file('{{ Crypt::encryptString($subfolder->id) }}')"><i
+                                                    class="bx bx-share me-2"></i> Share</a></li>
+                                        <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                data-file-id="{{ Crypt::encryptString($subfolder->id) }}"><i
+                                                    class="bx bx-download me-2"></i> Download</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.edit', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
+                                                    class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="renameFile('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')"><i
+                                                    class="bx bx-rename me-2"></i> Rename</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('drive.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
+                                                    class="bx bx-trash me-2"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="{{ route('drive.show', ['id' => Crypt::encryptString($subfolder->id)]) }}"
+                                    class="text-decoration-none">
+                                    <div class="mb-2">
+                                        <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                    </div>
+                                    <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        class="fs-15 folder-name">{{ $subfolder->name }}</h6>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach --}}
+
             {{ $query->links() }}
         @endif
     </div>
@@ -91,6 +144,12 @@
 
 @section('custom_js')
     <script>
+        function createSubFolder(parentId) {
+            $('#parent_id').val(parentId);
+            $('#title').val(''); // Clear any previous folder name input
+            $('#create_folder').modal('show');
+        }
+
         document.getElementById('createFileButton').addEventListener('click', function() {
             const folderId = '{{ $folderId }}'; // Pass the folder_id from the Blade template
 
@@ -124,8 +183,8 @@
                 confirmButtonText: 'Create',
                 cancelButtonText: 'Cancel',
                 customClass: {
-                    confirmButton: 'btn btn-primary mx-2',
-                    cancelButton: 'btn btn-secondary mx-2'
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-secondary'
                 },
                 buttonsStyling: false,
                 showLoaderOnConfirm: true,

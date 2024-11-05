@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,10 @@ class FolderController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch only top-level folders, excluding subfolders
+        $query = Folder::whereNull('parent_folder_id')->paginate(10); // Adjust as needed
+
+        return view('home', compact('query'));
     }
 
     /**
@@ -61,9 +65,23 @@ class FolderController extends Controller
      */
     public function show(string $id)
     {
-        $query = DB::table('users_folder_files')->where(['users_folder_id' => Crypt::decryptString($id)])->paginate(18);
-        $title = DB::table('users_folder')->where(['id' => Crypt::decryptString($id)])->first()->title;
-        $folderId = Crypt::encryptString(Crypt::decryptString($id)); // Encrypt the folder ID
+        $decryptedId = Crypt::decryptString($id);
+
+        // Fetch the folder details
+        $folder = DB::table('users_folder')->where('id', $decryptedId)->first();
+
+        // Check if folder exists
+        if (!$folder) {
+            return back()->with([
+                'message' => 'Folder not found.',
+                'type'    => 'error',
+                'title'   => 'System Notification'
+            ]);
+        }
+
+        $query = DB::table('users_folder_files')->where('users_folder_id', $decryptedId)->paginate(18);
+        $title = $folder->title;
+        $folderId = Crypt::encryptString($decryptedId); // Encrypt the folder ID
 
         return view('drive', compact('title', 'query', 'folderId'));
     }
