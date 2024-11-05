@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -162,7 +163,8 @@ class FilesController extends Controller
                     'size' => $fileSize,
                     'extension' => $extension,
                     'protected' => $isEncrypted ? 'YES' : 'NO',
-                    'password' => $password
+                    'password' => $password,
+                    'created_at' => Carbon::now() // Add created_at timestamp here
                 ]);
             }
             return back()->with([
@@ -277,9 +279,15 @@ class FilesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $folder_id = Crypt::decryptString($id);
+        $files = DB::table('users_folder_files')
+            ->where('users_folder_id', $folder_id)
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+            ->get();
+
+        return view('folder.show', compact('files'));
     }
 
     /**

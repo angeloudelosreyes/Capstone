@@ -23,9 +23,9 @@
                 <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
                     style="min-width: 160px;">
                     <i class="ri-file-add-line fs-5 me-1"></i> Create New File
-                </button> <button onclick="createFolderModal()" class="btn btn-primary text-uppercase mx-2">
+                    {{-- </button> <button onclick="createFolderModal()" class="btn btn-primary text-uppercase mx-2">
                     <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Folder
-                </button>
+                </button> --}}
             </div>
             @foreach ($query as $data)
                 <div class="col-md-2 col-6 folder-card">
@@ -124,8 +124,8 @@
                 confirmButtonText: 'Create',
                 cancelButtonText: 'Cancel',
                 customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-secondary'
+                    confirmButton: 'btn btn-primary mx-2',
+                    cancelButton: 'btn btn-secondary mx-2'
                 },
                 buttonsStyling: false,
                 showLoaderOnConfirm: true,

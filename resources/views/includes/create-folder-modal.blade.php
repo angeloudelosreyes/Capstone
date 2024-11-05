@@ -1,7 +1,9 @@
-<form action="{{route('folder.store')}}" method="POST">
+<form action="{{ route('folder.store') }}" method="POST">
     @csrf
     @honeypot
-    <div class="modal component fade" id="create_folder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal component fade @if ($errors->any()) show @endif" id="create_folder" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true"
+        @if ($errors->any()) style="display: block;" @endif>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -13,7 +15,11 @@
                         <div class="col-12">
                             <div>
                                 <label for="title" class="form-label">Folder Name</label>
-                                <input type="text" class="form-control" name="title" id="title">
+                                <input type="text" class="form-control" name="title" id="title"
+                                    value="{{ old('title') }}">
+                                @error('title')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -25,3 +31,14 @@
         </div>
     </div>
 </form>
+
+@section('custom_js')
+    <script>
+        // Check if there are any validation errors and open the modal if there are
+        @if ($errors->any())
+            $(document).ready(function() {
+                $('#create_folder').modal('show');
+            });
+        @endif
+    </script>
+@endsection

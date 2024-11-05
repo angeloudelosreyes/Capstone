@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en" data-layout="horizontal" data-bs-theme="light"  data-topbar="dark" data-sidebar-size="lg" data-sidebar="dark">
+<html lang="en" data-layout="horizontal" data-bs-theme="light" data-topbar="dark" data-sidebar-size="lg"
+    data-sidebar="dark">
 @include('layouts.header')
 
 <body>
-<!-- <body style="background:#eee"> -->
+    <!-- <body style="background:#eee"> -->
 
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -29,10 +30,10 @@
                             <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                 <div class="flex-grow-1">
                                     <h4 class="fs-16 mb-1">Welcome Back!
-                                        {{auth()->user()->name}}</h4>
+                                        {{ auth()->user()->name }}</h4>
                                     <p class="text-muted mb-0">Here's what's happening with your portal today.</p>
                                 </div>
-                                @if(request()->is('home'))
+                                @if (request()->is('home') || request()->is('folder/show/*'))
                                     <div class="mt-3 text-uppercase fs-5 mt-lg-0">
                                         <button onclick="createFolderModal()" class="btn btn-primary text-uppercase">
                                             <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Folder
