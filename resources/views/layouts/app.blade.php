@@ -83,6 +83,7 @@
 
     @include('layouts.scripts')
     @yield('custom_js')
+
 </body>
 
 </html>

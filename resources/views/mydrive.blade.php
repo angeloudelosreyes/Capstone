@@ -45,6 +45,12 @@
                                                 <i class="bx bx-edit-alt me-2"></i> Rename
                                             </a>
                                         </li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="copyFile('{{ Crypt::encryptString($data->id) }}')"><i
+                                                    class="bx bx-copy me-2"></i> Copy</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="moveFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->id }}')"><i
+                                                    class="bx bx-cut me-2"></i> Move</a></li>
                                         <li><a class="dropdown-item"
                                                 href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
                                                     class="bx bx-trash me-2"></i> Delete</a></li>
@@ -75,6 +81,13 @@
                     </div>
                 </div>
             @endforeach
+            <!-- Add Paste Button if there’s a copied file in session -->
+            @if (session('copiedFile'))
+                <div class="col-12 mb-3">
+                    <button class="btn btn-success" onclick="pasteFile('{{ $folderId }}')"><i
+                            class="bx bx-paste me-2"></i> Paste</button>
+                </div>
+            @endif
             {{ $query->links() }}
         @endif
     </div>
@@ -106,6 +119,63 @@
     </div>
 
     <script>
+        // Copy a file
+        function copyFile(fileId) {
+            fetch(`{{ route('drive.copy', '') }}/${fileId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.type === 'success') {
+                    Swal.fire('Copied!', 'The file has been copied successfully.', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error!', data.message || 'Failed to copy the file.', 'error');
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+
+        // Move a file
+        function moveFile(fileId, destinationFolderId) {
+            const url = `{{ url('drive/move') }}/${fileId}/${destinationFolderId}`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.type === 'success') {
+                    Swal.fire('Moved!', 'The file has been moved successfully.', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error!', data.message || 'Failed to move the file.', 'error');
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+
+
+        // Paste the copied file into the current folder
+        function pasteFile(destinationFolderId) {
+            fetch(`{{ route('drive.paste', '') }}/${destinationFolderId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.type === 'success') {
+                    Swal.fire('Pasted!', 'The file has been pasted successfully.', 'success').then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error!', data.message || 'Failed to paste the file.', 'error');
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+
         function showRenameModal(id, oldName) {
             document.getElementById('fileId').value = id;
             document.getElementById('new_name').value = oldName; // Set the current name as default

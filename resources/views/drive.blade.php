@@ -2,10 +2,13 @@
 @section('container')
     @include('includes.create-sub-folder-modal')
 
+
+
     <div class="row">
-
-
-        @if (count($query) == 0)
+        @if (isset($query) &&
+                count($query) == 0 &&
+                (isset($subfolders) && count($subfolders) == 0) &&
+                (isset($files) && count($files) == 0))
             <div class="col-12 mb-3">
                 <button class="btn btn-primary" id="createFileButton">Create New File</button>
             </div>
@@ -14,8 +17,6 @@
             </div>
         @else
             <h5 class="mb-4 text-uppercase fw-bolder">{{ $title }}</h5>
-
-
 
             <!-- Add Create Button -->
             <div class="col-12 mb-3 d-flex justify-content-start">
@@ -29,115 +30,142 @@
                 <button class="btn btn-primary text-uppercase mx-2" onclick="createSubFolder('{{ $folderId }}')">
                     <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Sub Folder
                 </button>
-
             </div>
-            @foreach ($query as $data)
-                <div class="col-md-2 col-6 folder-card">
-                    <div class="card bg-light shadow-none" id="folder-1">
-                        <div class="card-body">
-                            <div class="d-flex mb-1">
-                                <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                </div>
-                                <div class="dropdown">
-                                    <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="ri-more-2-fill fs-16 align-bottom"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-link me-2"></i> Open File</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="share_file('{{ Crypt::encryptString($data->id) }}')"><i
-                                                    class="bx bx-share me-2"></i> Share</a></li>
-                                        <li><a class="dropdown-item download-button" href="javascript:void(0)"
-                                                data-file-id="{{ Crypt::encryptString($data->id) }}"><i
-                                                    class="bx bx-download me-2"></i> Download</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.edit', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-edit me-2"></i> Edit</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
-                                                    class="bx bx-rename me-2"></i> Rename</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-trash me-2"></i> Delete</a></li>
-                                    </ul>
-                                </div>
-                            </div>
 
-                            <div class="text-center">
-                                <a href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"
-                                    class="text-decoration-none">
-                                    <div class="mb-2">
-                                        @if ($data->extension == 'txt')
-                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
-                                        @elseif($data->extension == 'pdf')
-                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                        @elseif($data->extension == 'docx')
-                                            <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
-                                        @else
-                                            <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                        @endif
-                                    </div>
-                                    <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                        class="fs-15 folder-name">{{ $data->files }}</h6>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-            {{-- @foreach ($query as $subfolder)
-                <div class="col-md-2 col-6 folder-card">
-                    <div class="card bg-light shadow-none" id="folder-{{ $subfolder->id }}">
-                        <div class="card-body">
-                            <div class="d-flex mb-1">
-                                <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1"></div>
-                                <div class="dropdown">
-                                    <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="ri-more-2-fill fs-16 align-bottom"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.show', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
-                                                    class="bx bx-link me-2"></i> Open Subfolder</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="share_file('{{ Crypt::encryptString($subfolder->id) }}')"><i
-                                                    class="bx bx-share me-2"></i> Share</a></li>
-                                        <li><a class="dropdown-item download-button" href="javascript:void(0)"
-                                                data-file-id="{{ Crypt::encryptString($subfolder->id) }}"><i
-                                                    class="bx bx-download me-2"></i> Download</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.edit', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
-                                                    class="bx bx-edit me-2"></i> Edit</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="renameFile('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')"><i
-                                                    class="bx bx-rename me-2"></i> Rename</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"><i
-                                                    class="bx bx-trash me-2"></i> Delete</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="text-center">
-                                <a href="{{ route('drive.show', ['id' => Crypt::encryptString($subfolder->id)]) }}"
-                                    class="text-decoration-none">
-                                    <div class="mb-2">
+            <!-- Display Subfolders -->
+            @if (isset($subfolders) && count($subfolders) > 0)
+                @foreach ($subfolders as $subfolder)
+                    <div class="col-md-2 col-6 folder-card">
+                        <div class="card bg-light shadow-none">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <a href="{{ route('subfolder.show', ['subfolder' => Crypt::encryptString($subfolder->id)]) }}"
+                                        class="text-decoration-none">
                                         <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                    </div>
-                                    <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                        class="fs-15 folder-name">{{ $subfolder->name }}</h6>
-                                </a>
+                                        <h6 class="fs-15 folder-name">{{ $subfolder->name }}</h6>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach --}}
+                @endforeach
+                {{ $subfolders->links() }}
+            @endif
 
-            {{ $query->links() }}
+            <!-- Display Files -->
+            <!-- Display Files -->
+            @if (isset($files) && count($files) > 0)
+                @foreach ($files as $file)
+                    <div class="col-md-2 col-6 folder-card">
+                        <div class="card bg-light shadow-none">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center position-relative">
+                                    <a href="{{ route('file.download', ['id' => Crypt::encryptString($file->id)]) }}"
+                                        class="text-decoration-none">
+                                        <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                    </a>
+                                    <!-- Dropdown Menu for File Options -->
+                                    <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
+                                        <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.show', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                                        class="bx bx-link me-2"></i> Open File</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="share_file('{{ Crypt::encryptString($file->id) }}')"><i
+                                                        class="bx bx-share me-2"></i> Share</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.download', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                                        class="bx bx-download me-2"></i> Download</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.edit', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                                        class="bx bx-edit me-2"></i> Edit</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="renameFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
+                                                        class="bx bx-edit-alt me-2"></i> Rename</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
+                                                        class="bx bx-copy me-2"></i> Copy</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->id }}')"><i
+                                                        class="bx bx-cut me-2"></i> Move</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                                        class="bx bx-trash me-2"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h6 class="fs-15 folder-name text-center mt-2">{{ $file->files }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
+
+            <!-- Display Existing Folder Contents -->
+            @if (isset($query) && count($query) > 0)
+                @foreach ($query as $data)
+                    <div class="col-md-2 col-6 folder-card">
+                        <div class="card bg-light shadow-none" id="folder-{{ $data->id }}">
+                            <div class="card-body">
+                                <div class="d-flex mb-1">
+                                    <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1"></div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                        class="bx bx-link me-2"></i> Open File</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="share_file('{{ Crypt::encryptString($data->id) }}')"><i
+                                                        class="bx bx-share me-2"></i> Share</a></li>
+                                            <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                    data-file-id="{{ Crypt::encryptString($data->id) }}"><i
+                                                        class="bx bx-download me-2"></i> Download</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.edit', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                        class="bx bx-edit me-2"></i> Edit</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
+                                                        class="bx bx-rename me-2"></i> Rename</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                        class="bx bx-trash me-2"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <a href="{{ route('drive.show', ['id' => Crypt::encryptString($data->id)]) }}"
+                                        class="text-decoration-none">
+                                        <div class="mb-2">
+                                            @if ($data->extension == 'txt')
+                                                <i class="ri-file-2-fill align-bottom text-default display-5"></i>
+                                            @elseif($data->extension == 'pdf')
+                                                <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                            @elseif($data->extension == 'docx')
+                                                <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                            @else
+                                                <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                            @endif
+                                        </div>
+                                        <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                            class="fs-15 folder-name">{{ $data->files }}</h6>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                {{ $files->links() }}
+            @endif
+
         @endif
     </div>
 @endsection

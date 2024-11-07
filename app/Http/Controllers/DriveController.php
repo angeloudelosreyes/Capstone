@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\File;
+
 class DriveController extends Controller
 {
     /**
@@ -18,7 +19,7 @@ class DriveController extends Controller
     {
         $query = DB::table('users_folder_files')->where(['users_id' => auth()->user()->id])->paginate(18);
         $title = 'My Drive';
-        return view('mydrive',compact('title','query'));
+        return view('mydrive', compact('title', 'query'));
     }
 
     /**
@@ -116,7 +117,8 @@ class DriveController extends Controller
         }
         return view('read', compact('title', 'query', 'content', 'extension'));
     }
-    public function display_pdf($title,$content) {
+    public function display_pdf($title, $content)
+    {
         $path = Crypt::decryptString($content);
         return response()->stream(function () use ($path) {
             echo Storage::disk('local')->get($path);
@@ -293,7 +295,7 @@ class DriveController extends Controller
     {
         $query = DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->first();
         $title = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
-        $directory = 'public/users/'.$query->users_id.'/'.$title.'/'.$query->files;
+        $directory = 'public/users/' . $query->users_id . '/' . $title . '/' . $query->files;
         if (Storage::exists($directory)) {
             Storage::delete($directory);
             DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->delete();
@@ -312,44 +314,143 @@ class DriveController extends Controller
     }
 
     public function rename(Request $request, string $id)
-{
-    // Decrypt the ID to get the actual database ID
-    $decryptedId = Crypt::decryptString($id);
+    {
+        // Decrypt the ID to get the actual database ID
+        $decryptedId = Crypt::decryptString($id);
 
-    // Validate the incoming request to ensure a new name is provided
-    $request->validate([
-        'new_name' => 'required|string|max:255',
-    ]);
+        // Validate the incoming request to ensure a new name is provided
+        $request->validate([
+            'new_name' => 'required|string|max:255',
+        ]);
 
-    // Fetch the file record from the database
-    $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+        // Fetch the file record from the database
+        $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
 
-    if (!$fileRecord) {
-        return response()->json(['type' => 'error', 'message' => 'File not found.']);
+        if (!$fileRecord) {
+            return response()->json(['type' => 'error', 'message' => 'File not found.']);
+        }
+
+        // Get the current folder title and the old file name
+        $folder = DB::table('users_folder')->where('id', $fileRecord->users_folder_id)->first();
+        $oldFileName = $fileRecord->files;
+        $newFileName = $request->input('new_name');
+        $userId = $fileRecord->users_id;
+
+        // Construct the file path in storage
+        $oldFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $oldFileName;
+        $newFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $newFileName;
+
+        // Check if the old file exists
+        if (Storage::exists($oldFilePath)) {
+            // Rename the file in storage
+            Storage::move($oldFilePath, $newFilePath);
+
+            // Update the file name in the database
+            DB::table('users_folder_files')->where('id', $decryptedId)->update(['files' => $newFileName]);
+
+            return response()->json(['type' => 'success', 'message' => 'File renamed successfully.']);
+        } else {
+            return response()->json(['type' => 'error', 'message' => 'File does not exist in storage.']);
+        }
+    }
+    public function copy(Request $request, string $fileId)
+    {
+        $decryptedFileId = Crypt::decryptString($fileId);
+
+        // Find the file in the database
+        $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+        if (!$file) {
+            return back()->with(['error' => 'File not found']);
+        }
+
+        // Temporarily store the file details for pasting
+        session()->put('copiedFile', $file);
+
+        return back()->with(['message' => 'File copied successfully.']);
     }
 
-    // Get the current folder title and the old file name
-    $folder = DB::table('users_folder')->where('id', $fileRecord->users_folder_id)->first();
-    $oldFileName = $fileRecord->files;
-    $newFileName = $request->input('new_name');
-    $userId = $fileRecord->users_id;
+    /**
+     * Move a file to another folder.
+     */
+    public function move(Request $request, string $fileId, string $destinationFolderId)
+    {
+        $decryptedFileId = Crypt::decryptString($fileId);
+        $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
 
-    // Construct the file path in storage
-    $oldFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $oldFileName;
-    $newFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $newFileName;
+        // Find the file and destination folder
+        $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+        $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
 
-    // Check if the old file exists
-    if (Storage::exists($oldFilePath)) {
-        // Rename the file in storage
-        Storage::move($oldFilePath, $newFilePath);
+        if (!$file || !$destinationFolder) {
+            return back()->with(['error' => 'File or destination folder not found']);
+        }
 
-        // Update the file name in the database
-        DB::table('users_folder_files')->where('id', $decryptedId)->update(['files' => $newFileName]);
+        $userId = $file->users_id;
+        $sourceFolder = DB::table('users_folder')->where('id', $file->users_folder_id)->first();
+        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolder->title . '/' . $file->files;
+        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $file->files;
 
-        return response()->json(['type' => 'success', 'message' => 'File renamed successfully.']);
-    } else {
-        return response()->json(['type' => 'error', 'message' => 'File does not exist in storage.']);
+        // Move file in storage and update database record
+        if (Storage::exists($sourcePath)) {
+            Storage::move($sourcePath, $destinationPath);
+
+            DB::table('users_folder_files')->where('id', $decryptedFileId)->update([
+                'users_folder_id' => $decryptedDestinationFolderId
+            ]);
+
+            return back()->with(['message' => 'File moved successfully.']);
+        } else {
+            return back()->with(['error' => 'File not found in storage.']);
+        }
     }
-}
 
+    /**
+     * Paste the copied file into the specified folder.
+     */
+    public function paste(Request $request, string $destinationFolderId)
+    {
+        $copiedFile = session()->get('copiedFile');
+
+        if (!$copiedFile) {
+            return back()->with(['error' => 'No file copied.']);
+        }
+
+        $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+
+        // Find the destination folder
+        $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
+
+        if (!$destinationFolder) {
+            return back()->with(['error' => 'Destination folder not found.']);
+        }
+
+        $userId = $copiedFile->users_id;
+        $sourceFolder = DB::table('users_folder')->where('id', $copiedFile->users_folder_id)->first();
+        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolder->title . '/' . $copiedFile->files;
+        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $copiedFile->files;
+
+        // Copy the file in storage and insert a new record in the database
+        if (Storage::exists($sourcePath)) {
+            Storage::copy($sourcePath, $destinationPath);
+
+            // Insert a new record in the database for the copied file
+            DB::table('users_folder_files')->insert([
+                'users_id' => $userId,
+                'users_folder_id' => $decryptedDestinationFolderId,
+                'files' => $copiedFile->files,
+                'size' => $copiedFile->size,
+                'extension' => $copiedFile->extension,
+                'protected' => $copiedFile->protected,
+                'password' => $copiedFile->password
+            ]);
+
+            // Clear the copied file from the session
+            session()->forget('copiedFile');
+
+            return back()->with(['message' => 'File pasted successfully.']);
+        } else {
+            return back()->with(['error' => 'Source file not found in storage.']);
+        }
+    }
 }

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subfolder;
+use App\Models\UsersFolder;
+use App\Models\UsersFolderFile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +23,20 @@ class FilesController extends Controller
      */
     public function index()
     {
-        //
+        $userId = Auth::id();
+
+        // Fetch the user's main folders with subfolders and files
+        $folders = UsersFolder::where('users_id', $userId)
+            ->with(['subfolders', 'files'])
+            ->get();
+
+        $title = 'My Drive';
+
+        // Pass folders to the view
+        return view('drive', compact('title', 'folders'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -281,14 +297,29 @@ class FilesController extends Controller
      */
     public function show($id)
     {
-        $folder_id = Crypt::decryptString($id);
-        $files = DB::table('users_folder_files')
-            ->where('users_folder_id', $folder_id)
-            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
-            ->get();
+        $decryptedId = Crypt::decryptString($id);
 
-        return view('folder.show', compact('files'));
+        $folder = UsersFolder::with(['subfolders', 'files'])->find($decryptedId);
+
+        if (!$folder) {
+            return back()->with([
+                'message' => 'Folder not found.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
+        dd($folder->subfolders, $folder->files); // Debugging
+
+        return view('drive', [
+            'title' => $folder->title,
+            'subfolders' => $folder->subfolders,
+            'files' => $folder->files,
+            'folderId' => $id
+        ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

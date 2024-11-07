@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subfolder;
+use App\Models\UsersFolder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -14,6 +15,20 @@ class SubfolderController extends Controller
     /**
      * Store a new subfolder.
      */
+    public function index()
+    {
+        $title = 'Drive Contents';
+
+        // Fetch subfolders and files
+        $subfolders = Subfolder::whereNull('parent_folder_id')->get();
+        $files = DB::table('files')->whereNull('folder_id')->get(); // Adjust query as needed
+
+        // Pass both variables to the view
+        return view('drive', compact('title', 'subfolders', 'files'));
+    }
+
+
+
     public function store(Request $request)
     {
         $userId = Auth::id();
@@ -52,22 +67,38 @@ class SubfolderController extends Controller
     /**
      * Display the specified subfolder.
      */
-    public function show(Subfolder $subfolder)
+    public function show($id)
     {
-        $subfolders = $subfolder->subfolders;
-        $files = DB::table('files')->where('folder_id', $subfolder->id)->get();
+        $decryptedId = Crypt::decryptString($id);
 
-        return view('subfolders.show', [
-            'subfolder' => $subfolder,
-            'subfolders' => $subfolders,
-            'files' => $files,
-            'parentFolderId' => $subfolder->id // Pass the current folder ID as parent ID
+        // Fetch subfolders and files related to this folder
+        $folder = UsersFolder::with(['subfolders', 'files'])->find($decryptedId);
+
+        if (!$folder) {
+            return back()->with([
+                'message' => 'Folder not found.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
+        return view('drive', [
+            'title' => $folder->title,
+            'subfolders' => $folder->subfolders, // Verify this returns data
+            'files' => $folder->files, // Verify this returns data
+            'folderId' => $id
         ]);
     }
+
     public function showSubfolders($parentId)
     {
-        $subfolders = DB::table('subfolders')->where('parent_folder_id', $parentId)->get();
-        $query = Subfolder::hydrate($subfolders->toArray()); // Convert stdClass objects to Subfolder models
-        return view('your_view_name', compact('query'));
+        $subfolders = Subfolder::where('parent_folder_id', $parentId)
+            ->with('files') // Assuming each subfolder has a 'files' relationship defined
+            ->get();
+
+        return view('subfolder', [
+            'subfolders' => $subfolders,
+            'parentFolderId' => $parentId // Pass the parent ID to the view
+        ]);
     }
 }

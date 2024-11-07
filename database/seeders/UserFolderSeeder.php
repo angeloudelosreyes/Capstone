@@ -15,14 +15,14 @@ class UserFolderSeeder extends Seeder
     public function run(): void
     {
         $query = DB::table('users')->get();
-        foreach($query as $row) {
-            for($i=1;$i<=6;$i++) {
-                $directory = 'public/users/'.$row->id.'/Folder '.$i;
+        foreach ($query as $row) {
+            for ($i = 1; $i <= 6; $i++) {
+                $directory = 'public/users/' . $row->id . '/Folder ' . $i;
                 if (!Storage::exists($directory)) {
                     Storage::makeDirectory($directory);
-                    DB::table('users_folder')->insert(['users_id' => $row->id, 'title' => 'Folder '.$i]);
+                    DB::table('users_folder')->insert(['users_id' => $row->id, 'title' => 'Folder ' . $i]);
                     echo "Success\n";
-                } 
+                }
             }
         }
     }

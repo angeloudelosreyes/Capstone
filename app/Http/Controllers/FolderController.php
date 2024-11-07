@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Folder;
+use App\Models\UsersFolder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ class FolderController extends Controller
     public function index()
     {
         // Fetch only top-level folders, excluding subfolders
-        $query = Folder::whereNull('parent_folder_id')->paginate(10); // Adjust as needed
+        $query = UsersFolder::whereNull('parent_folder_id')->paginate(10); // Adjust as needed
 
         return view('home', compact('query'));
     }
@@ -63,28 +63,33 @@ class FolderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         $decryptedId = Crypt::decryptString($id);
 
-        // Fetch the folder details
-        $folder = DB::table('users_folder')->where('id', $decryptedId)->first();
+        // Fetch the folder and related subfolders and files
+        $folder = UsersFolder::find($decryptedId);
 
-        // Check if folder exists
         if (!$folder) {
             return back()->with([
                 'message' => 'Folder not found.',
-                'type'    => 'error',
-                'title'   => 'System Notification'
+                'type' => 'error',
+                'title' => 'System Notification'
             ]);
         }
 
-        $query = DB::table('users_folder_files')->where('users_folder_id', $decryptedId)->paginate(18);
-        $title = $folder->title;
-        $folderId = Crypt::encryptString($decryptedId); // Encrypt the folder ID
+        // Paginate subfolders and files separately
+        $subfolders = $folder->subfolders()->paginate(10, ['*'], 'subfolders'); // Paginate subfolders
+        $files = $folder->files()->paginate(10, ['*'], 'files'); // Paginate files
 
-        return view('drive', compact('title', 'query', 'folderId'));
+        return view('drive', [
+            'title' => $folder->title,
+            'subfolders' => $subfolders,
+            'files' => $files,
+            'folderId' => $id
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
