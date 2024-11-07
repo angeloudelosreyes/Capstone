@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', 'store')->name('folder.store');
         Route::post('/update', 'update')->name('folder.update');
         Route::get('/show/{id}', 'show')->name('folder.show');
-        Route::get('/destroy/{id}', 'destroy')->name('folder.destroy');
+        Route::delete('/destroy/{id}', 'destroy')->name('folder.destroy');
     });
 
     // Files Routes
@@ -89,8 +89,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Subfolder Routes
-    Route::resource('subfolders', SubfolderController::class);
-    Route::post('/subfolder/create', [SubfolderController::class, 'store'])->name('subfolder.store');
-    Route::get('/subfolder/{subfolder}', [SubfolderController::class, 'show'])->name('subfolder.show');
-    Route::get('/drive/{parentId}', [SubfolderController::class, 'showSubfolders'])->name('drive.showSubfolders');
+    Route::prefix('subfolder')->controller(SubfolderController::class)->group(function () {
+        Route::post('/store', 'store')->name('subfolder.store');
+        Route::post('/update', 'update')->name('subfolder.update');
+        Route::get('/show/{id}', 'show')->name('subfolder.show');
+        Route::delete('/destroy/{id}', 'destroy')->name('subfolder.destroy');
+    });
 });

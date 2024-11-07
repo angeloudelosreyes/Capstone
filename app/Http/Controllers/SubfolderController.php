@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SubfolderController extends Controller
 {
@@ -71,21 +72,25 @@ class SubfolderController extends Controller
     {
         $decryptedId = Crypt::decryptString($id);
 
-        // Fetch subfolders and files related to this folder
-        $folder = UsersFolder::with(['subfolders', 'files'])->find($decryptedId);
+        // Fetch the subfolder and related subfolders and files
+        $subfolder = Subfolder::find($decryptedId);
 
-        if (!$folder) {
+        if (!$subfolder) {
             return back()->with([
-                'message' => 'Folder not found.',
+                'message' => 'Subfolder not found.',
                 'type' => 'error',
                 'title' => 'System Notification'
             ]);
         }
 
+        // Paginate nested subfolders and files
+        $nestedSubfolders = $subfolder->subfolders()->paginate(10, ['*'], 'subfolders');
+        $files = $subfolder->files()->paginate(10, ['*'], 'files');
+
         return view('drive', [
-            'title' => $folder->title,
-            'subfolders' => $folder->subfolders, // Verify this returns data
-            'files' => $folder->files, // Verify this returns data
+            'title' => $subfolder->name,
+            'subfolders' => $nestedSubfolders,
+            'files' => $files,
             'folderId' => $id
         ]);
     }
@@ -99,6 +104,69 @@ class SubfolderController extends Controller
         return view('subfolder', [
             'subfolders' => $subfolders,
             'parentFolderId' => $parentId // Pass the parent ID to the view
+        ]);
+    }
+    public function update(Request $request)
+    {
+        $old = 'public/users/' . auth()->user()->id . '/' . $request->old;
+        $new = 'public/users/' . auth()->user()->id . '/' . $request->new;
+
+        if (Storage::exists($old)) {
+            // Move the old directory to the new directory
+            Storage::move($old, $new);
+
+            // Update the subfolder name in the database
+            DB::table('subfolders')->where(['id' => Crypt::decryptString($request->id)])->update(['name' => $request->new]);
+
+            return back()->with([
+                'message' => 'Subfolder has been renamed.',
+                'type'    => 'success',
+                'title'   => 'System Notification'
+            ]);
+        } else {
+            return back()->with([
+                'message' => 'Old subfolder does not exist.',
+                'type'    => 'error',
+                'title'   => 'System Notification'
+            ]);
+        }
+    }
+
+
+    /**
+     * Remove the specified subfolder from storage.
+     */
+    public function destroy(string $id)
+    {
+        // Decrypt the subfolder ID
+        $decryptedId = Crypt::decryptString($id);
+
+        // Find the subfolder in the database
+        $subfolder = Subfolder::find($decryptedId);
+
+        if (!$subfolder) {
+            return back()->with([
+                'message' => 'Subfolder not found.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
+        // Define the directory path for the subfolder
+        $directory = 'public/users/' . auth()->user()->id . '/' . $subfolder->name;
+
+        // Only show a success message if the directory is deleted or if it does not exist
+        if (Storage::exists($directory)) {
+            Storage::deleteDirectory($directory);
+        }
+
+        // Delete the subfolder entry from the database
+        $subfolder->delete();
+
+        return back()->with([
+            'message' => 'Subfolder has been deleted.',
+            'type' => 'success',
+            'title' => 'System Notification'
         ]);
     }
 }

@@ -38,9 +38,17 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="update_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-pencil me-2"></i> Rename</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('folder.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-trash me-2"></i> Delete</a></li>
+                                        <form
+                                            action="{{ route('folder.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
+                                            method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item"
+                                                onclick="return confirm('Are you sure you want to delete this folder?');">
+                                                <i class="bx bx-trash me-2"></i> Delete
+                                            </button>
+                                        </form>
+
                                     </ul>
                                 </div>
                             </div>

@@ -20,9 +20,10 @@
 
             <!-- Add Create Button -->
             <div class="col-12 mb-3 d-flex justify-content-start">
-                <button class="btn btn-secondary me-2" onclick="window.history.back();">
+                <button class="btn btn-secondary me-2" onclick="location.href='{{ route('home') }}'">
                     <i class="ri-arrow-left-line"></i> Back
                 </button>
+
                 <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
                     style="min-width: 160px;">
                     <i class="ri-file-add-line fs-5 me-1"></i> Create New File
@@ -38,13 +39,55 @@
                     <div class="col-md-2 col-6 folder-card">
                         <div class="card bg-light shadow-none">
                             <div class="card-body">
-                                <div class="text-center">
-                                    <a href="{{ route('subfolder.show', ['subfolder' => Crypt::encryptString($subfolder->id)]) }}"
+                                <div class="d-flex justify-content-center position-relative">
+                                    <a href="{{ route('subfolder.show', ['id' => Crypt::encryptString($subfolder->id)]) }}"
                                         class="text-decoration-none">
                                         <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                        <h6 class="fs-15 folder-name">{{ $subfolder->name }}</h6>
                                     </a>
+                                    <!-- Dropdown Menu for Folder Options -->
+                                    <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
+                                        <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('subfolder.show', ['id' => Crypt::encryptString($subfolder->id)]) }}">
+                                                    <i class="bx bx-link me-2"></i> Open Subfolder
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="create_files('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')">
+                                                    <i class="bx bx-upload me-2"></i> Upload Files
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="upload_encrypted_files('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')">
+                                                    <i class="bx bx-lock me-2"></i> Upload Encrypted Files
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')"><i
+                                                        class="bx bx-pencil me-2"></i> Rename</a></li>
+                                            <li>
+                                                <form
+                                                    action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
+                                                    method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item"
+                                                        onclick="return confirm('Are you sure you want to delete this subfolder?');">
+                                                        <i class="bx bx-trash me-2"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <h6 class="fs-15 folder-name text-center mt-2">{{ $subfolder->name }}</h6>
                             </div>
                         </div>
                     </div>
@@ -52,7 +95,6 @@
                 {{ $subfolders->links() }}
             @endif
 
-            <!-- Display Files -->
             <!-- Display Files -->
             @if (isset($files) && count($files) > 0)
                 @foreach ($files as $file)
@@ -137,7 +179,8 @@
                                                         class="bx bx-rename me-2"></i> Rename</a></li>
                                             <li><a class="dropdown-item"
                                                     href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                        class="bx bx-trash me-2"></i> Delete</a></li>
+                                                        class="bx bx-trash me-2"></i> Delete</a>\
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -379,6 +422,54 @@
                         })
                         .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
                             'error'));
+                }
+            });
+        }
+
+        function renameSubfolder(subfolderId, oldName) {
+            Swal.fire({
+                title: 'Rename Subfolder',
+                input: 'text',
+                inputLabel: 'Enter the new subfolder name',
+                inputValue: oldName,
+                showCancelButton: true,
+                confirmButtonText: 'Rename',
+                showLoaderOnConfirm: true,
+                preConfirm: (newName) => {
+                    if (!newName.trim()) {
+                        Swal.showValidationMessage('Subfolder name cannot be empty');
+                        return;
+                    }
+                    return fetch('{{ route('subfolder.update') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                id: subfolderId,
+                                new: newName,
+                                old: oldName
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.type === 'success') {
+                                Swal.fire('Renamed!', 'Subfolder has been renamed successfully.', 'success')
+                                    .then(() => {
+                                        location.reload(); // Reload the page after successful rename
+                                    });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error renaming subfolder:', error);
+                            Swal.fire('Error!', 'An error occurred while renaming the subfolder.', 'error');
+                        });
                 }
             });
         }

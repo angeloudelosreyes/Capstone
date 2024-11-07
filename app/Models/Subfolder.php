@@ -33,6 +33,6 @@ class Subfolder extends Model
     }
     public function files()
     {
-        return $this->hasMany(UsersFolderFile::class, 'subfolder_id'); // Assuming subfolder_id exists
+        return $this->hasMany(UsersFolderFile::class, 'users_folder_id'); // Use users_folder_id instead
     }
 }

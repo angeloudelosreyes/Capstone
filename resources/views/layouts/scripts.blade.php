@@ -17,7 +17,6 @@
 
     function createSubFolder(parentId) {
         $('#parent_id').val(parentId);
-        d
         $('#title').val('');
         $('#create_folder').modal('show');
     }
@@ -27,6 +26,13 @@
         $('#id').val(id)
         $('#update_folder').modal('show')
     }
+
+    function update_subfolder(id, old) {
+        $('#old, #new').val(old);
+        $('#id').val(id);
+        $('#update_subfolder').modal('show');
+    }
+
 
     function create_files(id, title) {
         $('#caption').html(title)

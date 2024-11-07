@@ -77,6 +77,7 @@
     @include('includes.create-folder-modal')
     @include('includes.update-folder-modal')
     @include('includes.upload-files-modal')
+    @include('includes.update-subfolder-modal')
     @include('includes.share-modal')
     @include('includes.create-user-modal')
     @include('includes.update-user-modal')
