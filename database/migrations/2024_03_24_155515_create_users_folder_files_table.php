@@ -14,8 +14,10 @@ return new class extends Migration
     {
         Schema::create('users_folder_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('users_folder_id')->references('id')->on('users_folder')->onDelete('cascade');
+            $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('users_folder_id')->nullable()->constrained('users_folder')->onDelete('cascade');
+            $table->unsignedBigInteger('subfolder_id')->nullable(); // Explicitly define as unsignedBigInteger
+            $table->foreign('subfolder_id')->references('id')->on('subfolders')->onDelete('cascade'); // Define foreign key constraint
             $table->string('files');
             $table->integer('size')->default(0);
             $table->string('extension');
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users_folder_contents');
+        Schema::dropIfExists('users_folder_files');
     }
 };

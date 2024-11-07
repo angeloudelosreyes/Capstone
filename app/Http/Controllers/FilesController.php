@@ -145,6 +145,19 @@ class FilesController extends Controller
             Log::info('Password: ' . $password);
         }
 
+        // Check if the folder ID exists in `users_folder` or `subfolders`
+        $folderExistsInUsersFolder = DB::table('users_folder')->where('id', $folder_id)->exists();
+        $folderExistsInSubfolder = DB::table('subfolders')->where('id', $folder_id)->exists();
+
+        if (!$folderExistsInUsersFolder && !$folderExistsInSubfolder) {
+            Log::error("Folder ID $folder_id does not exist in either users_folder or subfolders.");
+            return back()->with([
+                'message' => 'Invalid folder. Please check if the folder or subfolder exists.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
         if ($request->hasFile('files')) {
             $files = $request->file('files');
             foreach ($files as $file) {
@@ -172,6 +185,18 @@ class FilesController extends Controller
                 Log::info('File path: ' . $path);
                 Log::info('File size: ' . $fileSize);
 
+                // Log details before insertion for debugging
+                Log::info('Inserting file record with details:', [
+                    'user_id' => $id,
+                    'folder_id' => $folder_id,
+                    'file_name' => $name,
+                    'file_size' => $fileSize,
+                    'extension' => $extension,
+                    'is_protected' => $isEncrypted ? 'YES' : 'NO',
+                    'password' => $password,
+                ]);
+
+                // Insert the file record
                 DB::table('users_folder_files')->insert([
                     'users_id' => $id,
                     'users_folder_id' => $folder_id,
@@ -180,7 +205,6 @@ class FilesController extends Controller
                     'extension' => $extension,
                     'protected' => $isEncrypted ? 'YES' : 'NO',
                     'password' => $password,
-                    'created_at' => Carbon::now() // Add created_at timestamp here
                 ]);
             }
             return back()->with([
@@ -197,6 +221,8 @@ class FilesController extends Controller
             ]);
         }
     }
+
+
 
     public function decryptStore(Request $request)
     {

@@ -81,6 +81,8 @@
     @include('includes.share-modal')
     @include('includes.create-user-modal')
     @include('includes.update-user-modal')
+    @include('includes.upload-subfiles-modal')
+
 
     @include('layouts.scripts')
     @yield('custom_js')

@@ -14,6 +14,8 @@ class UsersFolderFile extends Model
     protected $fillable = [
         'users_id',
         'users_folder_id',
+        'subfolder_id',
+
         'files',
         'size',
         'extension',

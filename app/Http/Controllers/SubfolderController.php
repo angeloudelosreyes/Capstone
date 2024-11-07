@@ -20,11 +20,10 @@ class SubfolderController extends Controller
     {
         $title = 'Drive Contents';
 
-        // Fetch subfolders and files
-        $subfolders = Subfolder::whereNull('parent_folder_id')->get();
+        // Fetch all root subfolders (with nested subfolders) and files
+        $subfolders = Subfolder::whereNull('parent_folder_id')->with('subfolders')->get();
         $files = DB::table('files')->whereNull('folder_id')->get(); // Adjust query as needed
 
-        // Pass both variables to the view
         return view('drive', compact('title', 'subfolders', 'files'));
     }
 
@@ -65,6 +64,7 @@ class SubfolderController extends Controller
             return back()->withErrors('Failed to create subfolder. Please try again.');
         }
     }
+
     /**
      * Display the specified subfolder.
      */

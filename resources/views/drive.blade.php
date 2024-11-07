@@ -3,7 +3,6 @@
     @include('includes.create-sub-folder-modal')
 
 
-
     <div class="row">
         @if (isset($query) &&
                 count($query) == 0 &&

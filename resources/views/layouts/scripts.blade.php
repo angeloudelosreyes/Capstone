@@ -6,6 +6,8 @@
 <script src="{{ asset('storage/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('storage/FreezeUi/freeze-ui.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/min/dropzone.min.js"></script>
+
 
 <!-- App js -->
 <script src="{{ asset('storage/js/app.js') }}"></script>
@@ -39,6 +41,16 @@
         $('#folder_id').val(id)
         $('#folder').val(title)
         $('#create_files').modal('show')
+        dropzone.removeAllFiles();
+    }
+
+    function create_subfiles(id, title) {
+        console.log(title); // Check if title is correct
+
+        $('#caption_subfolder').html(title)
+        $('#parent_id').val(id)
+        $('#subfolder_name').val(title)
+        $('#create_subfiles').modal('show')
         dropzone.removeAllFiles();
     }
 

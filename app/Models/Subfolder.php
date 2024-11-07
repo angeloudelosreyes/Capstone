@@ -29,7 +29,7 @@ class Subfolder extends Model
     // Optionally, define relationship for nested subfolders
     public function subfolders()
     {
-        return $this->hasMany(Subfolder::class, 'parent_folder_id');
+        return $this->hasMany(Subfolder::class, 'parent_folder_id')->with('subfolders');
     }
     public function files()
     {
