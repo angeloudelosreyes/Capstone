@@ -14,16 +14,8 @@
         @else
             <h5 class="mb-4 text-uppercase fw-bolder">{{ $title }}</h5>
 
-            @php
-                // Create an array to keep track of displayed filenames
-                $displayedFiles = [];
-            @endphp
 
             @foreach ($query as $data)
-                @if (in_array($data->files, $displayedFiles))
-                    @continue // Skip this file if it's already displayed
-                @endif
-
                 @php
                     // Add the current file name to the displayed array
                     $displayedFiles[] = $data->files;
@@ -65,9 +57,19 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
                                                     class="bx bx-cut me-2"></i> Move</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-trash me-2"></i> Delete</a></li>
+                                        <li>
+                                            <form
+                                                action="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
+                                                method="POST" style="display: inline;"
+                                                id="delete-form-{{ $data->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                    <i class="bx bx-trash me-2"></i> Delete
+                                                </button>
+                                            </form>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -398,5 +400,23 @@
                 }
             });
         });
+    </script>
+    <script>
+        function confirmDelete(subfolderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirmed the deletion
+                    document.getElementById('delete-form-' + subfolderId).submit();
+                }
+            });
+        }
     </script>
 @endsection

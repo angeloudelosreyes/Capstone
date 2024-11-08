@@ -2,7 +2,6 @@
 @section('container')
     @include('includes.create-sub-folder-modal')
 
-
     <div class="row">
         @if (isset($query) &&
                 count($query) == 0 &&
@@ -71,11 +70,12 @@
                                             <li>
                                                 <form
                                                     action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
-                                                    method="POST" style="display: inline;">
+                                                    method="POST" style="display: inline;"
+                                                    id="delete-form-{{ $subfolder->id }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item"
-                                                        onclick="return confirm('Are you sure you want to delete this subfolder?');">
+                                                    <button type="button" class="dropdown-item"
+                                                        onclick="confirmDelete('{{ $subfolder->id }}')">
                                                         <i class="bx bx-trash me-2"></i> Delete
                                                     </button>
                                                 </form>
@@ -100,7 +100,15 @@
                                 <div class="d-flex justify-content-center position-relative">
                                     <a href="{{ route('drive.show', ['id' => Crypt::encryptString($file->id)]) }}"
                                         class="text-decoration-none">
-                                        <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                        @if ($file->extension == 'pdf')
+                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                        @elseif ($file->extension == 'xlsx')
+                                            <i class="ri-file-excel-fill align-bottom text-success display-5"></i>
+                                        @elseif ($file->extension == 'docx')
+                                            <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                        @else
+                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
+                                        @endif
                                     </a>
                                     <!-- Dropdown Menu for File Options -->
                                     <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
@@ -130,9 +138,19 @@
                                             <li><a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
                                                         class="bx bx-cut me-2"></i> Move</a></li>
-                                            <li><a class="dropdown-item"
-                                                    href="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"><i
-                                                        class="bx bx-trash me-2"></i> Delete</a></li>
+                                            <li>
+                                                <form
+                                                    action="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
+                                                    method="POST" style="display: inline;"
+                                                    id="delete-form-{{ $file->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="dropdown-item"
+                                                        onclick="confirmDelete('{{ $file->id }}')">
+                                                        <i class="bx bx-trash me-2"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -142,7 +160,6 @@
                     </div>
                 @endforeach
             @endif
-
 
             <!-- Display Existing Folder Contents -->
             @if (isset($query) && count($query) > 0)
@@ -173,9 +190,18 @@
                                             <li><a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="renameFile('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
                                                         class="bx bx-rename me-2"></i> Rename</a></li>
-                                            <li><a class="dropdown-item"
-                                                    href="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                        class="bx bx-trash me-2"></i> Delete</a>\
+                                            <li>
+                                                <form
+                                                    action="{{ route('drive.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
+                                                    method="POST" style="display: inline;"
+                                                    id="delete-form-{{ $data->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="dropdown-item"
+                                                        onclick="confirmDelete('{{ $data->id }}')">
+                                                        <i class="bx bx-trash me-2"></i> Delete
+                                                    </button>
+                                                </form>
                                             </li>
                                         </ul>
                                     </div>
@@ -190,6 +216,8 @@
                                                 <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
                                             @elseif($data->extension == 'docx')
                                                 <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                            @elseif($data->extension == 'xlsx')
+                                                <i class="ri-file-excel-fill align-bottom text-success display-5"></i>
                                             @else
                                                 <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                             @endif
@@ -208,6 +236,25 @@
         @endif
     </div>
 @endsection
+
+<script>
+    function confirmDelete(subfolderId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form if the user confirmed the deletion
+                document.getElementById('delete-form-' + subfolderId).submit();
+            }
+        });
+    }
+</script>
 <script>
     // Copy a file
     function copyFile(fileId) {

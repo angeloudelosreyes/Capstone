@@ -310,12 +310,35 @@ class DriveController extends Controller
      */
     public function destroy(string $id)
     {
-        $query = DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->first();
-        $title = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
+        // Decrypt the ID to get the file record
+        $fileId = Crypt::decryptString($id);
+
+        // Retrieve the file record
+        $query = DB::table('users_folder_files')->where('id', $fileId)->first();
+
+        // Check if the file exists
+        if (!$query) {
+            return back()->with([
+                'message' => 'File not found.',
+                'type'    => 'error',
+                'title'   => 'System Notification'
+            ]);
+        }
+
+        // Get the folder title
+        $title = DB::table('users_folder')->where('id', $query->users_folder_id)->first()->title;
+
+        // Build the directory path
         $directory = 'public/users/' . $query->users_id . '/' . $title . '/' . $query->files;
+
+        // Check if the file exists in storage
         if (Storage::exists($directory)) {
+            // Delete the file from storage
             Storage::delete($directory);
-            DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->delete();
+
+            // Delete the record from the database
+            DB::table('users_folder_files')->where('id', $fileId)->delete();
+
             return back()->with([
                 'message' => 'Selected file has been deleted.',
                 'type'    => 'success',
@@ -323,12 +346,13 @@ class DriveController extends Controller
             ]);
         } else {
             return back()->with([
-                'message' => 'File does not exist.',
+                'message' => 'File does not exist in storage.',
                 'type'    => 'error',
                 'title'   => 'System Notification'
             ]);
         }
     }
+
 
     public function rename(Request $request, string $id)
     {

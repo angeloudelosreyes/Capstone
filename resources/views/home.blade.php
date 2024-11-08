@@ -41,16 +41,19 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="update_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-pencil me-2"></i> Rename</a></li>
-                                        <form
-                                            action="{{ route('folder.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
-                                            method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item"
-                                                onclick="return confirm('Are you sure you want to delete this folder?');">
-                                                <i class="bx bx-trash me-2"></i> Delete
-                                            </button>
-                                        </form>
+                                        <li>
+                                            <form
+                                                action="{{ route('folder.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
+                                                method="POST" style="display: inline;"
+                                                id="delete-form-{{ $data->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="confirmDelete('{{ $data->id }}')">
+                                                    <i class="bx bx-trash me-2"></i> Delete
+                                                </button>
+                                            </form>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -163,6 +166,24 @@
                 reader.readAsText(file);
             }
         });
+    </script>
+    <script>
+        function confirmDelete(subfolderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirmed the deletion
+                    document.getElementById('delete-form-' + subfolderId).submit();
+                }
+            });
+        }
     </script>
     <script>
         $('.home').addClass('active')
