@@ -64,12 +64,6 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="upload_encrypted_files('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')">
-                                                    <i class="bx bx-lock me-2"></i> Upload Encrypted Files
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')"><i
                                                         class="bx bx-pencil me-2"></i> Rename
                                                 </a>
@@ -131,13 +125,11 @@
                                                     onclick="renameFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
                                                         class="bx bx-edit-alt me-2"></i> Rename</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')">
-                                                    <i class="bx bx-copy me-2"></i> Copy
-                                                </a></li>
-                                            {{-- <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}')">
-                                                    <i class="bx bx-move me-2"></i> Move
-                                                </a></li> --}}
+                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
+                                                        class="bx bx-copy me-2"></i> Copy</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
+                                                        class="bx bx-cut me-2"></i> Move</a></li>
                                             <li><a class="dropdown-item"
                                                     href="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"><i
                                                         class="bx bx-trash me-2"></i> Delete</a></li>
@@ -216,6 +208,120 @@
         @endif
     </div>
 @endsection
+<script>
+    // Copy a file
+    function copyFile(fileId) {
+        console.log("Copying file with ID:", fileId);
+
+        // Set the hidden input for fileId in the form
+        document.getElementById('fileIdToCopy').value = fileId;
+
+        const destinationFolderSelect = document.getElementById('copyDestinationFolder');
+        destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+        // Fetch the available folders to populate the dropdown
+        fetch("{{ route('folders.list') }}")
+            .then(response => {
+                console.log("Fetching folders...");
+                return response.json();
+            })
+            .then(data => {
+                console.log("Fetched folders:", data.folders);
+                destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                data.folders.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.encrypted_id; // Assuming folder.encrypted_id exists
+                    option.textContent = folder.title;
+                    destinationFolderSelect.appendChild(option);
+                });
+
+                // Show the modal only after folders are fetched
+                $('#copyFileModal').modal('show'); // Show the modal
+            })
+            .catch(error => {
+                console.error('Error fetching folders:', error);
+                Swal.fire('Error!', 'Could not fetch folders. Please try again later.', 'error');
+            });
+    }
+
+    function submitCopyFileForm() {
+        const form = document.getElementById('copyFileForm');
+        const fileId = document.getElementById('fileIdToCopy').value;
+        const destinationFolderId = document.getElementById('copyDestinationFolder').value;
+
+        console.log("Submitting copy form with fileId:", fileId, "and destinationFolderId:", destinationFolderId);
+
+        if (fileId && destinationFolderId) {
+            // Now set the form action to paste
+            form.action = `{{ url('drive/paste') }}/${destinationFolderId}`;
+            form.method = 'POST'; // Ensure it's a POST request
+            form.submit(); // Submit the form to paste the copied file
+        } else {
+            Swal.fire('Error', 'Please select a destination folder.', 'error');
+        }
+    }
+</script>
+
+<script>
+    function moveFile(fileId) {
+        // Set the hidden input for fileId
+        document.getElementById('fileIdToMove').value = fileId;
+
+        const destinationFolderSelect = document.getElementById('destinationFolder');
+        destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+        // Fetch the available folders
+        fetch("{{ route('folders.list') }}")
+            .then(response => response.json())
+            .then(data => {
+                destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                data.folders.forEach(folder => {
+                    const option = document.createElement('option');
+                    option.value = folder.encrypted_id;
+                    option.textContent = folder.title;
+                    destinationFolderSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching folders:', error));
+
+        $('#moveFileModal').modal('show'); // Show the modal
+    }
+
+    document.getElementById('destinationFolder').addEventListener('change', function() {
+        const fileId = document.getElementById('fileIdToMove').value;
+        const destinationFolderId = this.value;
+
+        // Confirm that the IDs are set
+        console.log("Selected fileId:", fileId);
+        console.log("Selected destinationFolderId:", destinationFolderId);
+
+        // Only set the action URL if both IDs are present
+        if (fileId && destinationFolderId) {
+            const actionUrl = `{{ url('drive/move') }}/${fileId}/${destinationFolderId}`;
+            console.log("Form action URL set to:", actionUrl); // Log to verify
+            document.getElementById('moveFileForm').action = actionUrl;
+
+            // Log the constructed action URL to verify
+            console.log("Form action URL set to:", actionUrl);
+        }
+    });
+
+    function submitMoveFileForm() {
+        const fileId = document.getElementById('fileIdToMove').value;
+        const destinationFolderId = document.getElementById('destinationFolder').value;
+
+        if (fileId && destinationFolderId) {
+            // Construct the route URL with the parameters
+            const actionUrl = `{{ url('drive/move') }}/${fileId}/${destinationFolderId}`;
+            document.getElementById('moveFileForm').action = actionUrl; // Set the form action
+
+            console.log("Form action URL set to:", actionUrl); // Log to verify
+            document.getElementById('moveFileForm').submit(); // Submit the form
+        } else {
+            Swal.fire('Error', 'Please select a destination folder.', 'error');
+        }
+    }
+</script>
 
 @section('custom_js')
     <script>
