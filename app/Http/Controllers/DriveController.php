@@ -370,23 +370,6 @@ class DriveController extends Controller
             return response()->json(['type' => 'error', 'message' => 'File does not exist in storage.']);
         }
     }
-    public function copy(Request $request, string $fileId)
-    {
-        $decryptedFileId = Crypt::decryptString($fileId);
-
-        // Find the file in the database
-        $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
-
-        if (!$file) {
-            return back()->with(['error' => 'File not found']);
-        }
-
-        // Temporarily store the file details for pasting
-        session()->put('copiedFile', $file);
-
-        return back()->with(['message' => 'File copied successfully.']);
-    }
-
     /**
      * Move a file to another folder.
      */
@@ -461,59 +444,114 @@ class DriveController extends Controller
             ]);
         }
     }
-
-
-
-
-
-
-
-    /**
-     * Paste the copied file into the specified folder.
-     */
-    public function paste(Request $request, string $destinationFolderId)
+    public function copy(Request $request, string $fileId)
     {
-        $copiedFile = session()->get('copiedFile');
+        Log::info("Copying file with ID: " . $fileId);
+        $decryptedFileId = Crypt::decryptString($fileId);
+        Log::info("Decrypted file ID: " . $decryptedFileId);
 
-        if (!$copiedFile) {
-            return back()->with(['error' => 'No file copied.']);
+        // Find the file in the database
+        $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+        if (!$file) {
+            Log::error("File not found: " . $decryptedFileId);
+            return back()->with(['error' => 'File not found']);
         }
 
-        $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+        // Temporarily store the file details for pasting
+        session()->put('copiedFile', $file);
+        Log::info("File copied successfully and stored in session.", ['file' => (array)$file]);
 
-        // Find the destination folder
+        // Log session data
+        Log::info("Session data after copying: ", session()->all());
+
+        return back()->with(['message' => 'File copied successfully.', 'type' => 'success', 'title' => 'Success']);
+    }
+
+
+
+
+    public function paste(Request $request, string $destinationFolderId)
+    {
+        // Decrypt the destination folder ID
+        $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
         $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
 
         if (!$destinationFolder) {
+            Log::error("Destination folder not found: " . $decryptedDestinationFolderId);
             return back()->with(['error' => 'Destination folder not found.']);
         }
 
+        // Retrieve the file ID from the request and fetch the file from the database
+        $fileId = $request->input('fileId');
+        $decryptedFileId = Crypt::decryptString($fileId);
+        $copiedFile = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+        if (!$copiedFile) {
+            Log::error("File not found: " . $decryptedFileId);
+            return back()->with(['error' => 'File not found.']);
+        }
+
+        Log::info("Pasting file: ", ['copiedFile' => $copiedFile]);
+
+        // Proceed to copy and paste logic here...
         $userId = $copiedFile->users_id;
         $sourceFolder = DB::table('users_folder')->where('id', $copiedFile->users_folder_id)->first();
         $sourcePath = 'public/users/' . $userId . '/' . $sourceFolder->title . '/' . $copiedFile->files;
-        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $copiedFile->files;
+        $newFileName = $this->generateUniqueFileName($copiedFile->files, $decryptedDestinationFolderId);
+        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $newFileName;
+
+        Log::info("Source path: " . $sourcePath);
+        Log::info("Destination path: " . $destinationPath);
 
         // Copy the file in storage and insert a new record in the database
         if (Storage::exists($sourcePath)) {
             Storage::copy($sourcePath, $destinationPath);
+            Log::info("File copied from " . $sourcePath . " to " . $destinationPath);
 
-            // Insert a new record in the database for the copied file
+            // Insert a new record for the copied file
             DB::table('users_folder_files')->insert([
                 'users_id' => $userId,
                 'users_folder_id' => $decryptedDestinationFolderId,
-                'files' => $copiedFile->files,
+                'files' => $newFileName,
                 'size' => $copiedFile->size,
                 'extension' => $copiedFile->extension,
                 'protected' => $copiedFile->protected,
                 'password' => $copiedFile->password
             ]);
 
-            // Clear the copied file from the session
-            session()->forget('copiedFile');
-
-            return back()->with(['message' => 'File pasted successfully.']);
+            Log::info("File pasted successfully.", ['newFileName' => $newFileName]);
+            return back()->with(['message' => 'File pasted successfully.', 'type' => 'success', 'title' => 'Success']);
         } else {
+            Log::error("Source file not found in storage: " . $sourcePath);
             return back()->with(['error' => 'Source file not found in storage.']);
         }
+    }
+
+    // Helper function remains unchanged...
+
+    // Helper function to generate a unique file name if the file already exists
+    private function generateUniqueFileName($fileName, $folderId)
+    {
+        $fileParts = pathinfo($fileName);
+        $baseName = $fileParts['filename']; // Without extension
+        $extension = isset($fileParts['extension']) ? '.' . $fileParts['extension'] : ''; // With extension
+
+        // Initialize new name
+        $newName = $fileName;
+        $counter = 1;
+
+        // Check if a file with the new name already exists in the same folder
+        while (DB::table('users_folder_files')
+            ->where('users_folder_id', $folderId)
+            ->where('files', $newName)
+            ->exists()
+        ) {
+            // Generate a new name e.g. file(1).docx
+            $newName = $baseName . "($counter)" . $extension;
+            $counter++;
+        }
+
+        return $newName;
     }
 }

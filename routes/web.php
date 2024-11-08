@@ -53,7 +53,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', 'update')->name('files.update');
         Route::post('/rename', 'rename')->name('files.rename');
         Route::get('/destroy/{id}', 'destroy')->name('files.destroy');
-        Route::post('/copy/{fileId}', 'copy')->name('drive.copy');
     });
 
     // Drive Routes
@@ -68,9 +67,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/update/{id}', 'update')->name('drive.update');
         Route::post('/rename/{id}', 'rename')->name('drive.rename');
         Route::get('/get-folders', 'getFolders')->name('folders.list');
-        Route::post('/move/{fileId}/{destinationFolderId}', [DriveController::class, 'move'])->name('drive.move');
+        Route::post('/move/{fileId}/{destinationFolderId}', 'move')->name('drive.move');
+        Route::post('/copy/{fileId}', 'copy')->name('drive.copy');
         Route::post('/paste/{destinationFolderId}', 'paste')->name('drive.paste');
     });
+
 
     // Shared Routes
     Route::prefix('shared')->controller(SharedController::class)->group(function () {
