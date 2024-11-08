@@ -121,8 +121,8 @@
                                             <li><a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="share_file('{{ Crypt::encryptString($file->id) }}')"><i
                                                         class="bx bx-share me-2"></i> Share</a></li>
-                                            <li><a class="dropdown-item"
-                                                    href="{{ route('drive.download', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                            <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                    data-file-id="{{ Crypt::encryptString($file->id) }}"><i
                                                         class="bx bx-download me-2"></i> Download</a></li>
                                             <li><a class="dropdown-item"
                                                     href="{{ route('drive.edit', ['id' => Crypt::encryptString($file->id)]) }}"><i
@@ -427,5 +427,74 @@
                 }
             });
         }
+
+        function downloadFile(fileId) {
+            Swal.fire({
+                title: 'Enter Password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                showCancelButton: true,
+                confirmButtonText: 'Download',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    if (!password) {
+                        Swal.showValidationMessage('Password is required');
+                        return;
+                    }
+
+                    return fetch(
+                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
+                                method: 'GET',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                }
+                            })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.text().then(text => {
+                                    console.error('Response text:', text); // Log the response text
+                                    throw new Error(text);
+                                });
+                            }
+                            return response.blob();
+                        })
+                        .then(blob => {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = url;
+                            a.download = 'protected-file.zip'; // Use the fixed name for the downloaded file
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Request failed: ${error}`);
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const fileId = this.getAttribute('data-file-id');
+                downloadFile(fileId);
+            });
+        });
+        document.getElementById('fileSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const files = document.querySelectorAll('.folder-card');
+
+            files.forEach(file => {
+                const fileName = file.querySelector('.folder-name').textContent.toLowerCase();
+                if (fileName.includes(searchTerm)) {
+                    file.style.display = 'block';
+                } else {
+                    file.style.display = 'none';
+                }
+            });
+        });
     </script>
 @endsection
