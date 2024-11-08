@@ -101,7 +101,7 @@
                         <div class="card bg-light shadow-none">
                             <div class="card-body">
                                 <div class="d-flex justify-content-center position-relative">
-                                    <a href="{{ route('file.download', ['id' => Crypt::encryptString($file->id)]) }}"
+                                    <a href="{{ route('drive.show', ['id' => Crypt::encryptString($file->id)]) }}"
                                         class="text-decoration-none">
                                         <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
                                     </a>

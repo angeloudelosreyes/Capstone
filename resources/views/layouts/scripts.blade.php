@@ -23,6 +23,7 @@
         $('#create_folder').modal('show');
     }
 
+
     function update_folder(id, old) {
         $('#old,#new').val(old)
         $('#id').val(id)

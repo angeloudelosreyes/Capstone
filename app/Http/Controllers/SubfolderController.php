@@ -40,19 +40,19 @@ class SubfolderController extends Controller
             // Decrypt `parent_id` if it's encrypted
             $parentId = Crypt::decryptString($request->parent_id);
 
-            // Merge decrypted `parent_id` into request for validation
-            $request->merge(['parent_id' => $parentId]);
+            // Check if `parent_id` is provided or set to `null` if it's a root folder
+            $isRootFolder = empty($parentId);
 
-            // Validate the request with decrypted `parent_id`
+            // Set up validation to ensure `parent_id` exists only when creating a subfolder
             $request->validate([
                 'title' => 'required|string|max:255',
-                'parent_id' => 'required|exists:users_folder,id'
+                'parent_id' => $isRootFolder ? 'nullable' : 'required|exists:subfolders,id'
             ]);
 
-            // Insert into subfolders table
+            // Insert into `subfolders` table
             DB::table('subfolders')->insert([
                 'user_id' => $userId,
-                'parent_folder_id' => $parentId,
+                'parent_folder_id' => $isRootFolder ? null : $parentId,
                 'name' => $request->title,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -72,7 +72,7 @@ class SubfolderController extends Controller
     {
         $decryptedId = Crypt::decryptString($id);
 
-        // Fetch the subfolder and related subfolders and files
+        // Fetch the specific subfolder by ID
         $subfolder = Subfolder::find($decryptedId);
 
         if (!$subfolder) {
@@ -83,9 +83,11 @@ class SubfolderController extends Controller
             ]);
         }
 
-        // Paginate nested subfolders and files
-        $nestedSubfolders = $subfolder->subfolders()->paginate(10, ['*'], 'subfolders');
-        $files = $subfolder->files()->paginate(10, ['*'], 'files');
+        // Fetch nested subfolders and files related to the subfolder
+        $nestedSubfolders = $subfolder->subfolders()->get(); // Fetch subfolders if any
+        $files = DB::table('users_folder_files')
+            ->where('subfolder_id', $decryptedId)
+            ->get(); // Fetch files related to this subfolder
 
         return view('drive', [
             'title' => $subfolder->name,
@@ -94,6 +96,7 @@ class SubfolderController extends Controller
             'folderId' => $id
         ]);
     }
+
 
     public function showSubfolders($parentId)
     {
