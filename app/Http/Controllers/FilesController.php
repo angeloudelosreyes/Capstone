@@ -165,10 +165,14 @@ class FilesController extends Controller
                 $extension = $file->getClientOriginalExtension();
 
                 // Check for duplicate file name in the same folder
-                $duplicateFile = DB::table('users_folder_files')
-                    ->where('users_folder_id', $folder_id)
-                    ->where('files', $name)
-                    ->exists();
+                $duplicateFileQuery = DB::table('users_folder_files')
+                    ->where('files', $name);
+                if ($folderExistsInUsersFolder) {
+                    $duplicateFileQuery->where('users_folder_id', $folder_id);
+                } elseif ($folderExistsInSubfolder) {
+                    $duplicateFileQuery->where('subfolder_id', $folder_id);
+                }
+                $duplicateFile = $duplicateFileQuery->exists();
 
                 if ($duplicateFile) {
                     return back()->with([
@@ -185,27 +189,29 @@ class FilesController extends Controller
                 Log::info('File path: ' . $path);
                 Log::info('File size: ' . $fileSize);
 
-                // Log details before insertion for debugging
-                Log::info('Inserting file record with details:', [
-                    'user_id' => $id,
-                    'folder_id' => $folder_id,
-                    'file_name' => $name,
-                    'file_size' => $fileSize,
-                    'extension' => $extension,
-                    'is_protected' => $isEncrypted ? 'YES' : 'NO',
-                    'password' => $password,
-                ]);
-
-                // Insert the file record
-                DB::table('users_folder_files')->insert([
+                // Prepare data for insertion based on folder type
+                $fileData = [
                     'users_id' => $id,
-                    'users_folder_id' => $folder_id,
                     'files' => $name,
                     'size' => $fileSize,
                     'extension' => $extension,
                     'protected' => $isEncrypted ? 'YES' : 'NO',
                     'password' => $password,
-                ]);
+                ];
+
+                if ($folderExistsInUsersFolder) {
+                    $fileData['users_folder_id'] = $folder_id;
+                    $fileData['subfolder_id'] = null;
+                } elseif ($folderExistsInSubfolder) {
+                    $fileData['users_folder_id'] = null;
+                    $fileData['subfolder_id'] = $folder_id;
+                }
+
+                // Log details before insertion for debugging
+                Log::info('Inserting file record with details:', $fileData);
+
+                // Insert the file record
+                DB::table('users_folder_files')->insert($fileData);
             }
             return back()->with([
                 'message' => 'New file has been uploaded.',
@@ -221,6 +227,7 @@ class FilesController extends Controller
             ]);
         }
     }
+
 
 
 
