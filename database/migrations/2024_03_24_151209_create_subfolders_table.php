@@ -14,7 +14,7 @@ class CreateSubfoldersTable extends Migration
         Schema::create('subfolders', function (Blueprint $table) {
             $table->id(); // This will be an unsignedBigInteger
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('parent_folder_id')->constrained('users_folder')->onDelete('cascade');
+            $table->unsignedBigInteger('parent_folder_id')->nullable(); // Remove foreign key constraint
             $table->string('name');
             $table->timestamps();
         });

@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 @endforeach
-                {{ $subfolders->links() }}
+                {{-- {{ $subfolders->links() }} --}}
             @endif
 
             <!-- Display Files -->

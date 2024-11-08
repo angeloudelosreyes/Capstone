@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\FolderController;
-use Faker\Core\File;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,13 +23,31 @@ class Subfolder extends Model
         return $this->belongsTo(Subfolder::class, 'parent_folder_id');
     }
 
-    // Optionally, define relationship for nested subfolders
+    // Define relationship for nested subfolders
     public function subfolders()
     {
-        return $this->hasMany(Subfolder::class, 'parent_folder_id')->with('subfolders');
+        return $this->hasMany(Subfolder::class, 'parent_folder_id');
     }
+
+    // Define relationship for files
     public function files()
     {
-        return $this->hasMany(UsersFolderFile::class, 'users_folder_id'); // Use users_folder_id instead
+        return $this->hasMany(UsersFolderFile::class, 'users_folder_id'); // Adjust as needed
+    }
+
+    // Boot method to add a model event listener for cascading deletion
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($subfolder) {
+            // Delete all nested subfolders and their subfolders recursively
+            $subfolder->subfolders()->each(function ($child) {
+                $child->delete();
+            });
+
+            // Optionally delete associated files as well
+            $subfolder->files()->delete();
+        });
     }
 }

@@ -115,6 +115,7 @@ class FilesController extends Controller
             return response()->json(['error' => 'File already exists'], 400);
         }
     }
+
     public function store(Request $request)
     {
         Log::info('Store function called.');
@@ -132,35 +133,24 @@ class FilesController extends Controller
 
         $userId = auth()->user()->id;
         $folderId = Crypt::decryptString($request->folder_id);
-        $title = $request->folder;
         $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
         $password = $isEncrypted ? $request->password : null;
 
         Log::info('User ID: ' . $userId);
         Log::info('Folder ID: ' . $folderId);
-        Log::info('Folder Title: ' . $title);
         Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
 
-        // Determine the directory path based on whether the folder is a main folder or a subfolder
+        // Base path for the user's files
         $basePath = 'users/' . $userId;
-        $directory = '';
+        $directory = $this->buildFullPath($folderId, $basePath);
 
-        if (DB::table('users_folder')->where('id', $folderId)->exists()) {
-            // It's a main folder
-            $directory = $basePath . '/' . $title;
-        } else {
-            // It's a subfolder, so retrieve the full path including parent folders
-            $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
-            if ($subfolder) {
-                $directory = $this->buildFullPathForSubfolder($subfolder, $basePath);
-            } else {
-                Log::error("Subfolder ID $folderId not found.");
-                return back()->with([
-                    'message' => 'Subfolder not found. Please check if the folder or subfolder exists.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
-                ]);
-            }
+        if (!$directory) {
+            Log::error("Folder ID $folderId not found or is invalid.");
+            return back()->with([
+                'message' => 'Folder not found. Please check if the folder or subfolder exists.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
         }
 
         Log::info('Final directory path for file storage:', ['directory' => $directory]);
@@ -171,8 +161,7 @@ class FilesController extends Controller
                 $extension = $file->getClientOriginalExtension();
 
                 // Check for duplicate file name in the same folder
-                $duplicateFileQuery = DB::table('users_folder_files')
-                    ->where('files', $name);
+                $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
                 if (DB::table('users_folder')->where('id', $folderId)->exists()) {
                     $duplicateFileQuery->where('users_folder_id', $folderId);
                 } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
@@ -237,27 +226,40 @@ class FilesController extends Controller
         }
     }
 
-    private function buildFullPathForSubfolder($subfolder, $basePath)
-    {
-        $path = $basePath . '/' . $subfolder->name;
 
-        // Traverse up to the root, building the full path
-        while ($subfolder->parent_folder_id !== null) {
-            $parentFolder = DB::table('subfolders')->where('id', $subfolder->parent_folder_id)->first();
-            if ($parentFolder) {
-                $path = $basePath . '/' . $parentFolder->name . '/' . $path;
-                $subfolder = $parentFolder;
-            } else {
-                break;
-            }
+
+    /**
+     * Helper function to recursively build the full folder path.
+     */
+    /**
+     * Helper function to build the full path for any level of nested folders.
+     */
+    /**
+     * Helper function to build the full path from the specified folder ID to the root.
+     */
+    /**
+     * Helper function to recursively build the full path from a subfolder to the root.
+     */
+    private function buildFullPath($folderId, $basePath)
+    {
+        // Check if it's a main folder in `users_folder`
+        $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
+        if ($mainFolder) {
+            // If it's the main folder, just return its path
+            return $basePath . '/' . $mainFolder->title;
         }
 
-        return $path;
+        // Otherwise, assume it's a subfolder and try to retrieve it
+        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+        if ($subfolder) {
+            // Recursively call this function to get the parent path
+            $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
+            return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
+        }
+
+        // If neither a main folder nor a subfolder was found, return null (invalid path)
+        return null;
     }
-
-
-
-
 
 
 
