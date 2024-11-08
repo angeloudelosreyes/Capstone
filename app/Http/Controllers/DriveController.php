@@ -15,6 +15,21 @@ class DriveController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function getFolders()
+    {
+        $folders = DB::table('users_folder')
+            ->where('users_id', auth()->user()->id)
+            ->select('id', 'title')
+            ->get()
+            ->map(function ($folder) {
+                $folder->encrypted_id = Crypt::encryptString($folder->id);
+                return $folder;
+            });
+
+        return response()->json(['folders' => $folders]);
+    }
+
+
     public function index()
     {
         $query = DB::table('users_folder_files')->where(['users_id' => auth()->user()->id])->paginate(18);
@@ -117,6 +132,8 @@ class DriveController extends Controller
         }
         return view('read', compact('title', 'query', 'content', 'extension'));
     }
+
+
     public function display_pdf($title, $content)
     {
         $path = Crypt::decryptString($content);
@@ -375,35 +392,81 @@ class DriveController extends Controller
      */
     public function move(Request $request, string $fileId, string $destinationFolderId)
     {
-        $decryptedFileId = Crypt::decryptString($fileId);
-        $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+        Log::info("Received encrypted fileId: " . $fileId);
+        Log::info("Received encrypted destinationFolderId: " . $destinationFolderId);
 
-        // Find the file and destination folder
+        try {
+            // Decrypt the IDs
+            $decryptedFileId = Crypt::decryptString($fileId);
+            $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+            Log::info("Decrypted fileId: " . $decryptedFileId);
+            Log::info("Decrypted destinationFolderId: " . $decryptedDestinationFolderId);
+        } catch (\Exception $e) {
+            Log::error("Decryption failed: " . $e->getMessage());
+            return redirect()->back()->with([
+                'message' => 'Invalid encrypted IDs. Please try again.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
+        }
+
+        // Retrieve the file and destination folder from the database
         $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
         $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
 
+        // Check if both file and destination folder exist
         if (!$file || !$destinationFolder) {
-            return back()->with(['error' => 'File or destination folder not found']);
+            Log::error('File or destination folder not found.');
+            return redirect()->back()->with([
+                'message' => 'File or destination folder not found.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
         }
 
+        // Log the folder title to confirm its value
+        Log::info("Destination folder title: " . $destinationFolder->title);
+
+        // Define source and destination paths
         $userId = $file->users_id;
-        $sourceFolder = DB::table('users_folder')->where('id', $file->users_folder_id)->first();
-        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolder->title . '/' . $file->files;
+        $sourceFolderTitle = DB::table('users_folder')->where('id', $file->users_folder_id)->value('title');
+        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolderTitle . '/' . $file->files;
         $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $file->files;
 
-        // Move file in storage and update database record
+        // Log the constructed paths
+        Log::info("Constructed source path: " . $sourcePath);
+        Log::info("Constructed destination path: " . $destinationPath);
+
+        // Move the file if it exists
         if (Storage::exists($sourcePath)) {
             Storage::move($sourcePath, $destinationPath);
 
+            // Update file's folder reference in the database
             DB::table('users_folder_files')->where('id', $decryptedFileId)->update([
-                'users_folder_id' => $decryptedDestinationFolderId
+                'users_folder_id' => $decryptedDestinationFolderId,
             ]);
 
-            return back()->with(['message' => 'File moved successfully.']);
+            Log::info("File moved successfully from $sourcePath to $destinationPath.");
+            return redirect()->back()->with([
+                'message' => 'File moved successfully.',
+                'type' => 'success',
+                'title' => 'Success'
+            ]);
         } else {
-            return back()->with(['error' => 'File not found in storage.']);
+            Log::error("File not found in storage: $sourcePath");
+            return redirect()->back()->with([
+                'message' => 'File not found in storage.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
         }
     }
+
+
+
+
+
+
 
     /**
      * Paste the copied file into the specified folder.

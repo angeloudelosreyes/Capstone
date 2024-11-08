@@ -115,7 +115,6 @@ class FilesController extends Controller
             return response()->json(['error' => 'File already exists'], 400);
         }
     }
-
     public function store(Request $request)
     {
         Log::info('Store function called.');
@@ -131,46 +130,53 @@ class FilesController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $id = auth()->user()->id;
-        $folder_id = Crypt::decryptString($request->folder_id);
+        $userId = auth()->user()->id;
+        $folderId = Crypt::decryptString($request->folder_id);
         $title = $request->folder;
         $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
         $password = $isEncrypted ? $request->password : null;
 
-        Log::info('User ID: ' . $id);
-        Log::info('Folder ID: ' . $folder_id);
+        Log::info('User ID: ' . $userId);
+        Log::info('Folder ID: ' . $folderId);
         Log::info('Folder Title: ' . $title);
         Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
-        if ($isEncrypted) {
-            Log::info('Password: ' . $password);
+
+        // Determine the directory path based on whether the folder is a main folder or a subfolder
+        $basePath = 'users/' . $userId;
+        $directory = '';
+
+        if (DB::table('users_folder')->where('id', $folderId)->exists()) {
+            // It's a main folder
+            $directory = $basePath . '/' . $title;
+        } else {
+            // It's a subfolder, so retrieve the full path including parent folders
+            $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+            if ($subfolder) {
+                $directory = $this->buildFullPathForSubfolder($subfolder, $basePath);
+            } else {
+                Log::error("Subfolder ID $folderId not found.");
+                return back()->with([
+                    'message' => 'Subfolder not found. Please check if the folder or subfolder exists.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
         }
 
-        // Check if the folder ID exists in `users_folder` or `subfolders`
-        $folderExistsInUsersFolder = DB::table('users_folder')->where('id', $folder_id)->exists();
-        $folderExistsInSubfolder = DB::table('subfolders')->where('id', $folder_id)->exists();
-
-        if (!$folderExistsInUsersFolder && !$folderExistsInSubfolder) {
-            Log::error("Folder ID $folder_id does not exist in either users_folder or subfolders.");
-            return back()->with([
-                'message' => 'Invalid folder. Please check if the folder or subfolder exists.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
+        Log::info('Final directory path for file storage:', ['directory' => $directory]);
 
         if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
+            foreach ($request->file('files') as $file) {
                 $name = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
 
                 // Check for duplicate file name in the same folder
                 $duplicateFileQuery = DB::table('users_folder_files')
                     ->where('files', $name);
-                if ($folderExistsInUsersFolder) {
-                    $duplicateFileQuery->where('users_folder_id', $folder_id);
-                } elseif ($folderExistsInSubfolder) {
-                    $duplicateFileQuery->where('subfolder_id', $folder_id);
+                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
+                    $duplicateFileQuery->where('users_folder_id', $folderId);
+                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
+                    $duplicateFileQuery->where('subfolder_id', $folderId);
                 }
                 $duplicateFile = $duplicateFileQuery->exists();
 
@@ -182,7 +188,13 @@ class FilesController extends Controller
                     ]);
                 }
 
-                $path = $file->storeAs("public/users/$id/$title", $name);
+                // Ensure the directory exists
+                Storage::disk('public')->makeDirectory($directory);
+
+                // Store the file directly to the desired path
+                $path = $directory . '/' . $name;
+                Storage::disk('public')->put($path, file_get_contents($file));
+
                 $fileSize = $file->getSize();
 
                 Log::info('File uploaded: ' . $name);
@@ -191,7 +203,7 @@ class FilesController extends Controller
 
                 // Prepare data for insertion based on folder type
                 $fileData = [
-                    'users_id' => $id,
+                    'users_id' => $userId,
                     'files' => $name,
                     'size' => $fileSize,
                     'extension' => $extension,
@@ -199,16 +211,13 @@ class FilesController extends Controller
                     'password' => $password,
                 ];
 
-                if ($folderExistsInUsersFolder) {
-                    $fileData['users_folder_id'] = $folder_id;
+                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
+                    $fileData['users_folder_id'] = $folderId;
                     $fileData['subfolder_id'] = null;
-                } elseif ($folderExistsInSubfolder) {
+                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
                     $fileData['users_folder_id'] = null;
-                    $fileData['subfolder_id'] = $folder_id;
+                    $fileData['subfolder_id'] = $folderId;
                 }
-
-                // Log details before insertion for debugging
-                Log::info('Inserting file record with details:', $fileData);
 
                 // Insert the file record
                 DB::table('users_folder_files')->insert($fileData);
@@ -227,6 +236,27 @@ class FilesController extends Controller
             ]);
         }
     }
+
+    private function buildFullPathForSubfolder($subfolder, $basePath)
+    {
+        $path = $basePath . '/' . $subfolder->name;
+
+        // Traverse up to the root, building the full path
+        while ($subfolder->parent_folder_id !== null) {
+            $parentFolder = DB::table('subfolders')->where('id', $subfolder->parent_folder_id)->first();
+            if ($parentFolder) {
+                $path = $basePath . '/' . $parentFolder->name . '/' . $path;
+                $subfolder = $parentFolder;
+            } else {
+                break;
+            }
+        }
+
+        return $path;
+    }
+
+
+
 
 
 

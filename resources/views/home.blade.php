@@ -32,9 +32,12 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="create_files('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-upload me-2"></i> Upload Files</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                        {{-- <li>
+                                            <a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="upload_encrypted_files('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
-                                                    class="bx bx-lock me-2"></i> Upload Encrypted Files</a></li>
+                                                    class="bx bx-lock me-2"></i> Upload Encrypted Files
+                                            </a>
+                                        </li> --}}
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="update_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-pencil me-2"></i> Rename</a></li>
@@ -107,6 +110,7 @@
                         @csrf
                         <input type="hidden" name="folder_id" id="encryptedFolderId">
                         <input type="hidden" name="folder" id="encryptedFolderTitle">
+
                         <div class="mb-3">
                             <label for="encryptedFiles" class="form-label">Select Files</label>
                             <input type="file" class="form-control" id="encryptedFiles" name="files[]" multiple
@@ -131,6 +135,7 @@
             document.getElementById('encryptedFolderTitle').value = folderTitle;
             $('#uploadEncryptedFilesModal').modal('show');
         }
+
 
         document.querySelectorAll('.upload-button').forEach(button => {
             button.addEventListener('click', function() {

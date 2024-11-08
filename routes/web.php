@@ -50,13 +50,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', 'store')->name('files.store');
         Route::post('/store/decrypt', 'decryptStore')->name('files.decrypt.store');
         Route::get('/file/download/{id}', [FilesController::class, 'download'])->name('file.download');
-
         Route::post('/update', 'update')->name('files.update');
         Route::post('/rename', 'rename')->name('files.rename');
         Route::get('/destroy/{id}', 'destroy')->name('files.destroy');
         Route::post('/copy/{fileId}', 'copy')->name('drive.copy');
-        Route::post('/move/{fileId}/{destinationFolderId}', 'move')->name('drive.move');
-        Route::post('/paste/{destinationFolderId}', 'paste')->name('drive.paste');
     });
 
     // Drive Routes
@@ -70,6 +67,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit/{id}', 'edit')->name('drive.edit');
         Route::post('/update/{id}', 'update')->name('drive.update');
         Route::post('/rename/{id}', 'rename')->name('drive.rename');
+        Route::get('/get-folders', 'getFolders')->name('folders.list');
+        Route::post('/move/{fileId}/{destinationFolderId}', [DriveController::class, 'move'])->name('drive.move');
+        Route::post('/paste/{destinationFolderId}', 'paste')->name('drive.paste');
     });
 
     // Shared Routes

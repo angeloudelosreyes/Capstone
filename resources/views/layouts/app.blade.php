@@ -82,7 +82,7 @@
     @include('includes.create-user-modal')
     @include('includes.update-user-modal')
     @include('includes.upload-subfiles-modal')
-
+    @include('includes.move-file-modal')
 
     @include('layouts.scripts')
     @yield('custom_js')

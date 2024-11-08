@@ -131,11 +131,13 @@
                                                     onclick="renameFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
                                                         class="bx bx-edit-alt me-2"></i> Rename</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
-                                                        class="bx bx-copy me-2"></i> Copy</a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->id }}')"><i
-                                                        class="bx bx-cut me-2"></i> Move</a></li>
+                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')">
+                                                    <i class="bx bx-copy me-2"></i> Copy
+                                                </a></li>
+                                            {{-- <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}')">
+                                                    <i class="bx bx-move me-2"></i> Move
+                                                </a></li> --}}
                                             <li><a class="dropdown-item"
                                                     href="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"><i
                                                         class="bx bx-trash me-2"></i> Delete</a></li>
@@ -326,61 +328,9 @@
             });
         });
 
-        function downloadFile(fileId) {
-            Swal.fire({
-                title: 'Enter Password',
-                input: 'password',
-                inputLabel: 'Password',
-                inputPlaceholder: 'Enter your password',
-                showCancelButton: true,
-                confirmButtonText: 'Download',
-                showLoaderOnConfirm: true,
-                preConfirm: (password) => {
-                    if (!password) {
-                        Swal.showValidationMessage('Password is required');
-                        return;
-                    }
 
-                    return fetch(
-                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
-                                method: 'GET',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            })
-                        .then(response => {
-                            if (!response.ok) {
-                                return response.text().then(text => {
-                                    console.error('Response text:', text); // Log the response text
-                                    throw new Error(text);
-                                });
-                            }
-                            return response.blob();
-                        })
-                        .then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.style.display = 'none';
-                            a.href = url;
-                            a.download = 'protected-file.zip'; // Use the fixed name for the downloaded file
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(`Request failed: ${error}`);
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        }
 
-        document.querySelectorAll('.download-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                downloadFile(fileId);
-            });
-        });
+
 
         function renameFile(fileId, oldName) {
             Swal.fire({

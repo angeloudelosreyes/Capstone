@@ -36,10 +36,6 @@
         $('#update_subfolder').modal('show');
     }
 
-
-
-
-
     function create_files(id, title) {
         $('#caption').html(title)
         $('#folder_id').val(id)
@@ -49,8 +45,7 @@
     }
 
     function create_subfiles(id, title) {
-        console.log(title); // Check if title is correct
-
+        console.log(title);
         $('#caption_subfolder').html(title)
         $('#parent_id').val(id)
         $('#subfolder_name').val(title)
