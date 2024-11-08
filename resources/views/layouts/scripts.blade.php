@@ -31,10 +31,13 @@
     }
 
     function update_subfolder(id, old) {
-        $('#old, #new').val(old);
-        $('#id').val(id);
+        $('#old2, #new2').val(old);
+        $('#id2').val(id);
         $('#update_subfolder').modal('show');
     }
+
+
+
 
 
     function create_files(id, title) {

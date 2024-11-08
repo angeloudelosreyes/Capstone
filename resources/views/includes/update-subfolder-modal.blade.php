@@ -2,8 +2,8 @@
 <form action="{{ route('subfolder.update') }}" method="POST">
     @csrf
     @honeypot
-    <input type="hidden" name="old" id="old">
-    <input type="hidden" name="id" id="id">
+    <input type="hidden" name="old" id="old2">
+    <input type="hidden" name="id" id="id2">
     <div class="modal fade component" id="update_subfolder" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -17,7 +17,7 @@
                         <div class="col-12">
                             <div>
                                 <label for="name" class="form-label">Update Subfolder Name</label>
-                                <input type="text" class="form-control" name="new" id="new" required>
+                                <input type="text" class="form-control" name="new" id="new2" required>
                             </div>
                         </div>
                     </div>

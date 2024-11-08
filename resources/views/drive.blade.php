@@ -68,9 +68,12 @@
                                                     <i class="bx bx-lock me-2"></i> Upload Encrypted Files
                                                 </a>
                                             </li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')"><i
-                                                        class="bx bx-pencil me-2"></i> Rename</a></li>
+                                                        class="bx bx-pencil me-2"></i> Rename
+                                                </a>
+                                            </li>
                                             <li>
                                                 <form
                                                     action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
@@ -421,54 +424,6 @@
                         })
                         .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
                             'error'));
-                }
-            });
-        }
-
-        function renameSubfolder(subfolderId, oldName) {
-            Swal.fire({
-                title: 'Rename Subfolder',
-                input: 'text',
-                inputLabel: 'Enter the new subfolder name',
-                inputValue: oldName,
-                showCancelButton: true,
-                confirmButtonText: 'Rename',
-                showLoaderOnConfirm: true,
-                preConfirm: (newName) => {
-                    if (!newName.trim()) {
-                        Swal.showValidationMessage('Subfolder name cannot be empty');
-                        return;
-                    }
-                    return fetch('{{ route('subfolder.update') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                id: subfolderId,
-                                new: newName,
-                                old: oldName
-                            })
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.type === 'success') {
-                                Swal.fire('Renamed!', 'Subfolder has been renamed successfully.', 'success')
-                                    .then(() => {
-                                        location.reload(); // Reload the page after successful rename
-                                    });
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error renaming subfolder:', error);
-                            Swal.fire('Error!', 'An error occurred while renaming the subfolder.', 'error');
-                        });
                 }
             });
         }
