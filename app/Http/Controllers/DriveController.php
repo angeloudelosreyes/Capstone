@@ -577,10 +577,20 @@ class DriveController extends Controller
         // Build the source path using the helper function
         $sourceBasePath = "public/users/$userId";
         $sourceFolderPath = $this->buildFullPath($file->users_folder_id, $sourceBasePath);
+
+        // If the source folder path cannot be built, try using the subfolder_id
         if (!$sourceFolderPath) {
-            Log::error("Failed to build source folder path for ID: " . $file->users_folder_id);
+            Log::warning("Failed to build source folder path for ID: " . $file->users_folder_id . ". Trying subfolder_id.");
+            if ($file->subfolder_id) {
+                $sourceFolderPath = $this->buildFullPath($file->subfolder_id, $sourceBasePath);
+            }
+        }
+
+        if (!$sourceFolderPath) {
+            Log::error("Failed to build source folder path using subfolder_id for ID: " . $file->subfolder_id);
             return redirect()->back()->with(['error' => 'Source folder path could not be determined.']);
         }
+
         $sourcePath = "$sourceFolderPath/{$file->files}";
 
         // Build the destination path using the helper function
