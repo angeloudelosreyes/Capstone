@@ -610,17 +610,40 @@ class DriveController extends Controller
             return back()->with(['error' => 'File not found']);
         }
 
+        // Determine the folder ID to use for path building
+        $folderId = $file->users_folder_id;
+        if ($file->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $file->subfolder_id;
+        }
+
+        // Attempt to get the folder title from the main folder first
+        $folder = DB::table('users_folder')->where(['id' => $file->users_folder_id])->first();
+
+        // If the main folder is not found, try to get the name from the subfolder
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $file->subfolder_id])->first();
+            if (!$folder) {
+                Log::error("Folder or subfolder not found for file ID: " . $decryptedFileId);
+                return back()->with(['error' => 'Folder or subfolder not found']);
+            }
+            $folderTitle = $folder->name; // Use the subfolder's name
+        } else {
+            $folderTitle = $folder->title; // Use the main folder's title
+        }
+
         // Temporarily store the file details for pasting
-        session()->put('copiedFile', $file);
-        Log::info("File copied successfully and stored in session.", ['file' => (array)$file]);
+        session()->put('copiedFile', [
+            'file' => $file,
+            'folderTitle' => $folderTitle // Store the folder title or name
+        ]);
+        Log::info("File copied successfully and stored in session.", ['file' => (array)$file, 'folderTitle' => $folderTitle]);
 
         // Log session data
         Log::info("Session data after copying: ", session()->all());
 
         return back()->with(['message' => 'File copied successfully.', 'type' => 'success', 'title' => 'Success']);
     }
-
-
 
 
     public function paste(Request $request, string $destinationFolderId)
@@ -646,24 +669,46 @@ class DriveController extends Controller
 
         Log::info("Pasting file: ", ['copiedFile' => $copiedFile]);
 
-        // Proceed to copy and paste logic here...
-        $userId = $copiedFile->users_id;
-        $sourceFolder = DB::table('users_folder')->where('id', $copiedFile->users_folder_id)->first();
-        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolder->title . '/' . $copiedFile->files;
+        // Determine the folder ID to use for path building
+        $folderId = $copiedFile->users_folder_id;
+        if ($copiedFile->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $copiedFile->subfolder_id;
+        }
+
+        // Build the full path using the helper function
+        $basePath = "public/users/{$copiedFile->users_id}";
+        $sourceFolderPath = $this->buildFullPath($folderId, $basePath);
+        if (!$sourceFolderPath) {
+            Log::error("Failed to build source folder path for ID: " . $folderId);
+            return back()->with(['error' => 'Source folder path could not be determined.']);
+        }
+
+        // Construct the full source path
+        $sourcePath = "$sourceFolderPath/{$copiedFile->files}";
+
+        // Build the destination path
         $newFileName = $this->generateUniqueFileName($copiedFile->files, $decryptedDestinationFolderId);
-        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $newFileName;
+        $destinationFolderPath = $this->buildFullPath($decryptedDestinationFolderId, $basePath);
+        if (!$destinationFolderPath) {
+            Log::error("Failed to build destination folder path for ID: " . $decryptedDestinationFolderId);
+            return back()->with(['error' => 'Destination folder path could not be determined.']);
+        }
+
+        // Construct the full destination path
+        $destinationPath = "$destinationFolderPath/$newFileName";
 
         Log::info("Source path: " . $sourcePath);
         Log::info("Destination path: " . $destinationPath);
 
-        // Copy the file in storage and insert a new record in the database
+        // Copy the file in storage
         if (Storage::exists($sourcePath)) {
             Storage::copy($sourcePath, $destinationPath);
             Log::info("File copied from " . $sourcePath . " to " . $destinationPath);
 
             // Insert a new record for the copied file
             DB::table('users_folder_files')->insert([
-                'users_id' => $userId,
+                'users_id' => $copiedFile->users_id,
                 'users_folder_id' => $decryptedDestinationFolderId,
                 'files' => $newFileName,
                 'size' => $copiedFile->size,
@@ -710,6 +755,7 @@ class DriveController extends Controller
         $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
         if ($mainFolder) {
             // If it's the main folder, just return its path
+            Log::info("Found main folder: " . $mainFolder->title);
             return $basePath . '/' . $mainFolder->title;
         }
 
@@ -718,10 +764,12 @@ class DriveController extends Controller
         if ($subfolder) {
             // Recursively call this function to get the parent path
             $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
+            Log::info("Found subfolder: " . $subfolder->name . " with parent path: " . $parentPath);
             return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
         }
 
         // If neither a main folder nor a subfolder was found, return null (invalid path)
+        Log::error("No folder found for ID: " . $folderId);
         return null;
     }
 }
