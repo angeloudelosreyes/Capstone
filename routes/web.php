@@ -82,6 +82,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/{id}', 'update')->name('shared.update');
         Route::get('/{id}/edit', 'edit')->name('shared.edit');
         Route::post('/{id}/download', 'download')->name('shared.download');
+        Route::post('/move/{fileId}/{destinationFolderId}', 'move')->name('shared.move');
+        Route::get('/folders', 'getSharedFolders')->name('shared.getSharedFolders');
     });
 
     // Account Routes

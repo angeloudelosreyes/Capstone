@@ -34,4 +34,8 @@ class UsersShareableFile extends Model
     {
         return $this->belongsTo(UsersFolderShareable::class, 'folder_shareable_id');
     }
+    public function shareableFiles()
+    {
+        return $this->hasMany(UsersFolderFile::class, 'users_folder_shareable_id');
+    }
 }

@@ -40,6 +40,28 @@ class SharedController extends Controller
             'sharedFiles' => $sharedFiles,
         ]);
     }
+    public function getSharedFolders()
+    {
+        // Retrieve the authenticated user's ID
+        $userId = auth()->user()->id;
+
+        // Query the shared folders where the user is the owner
+        $folders = DB::table('users_folder_shareable')
+            ->where('users_id', $userId) // Check if the authenticated user is the owner
+            ->select('id', 'title')
+            ->get()
+            ->map(function ($folder) {
+                // Encrypt each folder's ID for secure references
+                $folder->encrypted_id = Crypt::encryptString($folder->id);
+                return $folder;
+            });
+
+        Log::info('Retrieved shared folders for the authenticated user', [$folders]);
+
+        return response()->json(['folders' => $folders]);
+    }
+
+
 
 
     /**
@@ -505,6 +527,82 @@ class SharedController extends Controller
             return response()->json(['error' => 'An error occurred while processing the request.'], 500);
         }
     }
+
+
+
+    public function move(Request $request, string $fileId, string $destinationFolderId)
+    {
+        Log::info("Received encrypted fileId: " . $fileId);
+        Log::info("Received encrypted destinationFolderId: " . $destinationFolderId);
+
+        try {
+            // Decrypt the IDs
+            $decryptedFileId = Crypt::decryptString($fileId);
+            $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+            Log::info("Decrypted fileId: " . $decryptedFileId);
+            Log::info("Decrypted destinationFolderId: " . $decryptedDestinationFolderId);
+        } catch (\Exception $e) {
+            Log::error("Decryption failed: " . $e->getMessage());
+            return redirect()->back()->with([
+                'message' => 'Invalid encrypted IDs. Please try again.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
+        }
+
+        // Retrieve the file from the users_folder_files table
+        $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+        // Retrieve the destination folder from the users_folder_shareable table
+        $destinationFolder = DB::table('users_folder_shareable')->where('id', $decryptedDestinationFolderId)->first();
+
+        // Check if both file and destination folder exist
+        if (!$file || !$destinationFolder) {
+            Log::error('File or destination folder not found.');
+            return redirect()->back()->with([
+                'message' => 'File or destination folder not found.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
+        }
+        Log::info('File and destination folder found, proceeding with database update.');
+
+        // Build the destination path
+        $destinationPath = "public/users/{$file->users_id}/shared_folders/{$destinationFolder->title}/{$file->files}";
+
+        // Update the file's folder reference in the database to the new destination folder
+        DB::table('users_folder_files')->where('id', $decryptedFileId)->update([
+            'users_folder_id' => null, // Set to null since we're moving it to a shared folder
+            'users_folder_shareable_id' => $decryptedDestinationFolderId, // Set the new shared folder ID
+            'file_path' => str_replace('public/', '', $destinationPath), // Update the file path to reflect the new location
+        ]);
+
+        Log::info("Database updated for file ID $decryptedFileId with new shared folder ID $decryptedDestinationFolderId");
+
+        // Define the source path
+        $sourcePath = "public/{$file->file_path}";
+
+        // Check if the source file exists
+        if (Storage::exists($sourcePath)) {
+            // Move the file in storage
+            Storage::move($sourcePath, $destinationPath);
+            Log::info("File moved in storage from $sourcePath to $destinationPath");
+
+            return redirect()->back()->with([
+                'message' => 'File moved successfully.',
+                'type' => 'success',
+                'title' => 'Success'
+            ]);
+        } else {
+            Log::error("File not found in storage: $sourcePath");
+            return redirect()->back()->with([
+                'message' => 'File not found in storage.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
+        }
+    }
+
 
     private function buildFullPath($folderId, $basePath)
     {

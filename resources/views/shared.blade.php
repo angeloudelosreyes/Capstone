@@ -25,6 +25,7 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="update_shareablefolder('{{ Crypt::encryptString($folder->id) }}', '{{ $folder->title }}')"><i
                                                     class="bx bx-edit me-2"></i> Rename</a></li>
+
                                         <li>
                                             <form
                                                 action="{{ route('folder.shareable.destroy', ['id' => Crypt::encryptString($folder->id)]) }}"
@@ -83,6 +84,10 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="renameFile2('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
                                                     class="bx bx-rename me-2"></i> Rename</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
+                                                    class="bx bx-cut me-2"></i> Move</a></li>
+                                        <li>
                                         <li>
                                             <form
                                                 action="{{ route('shared.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
@@ -361,6 +366,63 @@
                     alert('Could not retrieve file details.');
                 }
             });
+        }
+    </script>
+    <script>
+        function moveFile(fileId) {
+            // Set the hidden input for fileId
+            document.getElementById('fileIdToMove').value = fileId;
+
+            const destinationFolderSelect = document.getElementById('destinationFolder');
+            destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+            // Fetch the available folders from the shared folders route
+            fetch("{{ route('shared.getSharedFolders') }}")
+                .then(response => response.json())
+                .then(data => {
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                    data.folders.forEach(folder => {
+                        const option = document.createElement('option');
+                        option.value = folder.encrypted_id;
+                        option.textContent = folder.title;
+                        destinationFolderSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching folders:', error));
+
+            $('#moveFileModal').modal('show'); // Show the modal
+        }
+
+        document.getElementById('destinationFolder').addEventListener('change', function() {
+            const fileId = document.getElementById('fileIdToMove').value;
+            const destinationFolderId = this.value;
+
+            // Confirm that the IDs are set
+            console.log("Selected fileId:", fileId);
+            console.log("Selected destinationFolderId:", destinationFolderId);
+
+            // Only set the action URL if both IDs are present
+            if (fileId && destinationFolderId) {
+                const actionUrl = `{{ url('shared/move') }}/${fileId}/${destinationFolderId}`;
+                console.log("Form action URL set to:", actionUrl); // Log to verify
+                document.getElementById('moveFileForm').action = actionUrl;
+            }
+        });
+
+        function submitMoveFileForm() {
+            const fileId = document.getElementById('fileIdToMove').value;
+            const destinationFolderId = document.getElementById('destinationFolder').value;
+
+            if (fileId && destinationFolderId) {
+                // Construct the route URL with the parameters
+                const actionUrl = `{{ url('shared/move') }}/${fileId}/${destinationFolderId}`;
+                document.getElementById('moveFileForm').action = actionUrl; // Set the form action
+
+                console.log("Form action URL set to:", actionUrl); // Log to verify
+                document.getElementById('moveFileForm').submit(); // Submit the form
+            } else {
+                Swal.fire('Error', 'Please select a destination folder.', 'error');
+            }
         }
     </script>
 @endsection

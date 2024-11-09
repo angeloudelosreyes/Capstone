@@ -15,8 +15,10 @@ return new class extends Migration
         Schema::create('users_folder_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('users_folder_id')->nullable()->constrained('users_folder')->onDelete('cascade'); // Cascade on folder delete
-            $table->unsignedBigInteger('subfolder_id')->nullable(); // Explicitly define as unsignedBigInteger
+            $table->foreignId('users_folder_id')->nullable()->constrained('users_folder')->onDelete('cascade');
+            $table->foreignId('users_folder_shareable_id')->nullable()->constrained('users_folder_shareable')->onDelete('cascade'); // New nullable foreign key
+            $table->unsignedBigInteger('subfolder_id')->nullable();
+
             $table->foreign('subfolder_id')->references('id')->on('subfolders')->onDelete('cascade'); // Cascade on subfolder delete
             $table->string('files');
             $table->integer('size')->default(0);
