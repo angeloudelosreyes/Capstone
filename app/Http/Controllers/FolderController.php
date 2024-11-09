@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subfolder;
 use App\Models\UsersFolder;
+use App\Models\UsersFolderFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class FolderController extends Controller
 {
@@ -127,27 +130,84 @@ class FolderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($encryptedId)
     {
+        Log::info("Starting destroy function for folder ID: $encryptedId");
 
-        $query = DB::table('users_folder')->where(['id' => Crypt::decryptString($id)])->first();
-        $directory = 'public/users/' . auth()->user()->id . '/' . $query->title;
-        if (Storage::exists($directory)) {
+        DB::beginTransaction();
 
-            // Storage::deleteDirectory() eto naman yong ginagamit kong saan e gusto mo idelete yong directory naman na ginawa mo
-            Storage::deleteDirectory($directory);
-            DB::table('users_folder')->where(['id' => Crypt::decryptString($id)])->delete();
+        try {
+            // Decrypt the folder ID
+            $folderId = Crypt::decryptString($encryptedId);
+            Log::info("Decrypted folder ID: $folderId");
+
+            // Find the folder to be deleted
+            $folder = UsersFolder::findOrFail($folderId);
+            Log::info("Folder found: " . $folder->title);
+
+            // Delete all subfolders and their files
+            $this->deleteSubfoldersAndFilesIteratively($folder->id);
+            Log::info("Deleted all subfolders and files for folder ID: $folderId");
+
+            // Delete all files directly in the folder
+            UsersFolderFile::where('users_folder_id', $folder->id)->delete();
+            Log::info("Deleted all files in the main folder ID: $folderId");
+
+            // Delete the main folder
+            $folder->delete();
+            Log::info("Main folder deleted: $folderId");
+
+            DB::commit();
+            Log::info("Transaction committed successfully for folder ID: $folderId");
+
             return back()->with([
-                'message' => 'Selected folder has been deleted.',
-                'type'    => 'success',
-                'title'   => 'System Notification'
+                'message' => 'Folder and all associated subfolders and files have been deleted successfully.',
+                'type' => 'success',
+                'title' => 'System Notification'
             ]);
-        } else {
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Error deleting folder and associated items: " . $e->getMessage());
+
             return back()->with([
-                'message' => 'Folder does not exist.',
-                'type'    => 'error',
-                'title'   => 'System Notification'
+                'message' => 'Error deleting folder and associated items.',
+                'type' => 'error',
+                'title' => 'System Notification'
             ]);
+        }
+    }
+
+    /**
+     * Iteratively delete all subfolders and their files for a given parent folder ID.
+     */
+    private function deleteSubfoldersAndFilesIteratively($parentFolderId)
+    {
+        Log::info("Deleting subfolders and files iteratively for parent folder ID: $parentFolderId");
+
+        // Queue for subfolders to delete
+        $foldersToDelete = [$parentFolderId];
+
+        while (!empty($foldersToDelete)) {
+            $currentFolderId = array_pop($foldersToDelete);
+            Log::info("Processing folder ID: $currentFolderId");
+
+            // Get all direct subfolders of the current folder
+            $subfolders = Subfolder::where('parent_folder_id', $currentFolderId)->get();
+
+            foreach ($subfolders as $subfolder) {
+                Log::info("Queueing subfolder ID for deletion: " . $subfolder->id);
+
+                // Queue sub-subfolders for deletion
+                $foldersToDelete[] = $subfolder->id;
+
+                // Delete files within this subfolder
+                UsersFolderFile::where('subfolder_id', $subfolder->id)->delete();
+                Log::info("Deleted files in subfolder ID: " . $subfolder->id);
+            }
+
+            // Delete the current subfolder itself
+            Subfolder::where('id', $currentFolderId)->delete();
+            Log::info("Deleted folder ID: " . $currentFolderId);
         }
     }
 }
