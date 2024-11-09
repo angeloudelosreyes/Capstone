@@ -184,31 +184,38 @@ class UsersFolderShareableController extends Controller
                 ]);
             }
 
-            // Fetch related subfolders and files if folder is found in users_folder
-            $subfolders = $folderModel->subfolders()->paginate(10, ['*'], 'subfolders');
-            $files = $folderModel->files()->paginate(10, ['*'], 'files');
+            // Fetch only files directly under this folder
+            $files = DB::table('users_folder_files')
+                ->where('users_folder_id', $decryptedId)
+                ->whereNull('subfolder_id') // Exclude files in subfolders
+                ->paginate(10);
 
-            // Render view with data from users_folder
+            // Render view with files data from users_folder
             return view('sharefolder', [
                 'title' => $folderModel->title ?? 'Folder',
                 'shareableFolder' => $folderModel,
-                'subfolders' => $subfolders,
                 'files' => $files,
                 'folderId' => $id
             ]);
         } else {
             Log::info("Found shareable folder with ID: {$shareableFolder->id} in users_folder_shareable.");
 
-            // If found in users_folder_shareable, assume it's a shareable folder without direct subfolders/files
+            // Fetch only files directly under this shareable folder
+            $files = DB::table('users_folder_files')
+                ->where('users_folder_shareable_id', $decryptedId)
+                ->whereNull('subfolder_id') // Exclude files in subfolders
+                ->paginate(10);
+
+            // Render view with files data from users_folder_shareable
             return view('sharefolder', [
                 'title' => $shareableFolder->title ?? 'Shareable Folder',
                 'shareableFolder' => $shareableFolder,
-                'subfolders' => null,
-                'files' => null,
+                'files' => $files,
                 'folderId' => $id
             ]);
         }
     }
+
 
 
     public function update(Request $request)

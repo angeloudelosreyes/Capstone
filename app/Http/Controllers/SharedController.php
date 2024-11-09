@@ -318,6 +318,76 @@ class SharedController extends Controller
         return $folder->title;
     }
 
+    public function paste(Request $request, string $destinationFolderId)
+    {
+        Log::info("Received request to paste file into shared folder with ID: " . $destinationFolderId);
+
+        try {
+            // Decrypt the destination folder ID
+            $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
+            $destinationFolder = DB::table('users_folder_shareable')->where('id', $decryptedDestinationFolderId)->first();
+
+            if (!$destinationFolder) {
+                Log::error("Destination shared folder not found: " . $decryptedDestinationFolderId);
+                return back()->with(['error' => 'Destination shared folder not found.']);
+            }
+
+            // Retrieve the file ID from the request and fetch the file from the database
+            $fileId = $request->input('fileId');
+            $decryptedFileId = Crypt::decryptString($fileId);
+            $copiedFile = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+            if (!$copiedFile) {
+                Log::error("File to paste not found: " . $decryptedFileId);
+                return back()->with(['error' => 'File not found.']);
+            }
+
+            Log::info("Pasting file: ", ['copiedFile' => $copiedFile]);
+
+            // Build the source path
+            $sourcePath = "public/{$copiedFile->file_path}";
+
+            // Generate a unique file name for the copied file
+            $newFileName = uniqid() . '_' . basename($copiedFile->files);
+
+            // Build the destination path for the shared folder
+            $destinationPath = "public/users/{$copiedFile->users_id}/shared_folders/{$destinationFolder->title}/$newFileName";
+
+            Log::info("Source path: " . $sourcePath);
+            Log::info("Destination path: " . $destinationPath);
+
+            // Copy the file in storage
+            if (Storage::exists($sourcePath)) {
+                Storage::copy($sourcePath, $destinationPath);
+                Log::info("File copied from " . $sourcePath . " to " . $destinationPath);
+
+                // Insert a new record for the copied file
+                DB::table('users_folder_files')->insert([
+                    'users_id' => $copiedFile->users_id,
+                    'users_folder_shareable_id' => $decryptedDestinationFolderId, // Set to the shared folder ID
+                    'file_path' => str_replace('public/', '', $destinationPath),
+                    'files' => $newFileName,
+                    'size' => $copiedFile->size,
+                    'extension' => $copiedFile->extension,
+                    'protected' => $copiedFile->protected,
+                    'password' => $copiedFile->password,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                Log::info("File pasted successfully in shared folder.", ['newFileName' => $newFileName]);
+                return back()->with(['message' => 'File pasted successfully in shared folder.', 'type' => 'success', 'title' => 'Success']);
+            } else {
+                Log::error("Source file not found in storage: " . $sourcePath);
+                return back()->with(['error' => 'Source file not found in storage.']);
+            }
+        } catch (\Exception $e) {
+            Log::error("Error occurred while pasting file in shared folder: " . $e->getMessage());
+            return back()->with(['error' => 'An error occurred while processing the request.']);
+        }
+    }
+
+
 
     /**
      * Update the specified resource in storage.

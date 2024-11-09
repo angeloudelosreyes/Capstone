@@ -32,10 +32,15 @@ class DriveController extends Controller
 
     public function index()
     {
-        $query = DB::table('users_folder_files')->where(['users_id' => auth()->user()->id])->paginate(18);
+        $query = DB::table('users_folder_files')
+            ->where('users_id', auth()->user()->id)
+            ->whereNull('users_folder_shareable_id') // Exclude records with a non-null users_folder_shareable_id
+            ->paginate(18);
+
         $title = 'My Drive';
         return view('mydrive', compact('title', 'query'));
     }
+
 
     /**
      * Show the form for creating a new resource.

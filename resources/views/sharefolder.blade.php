@@ -76,6 +76,10 @@
                                                         class="bx bx-pencil me-2"></i> Rename
                                                 </a>
                                             </li>
+                                            <li><a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
+                                                        class="bx bx-cut me-2"></i> Move</a></li>
+                                            <li>
                                             <li>
                                                 <form
                                                     action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
@@ -126,21 +130,21 @@
                                             <i class="ri-more-2-fill fs-16 align-bottom"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item"
-                                                    href="{{ route('drive.show', ['id' => Crypt::encryptString($file->id)]) }}"><i
-                                                        class="bx bx-link me-2"></i> Open File</a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="share_file('{{ Crypt::encryptString($file->id) }}')"><i
-                                                        class="bx bx-share me-2"></i> Share</a></li>
+                                            <li><a class="dropdown-item open-file-button" href="javascript:void(0)"
+                                                    data-file-id="{{ Crypt::encryptString($file->id) }}"
+                                                    data-protected="{{ $file->protected }}"
+                                                    data-password="{{ $file->password }}"><i class="bx bx-link me-2"></i>
+                                                    Open
+                                                    File</a></li>
                                             <li><a class="dropdown-item download-button" href="javascript:void(0)"
                                                     data-file-id="{{ Crypt::encryptString($file->id) }}"><i
                                                         class="bx bx-download me-2"></i> Download</a></li>
                                             <li><a class="dropdown-item"
-                                                    href="{{ route('drive.edit', ['id' => Crypt::encryptString($file->id)]) }}"><i
+                                                    href="{{ route('shared.edit', ['id' => Crypt::encryptString($file->id)]) }}"><i
                                                         class="bx bx-edit me-2"></i> Edit</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="renameFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
-                                                        class="bx bx-edit-alt me-2"></i> Rename</a></li>
+                                                    onclick="renameFile2('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
+                                                        class="bx bx-rename me-2"></i> Rename</a></li>
                                             <li><a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
                                                         class="bx bx-copy me-2"></i> Copy</a></li>
@@ -148,8 +152,9 @@
                                                     onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
                                                         class="bx bx-cut me-2"></i> Move</a></li>
                                             <li>
+                                            <li>
                                                 <form
-                                                    action="{{ route('drive.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
+                                                    action="{{ route('shared.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
                                                     method="POST" style="display: inline;"
                                                     id="delete-form-{{ $file->id }}">
                                                     @csrf
@@ -388,118 +393,59 @@
 
 @section('custom_js')
     <script>
-        function createSubFolder(parentId) {
-            $('#parent_id').val(parentId);
-            $('#title').val(''); // Clear any previous folder name input
-            $('#create_folder').modal('show');
+        function openFile(fileId, isProtected, hasPassword) {
+            if (isProtected === 'YES' && hasPassword) {
+                $('#passwordModal').modal('show');
+                $('#submitPassword').off('click').on('click', function() {
+                    const password = $('#filePassword').val();
+                    if (!password) {
+                        alert('Password is required');
+                        return;
+                    }
+                    window.location.href =
+                        `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
+                });
+            } else {
+                window.location.href = `{{ url('drive/sharedShow') }}/${fileId}`;
+            }
         }
 
-        document.getElementById('createFileButton').addEventListener('click', function() {
-            const folderId = this.getAttribute(
-                'data-folder-id'); // Get the dynamic folderId from the button's data attribute
-
-            Swal.fire({
-                title: '<strong>Create New File</strong>',
-                icon: 'folder-plus',
-                html: `
-        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="fileName" style="flex-basis: 30%; text-align: left;">File Name:</label>
-                <input type="text" id="fileName" class="swal2-input" placeholder="Enter the file name" style="flex-basis: 70%;">
-            </div>
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="fileType" style="flex-basis: 30%; text-align: left;">File Type:</label>
-                <select id="fileType" class="swal2-input" style="flex-basis: 70%;">
-                    <option value="docx">Word File (.docx)</option>
-                </select>
-            </div>
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="isProtected" style="flex-basis: 30%; text-align: left;">Protected:</label>
-                <input type="checkbox" id="isProtected" class="swal2-checkbox" style="flex-basis: 70%;">
-            </div>
-            <div style="display: flex; align-items: center; width: 100%;" id="passwordField" hidden>
-                <label for="password" style="flex-basis: 30%; text-align: left;">Password:</label>
-                <input type="password" id="password" class="swal2-input" placeholder="Enter the password" style="flex-basis: 70%;">
-            </div>
-        </div>
-        <input type="hidden" id="folderId" value="${folderId}"> <!-- Use the dynamic folderId here -->
-        `,
-                showCancelButton: true,
-                confirmButtonText: 'Create',
-                cancelButtonText: 'Cancel',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                    cancelButton: 'btn btn-secondary'
-                },
-                buttonsStyling: false,
-                showLoaderOnConfirm: true,
-                preConfirm: () => {
-                    const fileName = document.getElementById('fileName').value;
-                    const fileType = document.getElementById('fileType').value;
-                    const folderId = document.getElementById('folderId')
-                        .value; // Use the dynamic folderId
-                    const isProtected = document.getElementById('isProtected').checked;
-                    const password = document.getElementById('password').value;
-                    const requestBody = {
-                        fileName: fileName,
-                        fileType: fileType,
-                        folder_id: folderId,
-                        isProtected: isProtected,
-                        password: isProtected ? password : null
-                    };
-
-                    if (!fileName.trim()) {
-                        Swal.showValidationMessage('Please enter a file name.');
-                        return;
-                    }
-
-                    if (isProtected && !password.trim()) {
-                        Swal.showValidationMessage('Please enter a password.');
-                        return;
-                    }
-
-                    return fetch('{{ route('files.create') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify(requestBody)
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(response.statusText);
-                            }
-                            return response.json();
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(`Request failed: ${error}`);
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'File Created',
-                        text: 'Your file has been created successfully.'
-                    }).then(() => {
-                        location.reload();
-                    });
-                }
-            });
-
-            document.getElementById('isProtected').addEventListener('change', function() {
-                const passwordField = document.getElementById('passwordField');
-                if (this.checked) {
-                    passwordField.hidden = false;
-                } else {
-                    passwordField.hidden = true;
-                }
+        document.querySelectorAll('.open-file-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const fileId = this.getAttribute('data-file-id');
+                const isProtected = this.getAttribute('data-protected');
+                const hasPassword = this.getAttribute('data-password') !== '';
+                openFile(fileId, isProtected, hasPassword);
             });
         });
 
-
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}'
+            });
+        @endif
+    </script>
+    <script>
+        function confirmDelete(folderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirmed the deletion
+                    document.getElementById('delete-form-' + folderId).submit();
+                }
+            });
+        }
+    </script>
+    <script>
         function downloadFile(fileId) {
             Swal.fire({
                 title: 'Enter Password',
@@ -515,17 +461,20 @@
                         return;
                     }
 
-                    return fetch(
-                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
-                                method: 'GET',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
+                    return fetch(`{{ url('shared') }}/${fileId}/download`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                password: password
                             })
+                        })
                         .then(response => {
                             if (!response.ok) {
                                 return response.text().then(text => {
-                                    console.error('Response text:', text); // Log the response text
+                                    console.error('Response text:', text);
                                     throw new Error(text);
                                 });
                             }
@@ -536,7 +485,7 @@
                             const a = document.createElement('a');
                             a.style.display = 'none';
                             a.href = url;
-                            a.download = 'protected-file.zip'; // Use the fixed name for the downloaded file
+                            a.download = 'protected-file.zip';
                             document.body.appendChild(a);
                             a.click();
                             window.URL.revokeObjectURL(url);
@@ -555,31 +504,9 @@
                 downloadFile(fileId);
             });
         });
-        document.getElementById('fileSearch').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const files = document.querySelectorAll('.folder-card');
-
-            files.forEach(file => {
-                const fileName = file.querySelector('.folder-name').textContent.toLowerCase();
-                if (fileName.includes(searchTerm)) {
-                    file.style.display = 'block';
-                } else {
-                    file.style.display = 'none';
-                }
-            });
-        });
     </script>
     <script>
-        function showRenameModal(id, oldName) {
-            document.getElementById('fileId').value = id;
-            document.getElementById('new_name').value = oldName; // Set the current name as default
-            var modal = new bootstrap.Modal(document.getElementById('renameModal'));
-            modal.show();
-            // Update the form action URL with the encrypted ID
-            document.getElementById('renameForm').action = `{{ route('drive.rename', '') }}/${id}`;
-        }
-
-        function renameFile(fileId, oldName) {
+        function renameFile2(fileId, oldName) {
             Swal.fire({
                 title: 'Rename File',
                 input: 'text',
@@ -593,7 +520,7 @@
                         Swal.showValidationMessage('File name cannot be empty');
                         return;
                     }
-                    return fetch(`{{ url('drive/rename') }}/${fileId}`, {
+                    return fetch(`{{ route('shared.update', '') }}/${fileId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -619,27 +546,15 @@
                                 Swal.fire('Error!', data.message, 'error');
                             }
                         })
-                        .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
-                            'error'));
+                        .catch(() => {
+                            Swal.fire('Renamed!', 'File has been renamed successfully.', 'success').then(
+                                () => {
+                                    location.reload(); // Reload the page after successful rename
+                                });
+
+                        });
                 }
             });
-        }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if the skipNotification flag is set
-            if (sessionStorage.getItem('skipNotification') === 'true') {
-                // Hide notifications
-                const alerts = document.querySelectorAll('.alert');
-                alerts.forEach(alert => alert.style.display = 'none');
-                // Clear the flag for future visits
-                sessionStorage.removeItem('skipNotification');
-            }
-        });
-
-        function handleBack() {
-            sessionStorage.setItem('skipNotification', 'true');
-            history.back();
         }
     </script>
     <script>
@@ -688,27 +603,118 @@
         }
     </script>
     <script>
-        public
+        function moveFile(fileId) {
+            // Set the hidden input for fileId
+            document.getElementById('fileIdToMove').value = fileId;
 
-        function showFileDetails($id) {
-            // Decrypt the file ID
-            try {
-                $fileId = Crypt::decryptString($id);
-            } catch (\Exception $e) {
-                Log::error('Failed to decrypt file ID: '.$e - > getMessage());
-                return response() - > json(['error' => 'Invalid file ID'], 400);
+            const destinationFolderSelect = document.getElementById('destinationFolder');
+            destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+            // Fetch the available folders from the shared folders route
+            fetch("{{ route('shared.getSharedFolders') }}")
+                .then(response => response.json())
+                .then(data => {
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                    data.folders.forEach(folder => {
+                        const option = document.createElement('option');
+                        option.value = folder.encrypted_id;
+                        option.textContent = folder.title;
+                        destinationFolderSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching folders:', error));
+
+            $('#moveFileModal').modal('show'); // Show the modal
+        }
+
+        document.getElementById('destinationFolder').addEventListener('change', function() {
+            const fileId = document.getElementById('fileIdToMove').value;
+            const destinationFolderId = this.value;
+
+            // Confirm that the IDs are set
+            console.log("Selected fileId:", fileId);
+            console.log("Selected destinationFolderId:", destinationFolderId);
+
+            // Only set the action URL if both IDs are present
+            if (fileId && destinationFolderId) {
+                const actionUrl = `{{ url('shared/move') }}/${fileId}/${destinationFolderId}`;
+                console.log("Form action URL set to:", actionUrl); // Log to verify
+                document.getElementById('moveFileForm').action = actionUrl;
             }
+        });
 
-            // Fetch the file details
-            $file = UsersFolderFile::where('id', $fileId) - > first();
+        function submitMoveFileForm() {
+            const fileId = document.getElementById('fileIdToMove').value;
+            const destinationFolderId = document.getElementById('destinationFolder').value;
 
-            if (!$file) {
-                Log::error("File not found for ID: $fileId");
-                return response() - > json(['error' => 'File not found'], 404);
+            if (fileId && destinationFolderId) {
+                // Construct the route URL with the parameters
+                const actionUrl = `{{ url('shared/move') }}/${fileId}/${destinationFolderId}`;
+                document.getElementById('moveFileForm').action = actionUrl; // Set the form action
+
+                console.log("Form action URL set to:", actionUrl); // Log to verify
+                document.getElementById('moveFileForm').submit(); // Submit the form
+            } else {
+                Swal.fire('Error', 'Please select a destination folder.', 'error');
             }
+        }
+    </script>
+    <script>
+        function handleBack() {
+            window.history.back(); // This will take the user to the previous page in the browser history
+        }
+    </script>
+    <script>
+        // Copy a file
+        function copyFile(fileId) {
+            console.log("Copying file with ID:", fileId);
 
-            // Return the file details as a JSON response
-            return response() - > json(['file' => $file], 200);
+            // Set the hidden input for fileId in the form
+            document.getElementById('fileIdToCopy').value = fileId;
+
+            const destinationFolderSelect = document.getElementById('copyDestinationFolder');
+            destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+            // Fetch the available folders to populate the dropdown
+            fetch("{{ route('shared.getSharedFolders') }}")
+                .then(response => {
+                    console.log("Fetching folders...");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Fetched folders:", data.folders);
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                    data.folders.forEach(folder => {
+                        const option = document.createElement('option');
+                        option.value = folder.encrypted_id; // Assuming folder.encrypted_id exists
+                        option.textContent = folder.title;
+                        destinationFolderSelect.appendChild(option);
+                    });
+
+                    // Show the modal only after folders are fetched
+                    $('#copyFileModal').modal('show'); // Show the modal
+                })
+                .catch(error => {
+                    console.error('Error fetching folders:', error);
+                    Swal.fire('Error!', 'Could not fetch folders. Please try again later.', 'error');
+                });
+        }
+
+        function submitCopyFileForm() {
+            const form = document.getElementById('copyFileForm');
+            const fileId = document.getElementById('fileIdToCopy').value;
+            const destinationFolderId = document.getElementById('copyDestinationFolder').value;
+
+            console.log("Submitting copy form with fileId:", fileId, "and destinationFolderId:", destinationFolderId);
+
+            if (fileId && destinationFolderId) {
+                // Set the form action to the shared.paste route
+                form.action = `{{ route('shared.paste', '') }}/${destinationFolderId}`;
+                form.method = 'POST'; // Ensure it's a POST request
+                form.submit(); // Submit the form to paste the copied file
+            } else {
+                Swal.fire('Error', 'Please select a destination folder.', 'error');
+            }
         }
     </script>
 @endsection

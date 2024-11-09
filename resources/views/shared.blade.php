@@ -43,7 +43,10 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                <a href="{{ route('folder.shareable.show', ['id' => Crypt::encryptString($folder->id)]) }}"
+                                    class="text-decoration-none">
+                                    <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                </a>
                                 <h6 class="fs-15 folder-name">{{ $folder->title }}</h6>
                             </div>
                         </div>
@@ -85,6 +88,9 @@
                                                 onclick="renameFile2('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
                                                     class="bx bx-rename me-2"></i> Rename</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="copyFile('{{ Crypt::encryptString($data->id) }}')"><i
+                                                    class="bx bx-copy me-2"></i> Copy</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
                                                     class="bx bx-cut me-2"></i> Move</a></li>
                                         <li>
@@ -113,22 +119,25 @@
                             </div>
 
                             <div class="text-center">
-                                <div class="mb-2">
-                                    @php
-                                        $extension = strtolower(pathinfo($data->files, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($extension, ['doc', 'docx']))
-                                        <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
-                                    @elseif(in_array($extension, ['pdf', 'ppt', 'pptx']))
-                                        <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                    @elseif(in_array($extension, ['xls', 'xlsx']))
-                                        <i class="ri-file-excel-line align-bottom text-success display-5"></i>
-                                    @else
-                                        <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                    @endif
-                                </div>
-                                <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                                    class="fs-15 folder-name">{{ $data->files }}</h6>
+                                <a href="{{ route('drive.sharedShow', ['id' => Crypt::encryptString($data->id)]) }}"
+                                    class="text-decoration-none">
+                                    <div class="mb-2">
+                                        @php
+                                            $extension = strtolower(pathinfo($data->files, PATHINFO_EXTENSION));
+                                        @endphp
+                                        @if (in_array($extension, ['doc', 'docx']))
+                                            <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                        @elseif(in_array($extension, ['pdf', 'ppt', 'pptx']))
+                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                        @elseif(in_array($extension, ['xls', 'xlsx']))
+                                            <i class="ri-file-excel-line align-bottom text-success display-5"></i>
+                                        @else
+                                            <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                        @endif
+                                    </div>
+                                    <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        class="fs-15 folder-name">{{ $data->files }}</h6>
+                                </a>
                             </div>
 
                         </div>
@@ -420,6 +429,59 @@
 
                 console.log("Form action URL set to:", actionUrl); // Log to verify
                 document.getElementById('moveFileForm').submit(); // Submit the form
+            } else {
+                Swal.fire('Error', 'Please select a destination folder.', 'error');
+            }
+        }
+    </script>
+    <script>
+        // Copy a file
+        function copyFile(fileId) {
+            console.log("Copying file with ID:", fileId);
+
+            // Set the hidden input for fileId in the form
+            document.getElementById('fileIdToCopy').value = fileId;
+
+            const destinationFolderSelect = document.getElementById('copyDestinationFolder');
+            destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
+
+            // Fetch the available folders to populate the dropdown
+            fetch("{{ route('shared.getSharedFolders') }}")
+                .then(response => {
+                    console.log("Fetching folders...");
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Fetched folders:", data.folders);
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
+                    data.folders.forEach(folder => {
+                        const option = document.createElement('option');
+                        option.value = folder.encrypted_id; // Assuming folder.encrypted_id exists
+                        option.textContent = folder.title;
+                        destinationFolderSelect.appendChild(option);
+                    });
+
+                    // Show the modal only after folders are fetched
+                    $('#copyFileModal').modal('show'); // Show the modal
+                })
+                .catch(error => {
+                    console.error('Error fetching folders:', error);
+                    Swal.fire('Error!', 'Could not fetch folders. Please try again later.', 'error');
+                });
+        }
+
+        function submitCopyFileForm() {
+            const form = document.getElementById('copyFileForm');
+            const fileId = document.getElementById('fileIdToCopy').value;
+            const destinationFolderId = document.getElementById('copyDestinationFolder').value;
+
+            console.log("Submitting copy form with fileId:", fileId, "and destinationFolderId:", destinationFolderId);
+
+            if (fileId && destinationFolderId) {
+                // Set the form action to the shared.paste route
+                form.action = `{{ route('shared.paste', '') }}/${destinationFolderId}`;
+                form.method = 'POST'; // Ensure it's a POST request
+                form.submit(); // Submit the form to paste the copied file
             } else {
                 Swal.fire('Error', 'Please select a destination folder.', 'error');
             }

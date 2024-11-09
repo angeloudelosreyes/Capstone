@@ -4335,3 +4335,693 @@
 [2024-11-09 20:49:00] local.INFO: File and destination folder found, proceeding with database update.  
 [2024-11-09 20:49:00] local.INFO: Database updated for file ID 4 with new shared folder ID 1  
 [2024-11-09 20:49:00] local.INFO: File moved in storage from public/users/2/shared_folders/testtest.docx to public/users/2/shared_folders/test1/testtest.docx  
+[2024-11-09 20:49:44] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:49:44] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:49:47] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:49:47] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:52:45] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:52:45] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:52:49] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:52:49] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:52:51] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:52:51] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:52:54] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:52:54] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:52:57] local.INFO: Received request data for rename: {"new_name":"tessdsttest.docx"} 
+[2024-11-09 20:52:57] local.INFO: Decrypted file ID: {"id":"2"} 
+[2024-11-09 20:52:57] local.ERROR: No folder found for ID:   
+[2024-11-09 20:52:57] local.ERROR: Invalid folder path for ID: {"folder_id":null} 
+[2024-11-09 20:53:00] local.ERROR: No folder found for ID:   
+[2024-11-09 20:53:00] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:53:00] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:53:02] local.ERROR: No folder found for ID:   
+[2024-11-09 20:53:02] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:53:02] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:54:11] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:54:11] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:54:11] local.ERROR: Undefined variable $data {"view":{"view":"D:\\HackathonRepository\\RevisedSystem\\resources\\views\\sharefolder.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1449030583 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#383</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1449030583\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","title":"<pre class=sf-dump id=sf-dump-1212059358 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"5 characters\">test2</span>\"
+</pre><script>Sfdump(\"sf-dump-1212059358\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","shareableFolder":"<pre class=sf-dump id=sf-dump-48550341 data-indent-pad=\"  \">{<a class=sf-dump-ref>#1387</a><samp data-depth=1 class=sf-dump-expanded>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">id</span>\": <span class=sf-dump-num>2</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">users_id</span>\": <span class=sf-dump-num>2</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">recipient_id</span>\": <span class=sf-dump-const>null</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">title</span>\": \"<span class=sf-dump-str title=\"5 characters\">test2</span>\"
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">can_edit</span>\": <span class=sf-dump-num>0</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">can_delete</span>\": <span class=sf-dump-num>0</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">created_at</span>\": \"<span class=sf-dump-str title=\"19 characters\">2024-11-09 20:34:41</span>\"
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">updated_at</span>\": \"<span class=sf-dump-str title=\"19 characters\">2024-11-09 20:34:41</span>\"
+</samp>}
+</pre><script>Sfdump(\"sf-dump-48550341\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","files":"<pre class=sf-dump id=sf-dump-1555938536 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Pagination\\LengthAwarePaginator</span> {<a class=sf-dump-ref>#1398</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note title=\"Illuminate\\Support\\Collection
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">Illuminate\\Support</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>Collection</span> {<a class=sf-dump-ref>#1391</a><samp data-depth=2 class=sf-dump-compact>
+    #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => {<a class=sf-dump-ref>#1390</a> &#8230;13}
+    </samp>]
+    #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  </samp>}
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>10</span>
+  #<span class=sf-dump-protected title=\"Protected property\">currentPage</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">path</span>: \"<span class=sf-dump-str title=\"244 characters\">http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">query</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fragment</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">pageName</span>: \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  +<span class=sf-dump-public title=\"Public property\">onEachSide</span>: <span class=sf-dump-num>3</span>
+  #<span class=sf-dump-protected title=\"Protected property\">options</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>path</span>\" => \"<span class=sf-dump-str title=\"244 characters\">http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+    \"<span class=sf-dump-key>pageName</span>\" => \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">total</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">lastPage</span>: <span class=sf-dump-num>1</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1555938536\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","folderId":"<pre class=sf-dump id=sf-dump-1090227203 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"200 characters\">eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+</pre><script>Sfdump(\"sf-dump-1090227203\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":2,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable $data at D:\\HackathonRepository\\RevisedSystem\\resources\\views\\sharefolder.blade.php:130)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#54 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable $data at D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\e79583879db2ca470f19ed2f001a99b1.php:129)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 129)
+#1 D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\e79583879db2ca470f19ed2f001a99b1.php(129): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 129)
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#54 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#55 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#56 {main}
+"} 
+[2024-11-09 20:54:46] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:54:46] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:54:46] local.ERROR: Undefined variable $data {"view":{"view":"D:\\HackathonRepository\\RevisedSystem\\resources\\views\\sharefolder.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1956722380 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#383</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1956722380\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","title":"<pre class=sf-dump id=sf-dump-34409558 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"5 characters\">test2</span>\"
+</pre><script>Sfdump(\"sf-dump-34409558\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","shareableFolder":"<pre class=sf-dump id=sf-dump-2080904055 data-indent-pad=\"  \">{<a class=sf-dump-ref>#1387</a><samp data-depth=1 class=sf-dump-expanded>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">id</span>\": <span class=sf-dump-num>2</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">users_id</span>\": <span class=sf-dump-num>2</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">recipient_id</span>\": <span class=sf-dump-const>null</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">title</span>\": \"<span class=sf-dump-str title=\"5 characters\">test2</span>\"
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">can_edit</span>\": <span class=sf-dump-num>0</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">can_delete</span>\": <span class=sf-dump-num>0</span>
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">created_at</span>\": \"<span class=sf-dump-str title=\"19 characters\">2024-11-09 20:34:41</span>\"
+  +\"<span class=sf-dump-public title=\"Runtime added dynamic property\">updated_at</span>\": \"<span class=sf-dump-str title=\"19 characters\">2024-11-09 20:34:41</span>\"
+</samp>}
+</pre><script>Sfdump(\"sf-dump-2080904055\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","files":"<pre class=sf-dump id=sf-dump-491028706 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Pagination\\LengthAwarePaginator</span> {<a class=sf-dump-ref>#1398</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note title=\"Illuminate\\Support\\Collection
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">Illuminate\\Support</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>Collection</span> {<a class=sf-dump-ref>#1391</a><samp data-depth=2 class=sf-dump-compact>
+    #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => {<a class=sf-dump-ref>#1390</a> &#8230;13}
+    </samp>]
+    #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  </samp>}
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>10</span>
+  #<span class=sf-dump-protected title=\"Protected property\">currentPage</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">path</span>: \"<span class=sf-dump-str title=\"244 characters\">http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">query</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fragment</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">pageName</span>: \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  +<span class=sf-dump-public title=\"Public property\">onEachSide</span>: <span class=sf-dump-num>3</span>
+  #<span class=sf-dump-protected title=\"Protected property\">options</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>path</span>\" => \"<span class=sf-dump-str title=\"244 characters\">http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+    \"<span class=sf-dump-key>pageName</span>\" => \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">total</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">lastPage</span>: <span class=sf-dump-num>1</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-491028706\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","folderId":"<pre class=sf-dump id=sf-dump-1941194526 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"200 characters\">eyJpdiI6ImxsWk84dUhVOE1UQ1VNY09KRCtPV1E9PSIsInZhbHVlIjoiVkhreEFjeUt0MURSMUV3WkoveEd1QT09IiwibWFjIjoiNzNjOTdmMWMwYTdhNzA4ODI5ZGFmNjZmNTU3OTk1OTkzZTNhMWUyYWI0OTA5YjFkNzI3NDkxOWYyNTVlN2RhYyIsInRhZyI6IiJ9</span>\"
+</pre><script>Sfdump(\"sf-dump-1941194526\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":2,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable $data at D:\\HackathonRepository\\RevisedSystem\\resources\\views\\sharefolder.blade.php:163)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#54 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable $data at D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\e79583879db2ca470f19ed2f001a99b1.php:162)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 162)
+#1 D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\e79583879db2ca470f19ed2f001a99b1.php(162): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 162)
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#54 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#55 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#56 {main}
+"} 
+[2024-11-09 20:54:53] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:54:53] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:55:35] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:55:35] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:55:38] local.INFO: Starting update function for shareable file ID: eyJpdiI6IlhuZWZDL2VWcHAyOWFwcjhJWHBOUlE9PSIsInZhbHVlIjoiYUFROXF6d2VsL25YdDl1VzdlQW9RZz09IiwibWFjIjoiMTgxZDc4YzVmZTQ4M2QwNjlkNDc5ZjQ1MGVkNjBhNzEzY2NmYTM0YmM5YWQ3ZTAxMWRiNDgxZWZmNGJjMDI0ZiIsInRhZyI6IiJ9  
+[2024-11-09 20:55:38] local.INFO: Shareable file found with users_folder_files_id: 2  
+[2024-11-09 20:55:38] local.INFO: Storage file renamed from: public/users/2/shared_folders/test2/testtest.docx to: public/users/2/shared_folders/testtes3t.docx  
+[2024-11-09 20:55:38] local.INFO: File reference updated in users_folder_files for ID: 2  
+[2024-11-09 20:55:38] local.INFO: Transaction committed successfully for shareable file update with users_folder_files_id: 2  
+[2024-11-09 20:55:39] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:55:39] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:55:40] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:55:40] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:55:44] local.INFO: Password entered by user: 123  
+[2024-11-09 20:55:44] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:55:44] local.INFO: File query result: {"id":2,"users_id":2,"users_folder_id":null,"users_folder_shareable_id":2,"subfolder_id":null,"files":"testtes3t.docx","size":0,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-09 20:34:24","updated_at":"2024-11-09 20:55:38","file_path":"users\/2\/shared_folders\/testtes3t.docx"}  
+[2024-11-09 20:55:44] local.INFO: File path: public/users/2/shared_folders/testtes3t.docx  
+[2024-11-09 20:55:44] local.INFO: File exists in storage.  
+[2024-11-09 20:56:14] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:56:14] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:56:17] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:56:17] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:56:20] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:56:20] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:56:23] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:56:23] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:56:29] local.INFO: Starting update function for shareable file ID: eyJpdiI6ImRpS2tKR2trSDQxVTVmQmhyVTg5aEE9PSIsInZhbHVlIjoiTFBhQ1dDOHpkRnd4eVFLY3JGdnMwdz09IiwibWFjIjoiNWE4ZjdjMTBmM2NhYjVhZjJlNGZmOTMxYmFjZGY3NTkyZTNlNTA1ODBjMmVlMTUwOWY4YzQ1NWIwMWFkMTZhMiIsInRhZyI6IiJ9  
+[2024-11-09 20:56:29] local.INFO: Shareable file found with users_folder_files_id: 2  
+[2024-11-09 20:56:29] local.INFO: Storage file renamed from: public/users/2/shared_folders/testtes3t.docx to: public/users/2/shared_folders/testtes34t.docx  
+[2024-11-09 20:56:29] local.INFO: File reference updated in users_folder_files for ID: 2  
+[2024-11-09 20:56:29] local.INFO: Transaction committed successfully for shareable file update with users_folder_files_id: 2  
+[2024-11-09 20:56:32] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:56:32] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 20:57:07] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:57:07] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:57:19] local.INFO: Starting edit function for shareable file ID: eyJpdiI6Ikc5MUNmckJVd1pkTjBobkpzZVFwYkE9PSIsInZhbHVlIjoiNk56ZjA1ZTE2RXFob29vWlQrNzJmdz09IiwibWFjIjoiNjFhMjFlNmYwY2RmMDIyYWM4YzdhODkzNzAyNWUxNjE0MjJhNTUxYWE5MmEzY2E3NjVmZDViOTQ3ZjkwYWU5MiIsInRhZyI6IiJ9  
+[2024-11-09 20:57:19] local.INFO: Shareable file found with users_folder_files_id: 4  
+[2024-11-09 20:57:51] local.INFO: Decrypted ID: 1  
+[2024-11-09 20:57:51] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 20:57:53] local.INFO: Decrypted ID: 2  
+[2024-11-09 20:57:53] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:01:06] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:01:06] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:01:08] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:01:08] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:04:24] local.INFO: File path from database: users/2/shared_folders/testtes34t.docx  
+[2024-11-09 21:04:30] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:04:30] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:04:33] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:04:33] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:06:36] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:06:36] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:06:38] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:06:38] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:06:40] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:06:40] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:06:58] local.INFO: Create function called.  
+[2024-11-09 21:06:58] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-09 21:06:58] local.INFO: Attempting to create file: tesds.docx for user ID: 2  
+[2024-11-09 21:06:58] local.INFO: Resolved file path: users/2/test1/tesds.docx  
+[2024-11-09 21:06:58] local.INFO: File created and stored at: users/2/test1/tesds.docx  
+[2024-11-09 21:06:58] local.INFO: File size determined: 7310 bytes  
+[2024-11-09 21:06:58] local.INFO: File record inserted into database: tesds.docx  
+[2024-11-09 21:07:08] local.INFO: File/Folder sharing request received {"request":{"_token":"unDa956CyV71eEdAYoR3bMyEUeeAj1Tqc95GSkcI","my_name_MHzYf7IRfpRnf8wa":null,"valid_from":"eyJpdiI6IlhkeE12ZkVGd1R5b2pQcURKakNjMmc9PSIsInZhbHVlIjoiYjJuYzVxem1NSGlkRllINHZ6RmxEZz09IiwibWFjIjoiMzFmYzcxNDFjM2Q5NDIxZDUyYTg1ZmU5NjBhOTk5N2QzZTE3ZDNkMGYzNWE4ODc5YWUwMjFhYmE1ODdlZTRiMyIsInRhZyI6IiJ9","users_folder_files_id":"eyJpdiI6IjdTbkM4cDhrV3M4N3JFQjFIMzFwWWc9PSIsInZhbHVlIjoiZGRZRFhmclplSEV3Smx1dXlHMG9FUT09IiwibWFjIjoiZDg5ZmVlMjc4NjQ1YzU5MzlkMzU4OTU1Zjg3YjY3NmJmNDNmYWIxYjA1ZTRlMGJhZGNjZjc3NjcwNjMyMGNkZCIsInRhZyI6IiJ9","users_folder_id":null,"category":"Individual","email":"lafa.flores.up@phinmaed.com"}} 
+[2024-11-09 21:07:08] local.INFO: Recipient found {"recipient":{"stdClass":{"id":2,"name":"Lafa Flores","age":25,"address":"Address1","department":"CCS","email":"lafa.flores.up@phinmaed.com","email_verified_at":"2024-11-09 20:33:17","password":"$2y$10$qRLplU9foJuW8ukFSnqd2.CazIj76Pc4Y93fJ56/wjjOpOzK22xhS","remember_token":"AL8v8uDgGQ","roles":"USER","created_at":"2024-11-09 20:33:17","updated_at":"2024-11-09 20:33:17"}}} 
+[2024-11-09 21:07:08] local.INFO: Original file retrieved {"originalFileId":"5","originalFile":{"stdClass":{"id":5,"users_id":2,"users_folder_id":1,"users_folder_shareable_id":null,"subfolder_id":null,"files":"tesds.docx","size":7310,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-09 21:06:58","updated_at":"2024-11-09 21:06:58","file_path":"users/2/test1/tesds.docx"}}} 
+[2024-11-09 21:07:08] local.INFO: File copied successfully {"original":"users/2/test1/tesds.docx","new":"public/users/2/shared_folders/tesds.docx"} 
+[2024-11-09 21:07:08] local.INFO: New file reference created {"newFileId":6} 
+[2024-11-09 21:07:11] local.INFO: Notification sent to recipient {"email":"lafa.flores.up@phinmaed.com"} 
+[2024-11-09 21:07:11] local.INFO: Shareable file reference stored {"newFileId":6} 
+[2024-11-09 21:07:41] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-09 21:07:41] local.INFO: Decrypted parent ID: {"parent_id":"1"} 
+[2024-11-09 21:07:41] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/test1/dsds"} 
+[2024-11-09 21:07:41] local.INFO: Directory successfully created: {"directory":"users/2/test1/dsds"} 
+[2024-11-09 21:07:48] local.INFO: Create function called.  
+[2024-11-09 21:07:48] local.INFO: Folder ID belongs to a subfolder. Subfolder ID: 1  
+[2024-11-09 21:07:48] local.INFO: Attempting to create file: brih.docx for user ID: 2  
+[2024-11-09 21:07:48] local.INFO: Resolved file path: users/2/test1/brih.docx  
+[2024-11-09 21:07:48] local.INFO: File created and stored at: users/2/test1/brih.docx  
+[2024-11-09 21:07:48] local.INFO: File size determined: 7310 bytes  
+[2024-11-09 21:07:48] local.INFO: File record inserted into database: brih.docx  
+[2024-11-09 21:08:06] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:08:06] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:08:10] local.INFO: Starting edit function for shareable file ID: eyJpdiI6Im52WjM1ZC8xblBWSHBnRktyZjdtWnc9PSIsInZhbHVlIjoiaXAvK3k4U1pFeEdCSkkzeGNBaW5SZz09IiwibWFjIjoiMjFkZWY2YmQwNTU2OGQwMGI0OWZiODU5ZmM5MGI3YmVkOTI1OTNkNDAwNzBlZGY5N2NhYTIxYTU0ZWZlNzA4YiIsInRhZyI6IiJ9  
+[2024-11-09 21:08:10] local.INFO: Shareable file found with users_folder_files_id: 4  
+[2024-11-09 21:08:15] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:08:15] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:08:17] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:08:17] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:08:21] local.INFO: Storage directory created at: public/users/2/shared_folders/dasdasda  
+[2024-11-09 21:08:25] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6IkRvN1dhVHJTN1lXc3RaMHFUV3E0bUE9PSIsInZhbHVlIjoibnNwV1RDT1Zua01QaXpLNE91U2lzZz09IiwibWFjIjoiYWVlMDg2MDQyY2E4ZTQ4NzQyMzUwMzFjMzc0ZjNiYjZmZjQ2NDU4YjVmZjkwY2QwNDJmMTA5MWRiMmQ2YWFmYyIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6IkdvbDlldXE4elVuNFNhd0JUc2Zid1E9PSIsInZhbHVlIjoiZ29iOVR0WHRWV082b1RXVzJLcG16UT09IiwibWFjIjoiYzk0YWQxZTEwM2IzOWJhMTAzNDVkMzZiNzEwOGFiMTVlNzI2NmU2OGFmMzE3ZGU4YmNjYmRmMmY1NmI2OWI2NSIsInRhZyI6IiJ9"},{"id":3,"title":"dasdasda","encrypted_id":"eyJpdiI6Ind0dXMvZndxT1RwTkFNM2loa1pjS0E9PSIsInZhbHVlIjoiMUVMaVg1SUJ6bkpSNnpBei9lY0syZz09IiwibWFjIjoiOTZmYmYxYmVhZjI4MWY1NmE2MWRiZTE2YjE4NjE1ZGEwN2UxYmIxYzRlODdiYzhmYzI1Nzc3MTgzNWIxOTQzYiIsInRhZyI6IiJ9"}]}] 
+[2024-11-09 21:08:27] local.INFO: Received encrypted fileId: eyJpdiI6IlJVOEVYN2VNTVVQY3dSM0pvRFhHcGc9PSIsInZhbHVlIjoiTE9DdXN2TGtXbUsrb0Y3d1FkY0Fxdz09IiwibWFjIjoiMjlhNTg0ZWJkM2E2ZTU4N2E5ZWRhYzc1ZTY0ZDlmMTVhOTdlNDdmMWQ1YjFlZTRkZjc3NmZlNzNjNDk5ZTUxZiIsInRhZyI6IiJ9  
+[2024-11-09 21:08:27] local.INFO: Received encrypted destinationFolderId: eyJpdiI6Ind0dXMvZndxT1RwTkFNM2loa1pjS0E9PSIsInZhbHVlIjoiMUVMaVg1SUJ6bkpSNnpBei9lY0syZz09IiwibWFjIjoiOTZmYmYxYmVhZjI4MWY1NmE2MWRiZTE2YjE4NjE1ZGEwN2UxYmIxYzRlODdiYzhmYzI1Nzc3MTgzNWIxOTQzYiIsInRhZyI6IiJ9  
+[2024-11-09 21:08:27] local.INFO: Decrypted fileId: 6  
+[2024-11-09 21:08:27] local.INFO: Decrypted destinationFolderId: 3  
+[2024-11-09 21:08:27] local.INFO: File and destination folder found, proceeding with database update.  
+[2024-11-09 21:08:27] local.INFO: Database updated for file ID 6 with new shared folder ID 3  
+[2024-11-09 21:08:27] local.INFO: File moved in storage from public/users/2/shared_folders/tesds.docx to public/users/2/shared_folders/dasdasda/tesds.docx  
+[2024-11-09 21:08:27] local.INFO: Received encrypted fileId: eyJpdiI6IlJVOEVYN2VNTVVQY3dSM0pvRFhHcGc9PSIsInZhbHVlIjoiTE9DdXN2TGtXbUsrb0Y3d1FkY0Fxdz09IiwibWFjIjoiMjlhNTg0ZWJkM2E2ZTU4N2E5ZWRhYzc1ZTY0ZDlmMTVhOTdlNDdmMWQ1YjFlZTRkZjc3NmZlNzNjNDk5ZTUxZiIsInRhZyI6IiJ9  
+[2024-11-09 21:08:27] local.INFO: Received encrypted destinationFolderId: eyJpdiI6Ind0dXMvZndxT1RwTkFNM2loa1pjS0E9PSIsInZhbHVlIjoiMUVMaVg1SUJ6bkpSNnpBei9lY0syZz09IiwibWFjIjoiOTZmYmYxYmVhZjI4MWY1NmE2MWRiZTE2YjE4NjE1ZGEwN2UxYmIxYzRlODdiYzhmYzI1Nzc3MTgzNWIxOTQzYiIsInRhZyI6IiJ9  
+[2024-11-09 21:08:27] local.INFO: Decrypted fileId: 6  
+[2024-11-09 21:08:27] local.INFO: Decrypted destinationFolderId: 3  
+[2024-11-09 21:08:27] local.INFO: File and destination folder found, proceeding with database update.  
+[2024-11-09 21:08:27] local.INFO: Database updated for file ID 6 with new shared folder ID 3  
+[2024-11-09 21:08:27] local.INFO: File moved in storage from public/users/2/shared_folders/dasdasda/tesds.docx to public/users/2/shared_folders/dasdasda/tesds.docx  
+[2024-11-09 21:08:29] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:08:29] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:13:38] local.ERROR: Undefined variable $file {"view":{"view":"D:\\HackathonRepository\\RevisedSystem\\resources\\views\\shared.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-347624406 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#376</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-347624406\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","title":"<pre class=sf-dump id=sf-dump-440967819 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"34 characters\">My Shared Folders &amp; Shared With Me</span>\"
+</pre><script>Sfdump(\"sf-dump-440967819\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","createdFolders":"<pre class=sf-dump id=sf-dump-1962236619 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Pagination\\LengthAwarePaginator</span> {<a class=sf-dump-ref>#1381</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note title=\"Illuminate\\Database\\Eloquent\\Collection
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">Illuminate\\Database\\Eloquent</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>Collection</span> {<a class=sf-dump-ref>#1375</a><samp data-depth=2 class=sf-dump-compact>
+    #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => <span class=sf-dump-note title=\"App\\Models\\UsersFolderShareable
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>UsersFolderShareable</span> {<a class=sf-dump-ref>#1377</a> &#8230;30}
+      <span class=sf-dump-index>1</span> => <span class=sf-dump-note title=\"App\\Models\\UsersFolderShareable
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>UsersFolderShareable</span> {<a class=sf-dump-ref>#1378</a> &#8230;30}
+      <span class=sf-dump-index>2</span> => <span class=sf-dump-note title=\"App\\Models\\UsersFolderShareable
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">App\\Models</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>UsersFolderShareable</span> {<a class=sf-dump-ref>#1379</a> &#8230;30}
+    </samp>]
+    #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  </samp>}
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>10</span>
+  #<span class=sf-dump-protected title=\"Protected property\">currentPage</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">path</span>: \"<span class=sf-dump-str title=\"28 characters\">http://127.0.0.1:8000/shared</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">query</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fragment</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">pageName</span>: \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  +<span class=sf-dump-public title=\"Public property\">onEachSide</span>: <span class=sf-dump-num>3</span>
+  #<span class=sf-dump-protected title=\"Protected property\">options</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>path</span>\" => \"<span class=sf-dump-str title=\"28 characters\">http://127.0.0.1:8000/shared</span>\"
+    \"<span class=sf-dump-key>pageName</span>\" => \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">total</span>: <span class=sf-dump-num>3</span>
+  #<span class=sf-dump-protected title=\"Protected property\">lastPage</span>: <span class=sf-dump-num>1</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1962236619\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","sharedFiles":"<pre class=sf-dump id=sf-dump-1170612265 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Pagination\\LengthAwarePaginator</span> {<a class=sf-dump-ref>#1387</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note title=\"Illuminate\\Support\\Collection
+\"><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">Illuminate\\Support</span><span class=\"sf-dump-ellipsis sf-dump-ellipsis-note\">\\</span>Collection</span> {<a class=sf-dump-ref>#1372</a><samp data-depth=2 class=sf-dump-compact>
+    #<span class=sf-dump-protected title=\"Protected property\">items</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=3 class=sf-dump-compact>
+      <span class=sf-dump-index>0</span> => {<a class=sf-dump-ref>#1380</a> &#8230;15}
+    </samp>]
+    #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  </samp>}
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>18</span>
+  #<span class=sf-dump-protected title=\"Protected property\">currentPage</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">path</span>: \"<span class=sf-dump-str title=\"28 characters\">http://127.0.0.1:8000/shared</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">query</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fragment</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">pageName</span>: \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  +<span class=sf-dump-public title=\"Public property\">onEachSide</span>: <span class=sf-dump-num>3</span>
+  #<span class=sf-dump-protected title=\"Protected property\">options</span>: <span class=sf-dump-note>array:2</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>path</span>\" => \"<span class=sf-dump-str title=\"28 characters\">http://127.0.0.1:8000/shared</span>\"
+    \"<span class=sf-dump-key>pageName</span>\" => \"<span class=sf-dump-str title=\"4 characters\">page</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">total</span>: <span class=sf-dump-num>1</span>
+  #<span class=sf-dump-protected title=\"Protected property\">lastPage</span>: <span class=sf-dump-num>1</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1170612265\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":2,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Undefined variable $file at D:\\HackathonRepository\\RevisedSystem\\resources\\views\\shared.blade.php:91)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#54 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Undefined variable $file at D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\9c6725e51980b1b88bc39411702cb90e.php:91)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 91)
+#1 D:\\HackathonRepository\\RevisedSystem\\storage\\framework\\views\\9c6725e51980b1b88bc39411702cb90e.php(91): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined varia...', 'D:\\\\HackathonRep...', 91)
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(123): require('D:\\\\HackathonRep...')
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(124): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('D:\\\\HackathonRep...', Array)
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(72): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('D:\\\\HackathonRep...', Array)
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(207): Illuminate\\View\\Engines\\CompilerEngine->get('D:\\\\HackathonRep...', Array)
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(190): Illuminate\\View\\View->getContents()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(159): Illuminate\\View\\View->renderContents()
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(918): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(885): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(806): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#46 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#53 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#54 D:\\HackathonRepository\\RevisedSystem\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#55 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('D:\\\\HackathonRep...')
+#56 {main}
+"} 
+[2024-11-09 21:13:57] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6IkEyY3BkWFlKbnAxVUhTRGxnTmh6SVE9PSIsInZhbHVlIjoiV2YrL1FvQmhkeWI4ZW9PYUlOODJEdz09IiwibWFjIjoiZWJjMzg4ODViZTc1ZGVkODYzY2JiYmM3ZjQyMmYxZTIwMmI5MmJkZjA5MjJlYmY2MzgxY2JjOTZjMGUwMzk1ZSIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6InNKOE5mVFZxREZDdFJ2WnZESE9MWlE9PSIsInZhbHVlIjoiaDNlVUFjQks1Rm1IejdjUHl3ZitPdz09IiwibWFjIjoiYjhiMzEwZDZkYWJmNjE3YjE2ZDY3OWE3YjJlMDNmOGY2YzUwN2E3ZDQ0ZjgwMWE3ZWNkZmQ0ZTg0MWY0ZTUxMyIsInRhZyI6IiJ9"},{"id":3,"title":"dasdasda","encrypted_id":"eyJpdiI6InRSNm41enpUdEt2dzR5Y3dBelA1YkE9PSIsInZhbHVlIjoiTSsxMWs2elF3c1dvMDArUHRMMWNEZz09IiwibWFjIjoiMmU0ZTNjNzZkNWEwNTQ0OTY0MTYxMmI1MGQzMGM3OGIxZjEyZDkwNWQzYzNkYmUwZDhjYjVlZjJhMWYzYmI2OCIsInRhZyI6IiJ9"}]}] 
+[2024-11-09 21:14:00] local.INFO: Received request to paste file into shared folder with ID: eyJpdiI6InRSNm41enpUdEt2dzR5Y3dBelA1YkE9PSIsInZhbHVlIjoiTSsxMWs2elF3c1dvMDArUHRMMWNEZz09IiwibWFjIjoiMmU0ZTNjNzZkNWEwNTQ0OTY0MTYxMmI1MGQzMGM3OGIxZjEyZDkwNWQzYzNkYmUwZDhjYjVlZjJhMWYzYmI2OCIsInRhZyI6IiJ9  
+[2024-11-09 21:14:00] local.INFO: Pasting file:  {"copiedFile":{"stdClass":{"id":2,"users_id":2,"users_folder_id":null,"users_folder_shareable_id":2,"subfolder_id":null,"files":"testtes34t.docx","size":0,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-09 20:34:24","updated_at":"2024-11-09 20:56:29","file_path":"users/2/shared_folders/testtes34t.docx"}}} 
+[2024-11-09 21:14:00] local.INFO: Source path: public/users/2/shared_folders/testtes34t.docx  
+[2024-11-09 21:14:00] local.INFO: Destination path: public/users/2/shared_folders/dasdasda/672fd0989e017_testtes34t.docx  
+[2024-11-09 21:14:00] local.INFO: File copied from public/users/2/shared_folders/testtes34t.docx to public/users/2/shared_folders/dasdasda/672fd0989e017_testtes34t.docx  
+[2024-11-09 21:14:00] local.INFO: File pasted successfully in shared folder. {"newFileName":"672fd0989e017_testtes34t.docx"} 
+[2024-11-09 21:14:03] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:14:03] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:14:06] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:14:06] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:14:09] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:14:09] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:14:14] local.INFO: File path from database: users/2/shared_folders/testtes34t.docx  
+[2024-11-09 21:14:16] local.INFO: File path from database: users/2/shared_folders/testtes34t.docx  
+[2024-11-09 21:14:56] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:14:56] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:14:58] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6InA3bWoxYUxWQkpVTU1WUTJITnhWaUE9PSIsInZhbHVlIjoiZ3JabTF4RWRCQytRelRVZ1NlaDFsZz09IiwibWFjIjoiNGRiMzJlMmNmODVkOGE0Y2M3ZmVmNTI5MGM1ZjA5NTk4NDEyYWU2NGVmYjQyMzY1ZDhhMmQxNTE1MWVjODNlOCIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6IlRWU2toeURDZVFheFpsb3lRR2lrcEE9PSIsInZhbHVlIjoiUWlsMEVBcVd6cWJ4MWFIWXJNYnNQUT09IiwibWFjIjoiYWFlZjJmMWIzNjA3N2U5MzE0N2EzMzUxYjcxN2MyOGNjN2JjOTdhY2FjZGY3ZWExMGYyZWNmYTNmM2U1YTUzOSIsInRhZyI6IiJ9"},{"id":3,"title":"dasdasda","encrypted_id":"eyJpdiI6InNTQUdlWEJGRWJGWm1lVXJOdWFUWVE9PSIsInZhbHVlIjoibTRaUmdPT1JRTG9KN0dOU2VZZk1xQT09IiwibWFjIjoiODRhYjYwYTI4N2IyMDYwMGEyNzdjZDI4YzMzNmVlMzg1YjMzYzFkZGJjMGI2ZmE3NTBmZDVjYzVmMTQyNzVjYiIsInRhZyI6IiJ9"}]}] 
+[2024-11-09 21:15:01] local.INFO: Received encrypted fileId: eyJpdiI6ImpDZEkvQi9GdUtCenJsekJaZFJSV2c9PSIsInZhbHVlIjoicXJJQmdJOWxBT2t0a1k0ejB3cFQrdz09IiwibWFjIjoiYzA3Y2U2Y2E1NGJjNDBhNjg1MWZkMWQ3OGE0Y2YxMDkwYjMyYjA0YmIwODFlNzY0YjdmOTU0NzBmOWU5NzgxZCIsInRhZyI6IiJ9  
+[2024-11-09 21:15:01] local.INFO: Received encrypted destinationFolderId: eyJpdiI6InNTQUdlWEJGRWJGWm1lVXJOdWFUWVE9PSIsInZhbHVlIjoibTRaUmdPT1JRTG9KN0dOU2VZZk1xQT09IiwibWFjIjoiODRhYjYwYTI4N2IyMDYwMGEyNzdjZDI4YzMzNmVlMzg1YjMzYzFkZGJjMGI2ZmE3NTBmZDVjYzVmMTQyNzVjYiIsInRhZyI6IiJ9  
+[2024-11-09 21:15:01] local.INFO: Decrypted fileId: 2  
+[2024-11-09 21:15:01] local.INFO: Decrypted destinationFolderId: 3  
+[2024-11-09 21:15:01] local.INFO: File and destination folder found, proceeding with database update.  
+[2024-11-09 21:15:01] local.INFO: Database updated for file ID 2 with new shared folder ID 3  
+[2024-11-09 21:15:01] local.INFO: File moved in storage from public/users/2/shared_folders/testtes34t.docx to public/users/2/shared_folders/dasdasda/testtes34t.docx  
+[2024-11-09 21:15:02] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:15:02] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:15:22] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:15:22] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-09 21:15:25] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:15:25] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:15:30] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:15:30] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:15:33] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:15:33] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:15:59] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:15:59] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:16:22] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6IlVNRlZXdGZFUW0wZUtBcTZlOU9GK0E9PSIsInZhbHVlIjoiZGpBclYveThSam1OV1VhK1laR1JxZz09IiwibWFjIjoiZjhhNzM2ZGE1YzhkYjFmNjI4YjkyZmJjMTBmNmRiZGY1ZTY4ODY3MDc0MDhlY2ViYjYxNWJiNjE1NDdjMDdmMCIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6IlBQRlVFQjNrMnJiRHhTVURQNXhJTXc9PSIsInZhbHVlIjoidEMvcDNSeFduWGxEb2lrRjJTMnFPQT09IiwibWFjIjoiZTg1NDVlNTllZWI1MDFjODhjNDkwZWMxYzI5NDgzNzEyMTg4ZWRmNjE0NTdjZDQ4OTM3NWFiYTU3NzM5MzMwYSIsInRhZyI6IiJ9"},{"id":3,"title":"dasdasda","encrypted_id":"eyJpdiI6IjdrSjlnRUQvLzY5SjJ4OWtndVdSK1E9PSIsInZhbHVlIjoiM2VRdyt0dnVDSTRqWkkvL2IvSWFjUT09IiwibWFjIjoiZDdlYmY0YmE2MzdiYzJiNzkyMzI3MjM1ZGY5MmFjOGZlYmFmN2ZkODUzYmZjMWFlNjZkNTM4MmRiNzAzNDk0NCIsInRhZyI6IiJ9"}]}] 
+[2024-11-09 21:16:46] local.INFO: Decrypted ID: 3  
+[2024-11-09 21:16:46] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-09 21:17:03] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:17:03] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:17:13] local.INFO: File path from database: users/2/shared_folders/test1/testtest.docx  
+[2024-11-09 21:17:36] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:17:36] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:17:39] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:17:39] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:17:42] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:17:42] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:18:39] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:18:39] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:18:41] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6IllRdUt0L2NzWi9ERUlhZVRDU2JIK1E9PSIsInZhbHVlIjoiVzByTU1HQ2dXdXZ6M1hUTVZWa1RvQT09IiwibWFjIjoiMGU5MmE4YmIzNDFmZmQxMGI4Y2UxY2UwZTk2N2I2NWJiOGY1YTQzMWZiM2JlZTNjMjA5MDQxODhhNmM1ZTllOCIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6IkNkZGpjNUZDcUJabEV0MFo0eFRhZ3c9PSIsInZhbHVlIjoiT3ZnYXc3WTB0M2RTKzNTT21jMEduZz09IiwibWFjIjoiN2E3M2M1MzU2NDc0ZjY1ZTMyMDQ1OGM1YzBkZTZiNjE2ZmI1ZTU2NGEyZjI4ZDdiYjI2OTA4YjZkZjg2NzEwOSIsInRhZyI6IiJ9"},{"id":3,"title":"dasdasda","encrypted_id":"eyJpdiI6InIybU82Z2Nhb3cyK29ZM1ErTVlKOFE9PSIsInZhbHVlIjoiTzlZTE9zRWtoVE1HWWxrZnlHZ0J1QT09IiwibWFjIjoiZDhjYmM4Y2QwMDY5ZGFiNmFkOTE4ZTk1MWQ3YTVmNDI1ODkzMGVkNzE3ZDViZmQ1NjUxMDVjMjg3N2U5NGYwOSIsInRhZyI6IiJ9"}]}] 
+[2024-11-09 21:18:44] local.INFO: Received request to paste file into shared folder with ID: eyJpdiI6IkNkZGpjNUZDcUJabEV0MFo0eFRhZ3c9PSIsInZhbHVlIjoiT3ZnYXc3WTB0M2RTKzNTT21jMEduZz09IiwibWFjIjoiN2E3M2M1MzU2NDc0ZjY1ZTMyMDQ1OGM1YzBkZTZiNjE2ZmI1ZTU2NGEyZjI4ZDdiYjI2OTA4YjZkZjg2NzEwOSIsInRhZyI6IiJ9  
+[2024-11-09 21:18:44] local.INFO: Pasting file:  {"copiedFile":{"stdClass":{"id":4,"users_id":2,"users_folder_id":null,"users_folder_shareable_id":1,"subfolder_id":null,"files":"testtest.docx","size":0,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-09 20:47:08","updated_at":"2024-11-10 04:49:00","file_path":"users/2/shared_folders/test1/testtest.docx"}}} 
+[2024-11-09 21:18:44] local.INFO: Source path: public/users/2/shared_folders/test1/testtest.docx  
+[2024-11-09 21:18:44] local.INFO: Destination path: public/users/2/shared_folders/test2/672fd1b42bad5_testtest.docx  
+[2024-11-09 21:18:44] local.INFO: File copied from public/users/2/shared_folders/test1/testtest.docx to public/users/2/shared_folders/test2/672fd1b42bad5_testtest.docx  
+[2024-11-09 21:18:44] local.INFO: File pasted successfully in shared folder. {"newFileName":"672fd1b42bad5_testtest.docx"} 
+[2024-11-09 21:18:44] local.INFO: Decrypted ID: 1  
+[2024-11-09 21:18:44] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-09 21:18:48] local.INFO: Decrypted ID: 2  
+[2024-11-09 21:18:48] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
