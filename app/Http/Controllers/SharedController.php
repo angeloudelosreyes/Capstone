@@ -28,10 +28,12 @@ class SharedController extends Controller
         // Fetch shareable folders created by the authenticated user
         $createdFolders = UsersFolderShareable::where('users_id', $userId)->paginate(10);
 
-        // Fetch files shared with the authenticated user
+        // Fetch files shared with the authenticated user within the specified shared folders directory
         $sharedFiles = DB::table('users_shareable_files')
             ->join('users_folder_files', 'users_folder_files.id', '=', 'users_shareable_files.users_folder_files_id')
             ->where('users_shareable_files.recipient_id', $userId)
+            ->where('users_folder_files.file_path', 'like', "users/{$userId}/shared_folders/%")
+            ->whereRaw("CHAR_LENGTH(users_folder_files.file_path) - CHAR_LENGTH(REPLACE(users_folder_files.file_path, '/', '')) = CHAR_LENGTH('users/{$userId}/shared_folders') - CHAR_LENGTH(REPLACE('users/{$userId}/shared_folders', '/', '')) + 1")
             ->paginate(18);
 
         return view('shared', [
@@ -183,7 +185,7 @@ class SharedController extends Controller
         }
 
         // Define the new file path within storage
-        $newFilePath = "{$storagePath}/" . basename($originalFile->file_path);
+        $newFilePath = "{$storagePath}" . basename($originalFile->file_path);
 
         try {
             // Copy file using absolute paths with the 'public' disk
