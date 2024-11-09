@@ -149,15 +149,22 @@ class SharedController extends Controller
             ]);
         }
 
-        // Create a unique new file name
-        $newFileName = uniqid() . '_' . basename($originalFile->file_path);
-        $newFilePath = 'users/' . $recipient->id . '/' . $newFileName;
+        // Define sanitized title and storage path
+        $title = trim($request->input('title'), '/');
+        $storagePath = "public/users/{$recipient->id}/shared_folders/{$title}";
 
-        // Copy the original file to the new location
+        // Check and create directory if it doesn't exist
+        if (!Storage::exists($storagePath)) {
+            Storage::makeDirectory($storagePath);
+            Log::info("Storage directory created at: {$storagePath}");
+        }
+
+        // Define the new file path within storage
+        $newFilePath = "{$storagePath}/" . basename($originalFile->file_path);
+
         try {
-            // Ensure the directory exists
-            Storage::disk('public')->makeDirectory('users/' . $recipient->id);
-            Storage::disk('public')->copy($originalFile->file_path, $newFilePath);
+            // Copy file using absolute paths with the 'public' disk
+            Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
             Log::info('File copied successfully', ['original' => $originalFile->file_path, 'new' => $newFilePath]);
         } catch (\Exception $e) {
             Log::error('Error copying file', ['error' => $e->getMessage()]);
@@ -168,17 +175,17 @@ class SharedController extends Controller
             ]);
         }
 
-        // Prepare the new file reference for the database
+        // Prepare file reference data for the database
         $newFileData = [
-            'file_path' => $newFilePath,
-            'files' => $newFileName,
+            'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
+            'files' => basename($originalFile->file_path),
             'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
             'users_id' => $recipient->id, // Save under recipient's ID
             'created_at' => now(),
             'updated_at' => now(),
         ];
 
-        // Insert the new file reference and get the new file ID
+        // Insert file reference and get new file ID
         $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
         Log::info('New file reference created', ['newFileId' => $newFileId]);
 
@@ -186,7 +193,7 @@ class SharedController extends Controller
         Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
         Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
-        // Store the new shareable file reference in the database
+        // Store shareable file reference in the database
         DB::table('users_shareable_files')->insert([
             'users_id' => auth()->user()->id,
             'recipient_id' => $recipient->id,
@@ -201,82 +208,7 @@ class SharedController extends Controller
         ]);
     }
 
-    private function shareFolder(Request $request, $recipient)
-    {
-        $originalFolderId = Crypt::decryptString($request->users_folder_id);
-        $originalFolder = UsersFolder::find($originalFolderId);
 
-        Log::info('Original folder retrieved', ['originalFolderId' => $originalFolderId, 'originalFolder' => $originalFolder]);
-
-        if (!$originalFolder) {
-            Log::warning('Original folder not found', ['originalFolderId' => $originalFolderId]);
-            return back()->with([
-                'message' => 'Original folder not found.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        // Create a new folder for the recipient
-        $newFolder = new UsersFolder();
-        $newFolder->users_id = $recipient->id;
-
-        // Set the new folder name with a unique ID and original folder title
-        $newFolder->title = uniqid() . '_' . $originalFolder->title; // Ensure the folder name is unique and descriptive
-        $newFolder->file_path = 'users/' . $recipient->id . '/' . $newFolder->title; // Set the file path for the new folder
-
-        // Save the new folder
-        $newFolder->save();
-
-        Log::info('New folder created', ['newFolderId' => $newFolder->id]);
-
-        // Copy files from the original folder to the new folder
-        $files = DB::table('users_folder_files')->where('users_folder_id', $originalFolderId)->get(); // Get all files in the original folder
-
-        foreach ($files as $file) {
-            $newFileName = uniqid() . '_' . basename($file->file_path);
-            $newFilePath = 'users/' . $recipient->id . '/' . $newFolder->title . '/' . $newFileName; // Set the file path within the new folder
-
-            // Ensure the directory exists
-            Storage::disk('public')->makeDirectory('users/' . $recipient->id . '/' . $newFolder->title);
-
-            // Copy the file to the new location
-            try {
-                Storage::disk('public')->copy($file->file_path, $newFilePath);
-                Log::info('File copied to new folder', ['original' => $file->file_path, 'new' => $newFilePath]);
-            } catch (\Exception $e) {
-                Log::error('Error copying file to new folder', ['error' => $e->getMessage()]);
-                return back()->with([
-                    'message' => 'Error occurred while copying files to the folder.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
-                ]);
-            }
-
-            // Prepare the new file reference for the database
-            DB::table('users_folder_files')->insert([
-                'users_id' => $recipient->id,
-                'files' => $newFileName,
-                'extension' => pathinfo($file->file_path, PATHINFO_EXTENSION),
-                'file_path' => $newFilePath,
-                'users_folder_id' => $newFolder->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            Log::info('New file reference created in folder', ['newFileName' => $newFileName]);
-        }
-
-        // Optionally notify the recipient via email
-        Mail::to($recipient->email)->send(new Notification("You have received a new folder: " . $originalFolder->title));
-        Log::info('Folder notification sent to recipient', ['email' => $recipient->email]);
-
-        return back()->with([
-            'message' => 'The folder has been shared successfully.',
-            'type' => 'success',
-            'title' => 'System Notification'
-        ]);
-    }
     /**
      * Display the specified resource.
      */

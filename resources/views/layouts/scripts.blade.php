@@ -39,6 +39,13 @@
         $('#update_subfolder').modal('show');
     }
 
+
+    function update_shareablefolder(id, old) {
+        $('#old3, #new3').val(old);
+        $('#id3').val(id);
+        $('#update_shareablefolder').modal('show');
+    }
+
     function create_files(id, title) {
         $('#caption').html(title);
         $('#folder_id').val(id);

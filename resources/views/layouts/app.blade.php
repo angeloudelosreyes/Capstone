@@ -65,6 +65,7 @@
     @include('includes.copy-file-modal')
     @include('includes.file-details-modal')
     @include('includes.folder-share-modal')
+    @include('includes.update-shareablefolder')
 
     @include('layouts.scripts')
     @yield('custom_js')

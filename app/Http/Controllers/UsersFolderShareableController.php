@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UsersFolderShareableController extends Controller
 {
@@ -19,10 +20,20 @@ class UsersFolderShareableController extends Controller
             'title' => 'required|string|max:255',
         ]);
 
-        // Create a new shareable folder entry with the user's ID
+        // Define the storage path for the new shareable folder based on the user's ID
+        $userId = Auth::id();
+        $storagePath = "public/users/{$userId}/shared_folders/{$request->input('title')}";
+
+        // Create the storage directory if it doesn't exist
+        if (!Storage::exists($storagePath)) {
+            Storage::makeDirectory($storagePath);
+            Log::info("Storage directory created at: {$storagePath}");
+        }
+
+        // Create a new shareable folder entry in the database
         $folderShareable = UsersFolderShareable::create([
             'title' => $request->input('title'),
-            'users_id' => Auth::id(), // Set the user_id to the ID of the authenticated user
+            'users_id' => $userId, // Set the user_id to the ID of the authenticated user
             'can_edit' => false,
             'can_delete' => false,
         ]);
@@ -63,10 +74,19 @@ class UsersFolderShareableController extends Controller
         }
 
         try {
-            // Create a new shareable folder entry with the authenticated user's ID
+            // Define the storage path for the shared folder based on the recipient ID
+            $storagePath = "public/users/{$recipient->id}/shared_folders/{$request->title}";
+
+            // Create the storage directory if it doesn't exist
+            if (!Storage::exists($storagePath)) {
+                Storage::makeDirectory($storagePath);
+                Log::info("Storage directory created at: {$storagePath}");
+            }
+
+            // Store the shared folder in the database with a reference to the user's ID
             $folderShareable = UsersFolderShareable::create([
                 'title' => $request->input('title'),
-                'users_id' => $recipient->id, // ID of the authenticated user
+                'users_id' => Auth::id(), // ID of the authenticated user (creator)
                 'recipient_id' => $recipient->id, // ID of the recipient
                 'can_edit' => $request->input('can_edit', false),
                 'can_delete' => $request->input('can_delete', false),
@@ -159,7 +179,6 @@ class UsersFolderShareableController extends Controller
         ]);
     }
 
-    // Update the title of a shared folder
     public function update(Request $request)
     {
         $request->validate([
@@ -173,6 +192,18 @@ class UsersFolderShareableController extends Controller
         $oldFolderTitle = $folderShareable->title;
         $newFolderTitle = $request->input('new');
 
+        // Define the old and new storage paths
+        $userId = Auth::id();
+        $oldStoragePath = "public/users/{$userId}/shared_folders/{$oldFolderTitle}";
+        $newStoragePath = "public/users/{$userId}/shared_folders/{$newFolderTitle}";
+
+        // Rename the directory in storage
+        if (Storage::exists($oldStoragePath)) {
+            Storage::move($oldStoragePath, $newStoragePath);
+            Log::info("Storage directory renamed from: {$oldStoragePath} to {$newStoragePath}");
+        }
+
+        // Update the title in the database
         $folderShareable->update(['title' => $newFolderTitle]);
 
         return back()->with([
@@ -182,42 +213,47 @@ class UsersFolderShareableController extends Controller
         ]);
     }
 
-    // Delete a shared folder and all its associated shareable files
     public function destroy($encryptedId)
     {
-        Log::info("Starting destroy function for shared folder ID: $encryptedId");
+        Log::info("Starting destroy function for shareable folder ID: $encryptedId");
 
         DB::beginTransaction();
 
         try {
             $folderShareableId = Crypt::decryptString($encryptedId);
-            Log::info("Decrypted shared folder ID: $folderShareableId");
+            Log::info("Decrypted shareable folder ID: $folderShareableId");
 
             $folderShareable = UsersFolderShareable::findOrFail($folderShareableId);
-            Log::info("Shared folder found: " . $folderShareable->title);
+            Log::info("Shareable folder found: " . $folderShareable->title);
 
-            // Delete all shareable files in the folder
-            $folderShareable->shareableFiles()->delete();
-            Log::info("Deleted all shareable files in shared folder ID: $folderShareableId");
+            // Define the storage path based on the user's ID and folder title
+            $userId = Auth::id();
+            $storagePath = "public/users/{$userId}/shared_folders/{$folderShareable->title}";
 
-            // Delete the shared folder entry
+            // Delete the directory and all files within it from storage
+            if (Storage::exists($storagePath)) {
+                Storage::deleteDirectory($storagePath);
+                Log::info("Storage directory deleted at: {$storagePath}");
+            }
+
+            // Delete the shareable folder entry from the database
             $folderShareable->delete();
-            Log::info("Shared folder deleted: $folderShareableId");
+            Log::info("Shareable folder deleted from database: $folderShareableId");
 
             DB::commit();
-            Log::info("Transaction committed successfully for shared folder ID: $folderShareableId");
+            Log::info("Transaction committed successfully for shareable folder ID: $folderShareableId");
 
             return back()->with([
-                'message' => 'Shared folder and all associated shareable files have been deleted successfully.',
+                'message' => 'Shareable folder and all associated files have been deleted successfully.',
                 'type' => 'success',
                 'title' => 'System Notification'
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Error deleting shared folder and associated items: " . $e->getMessage());
+            Log::error("Error deleting shareable folder and associated items: " . $e->getMessage());
 
             return back()->with([
-                'message' => 'Error deleting shared folder and associated items.',
+                'message' => 'Error deleting shareable folder and associated items.',
                 'type' => 'error',
                 'title' => 'System Notification'
             ]);

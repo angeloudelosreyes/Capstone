@@ -23,7 +23,7 @@
                                                 href="{{ route('folder.shareable.show', ['id' => Crypt::encryptString($folder->id)]) }}"><i
                                                     class="bx bx-link me-2"></i> Open Folder</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="rename_folder('{{ Crypt::encryptString($folder->id) }}', '{{ $folder->title }}')"><i
+                                                onclick="update_shareablefolder('{{ Crypt::encryptString($folder->id) }}', '{{ $folder->title }}')"><i
                                                     class="bx bx-edit me-2"></i> Rename</a></li>
                                         <li>
                                             <form
@@ -32,7 +32,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="dropdown-item"><i
-                                                        class="bx bx-trash me-2"></i> Delete</button>
+                                                        class="bx bx-trash me-2"></i> Delete Folder</button>
                                             </form>
                                         </li>
                                     </ul>
