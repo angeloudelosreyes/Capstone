@@ -245,7 +245,12 @@ class SubfolderController extends Controller
     public function destroy(string $id)
     {
         // Decrypt the subfolder ID
-        $decryptedId = Crypt::decryptString($id);
+        try {
+            $decryptedId = Crypt::decryptString($id);
+        } catch (\Exception $e) {
+            Log::error("Failed to decrypt subfolder ID:", ['error' => $e->getMessage()]);
+            return back()->withErrors('Failed to decrypt subfolder ID.');
+        }
 
         // Find the subfolder in the database
         $subfolder = Subfolder::find($decryptedId);
@@ -258,16 +263,10 @@ class SubfolderController extends Controller
             ]);
         }
 
-        // Fetch the parent folder's name from the `users_folder` table
-        $parentFolder = DB::table('users_folder')->where('id', $subfolder->parent_folder_id)->value('title');
+        // Build the full directory path including the parent folder
+        $basePath = 'users/' . auth()->user()->id; // Base path for the user
+        $directory = $this->buildFullPath($subfolder->parent_folder_id, $basePath) . '/' . $subfolder->name; // Full path to the subfolder
 
-        if (!$parentFolder) {
-            Log::error("Parent folder not found for subfolder ID:", ['subfolder_id' => $decryptedId]);
-            return back()->withErrors('Parent folder does not exist.');
-        }
-
-        // Define the full directory path including the parent folder
-        $directory = 'users/' . auth()->user()->id . '/' . $parentFolder . '/' . $subfolder->name;
         Log::info("Attempting to delete directory:", ['directory' => $directory]);
 
         // Check if the directory exists and delete it from cloud storage
