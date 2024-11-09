@@ -35,19 +35,13 @@ class Subfolder extends Model
         return $this->hasMany(UsersFolderFile::class, 'users_folder_id'); // Adjust as needed
     }
 
-    // Boot method to add a model event listener for cascading deletion
+
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($subfolder) {
-            // Delete all nested subfolders and their subfolders recursively
-            $subfolder->subfolders()->each(function ($child) {
-                $child->delete();
-            });
-
-            // Optionally delete associated files as well
-            $subfolder->files()->delete();
+            UsersFolderFile::where('subfolder_id', $subfolder->id)->delete();
         });
     }
 }

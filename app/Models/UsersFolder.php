@@ -31,4 +31,16 @@ class UsersFolder extends Model
     {
         return $this->hasMany(Subfolder::class, 'parent_folder_id');
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($folder) {
+            // Delete all subfolders of the folder
+            Subfolder::where('parent_folder_id', $folder->id)->delete();
+
+            // Delete all files in the folder
+            UsersFolderFile::where('users_folder_id', $folder->id)->delete();
+        });
+    }
 }
