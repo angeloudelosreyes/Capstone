@@ -147,3 +147,9 @@
 [2024-11-09 17:26:25] local.INFO: Storage directory deleted at: public/users/2/shared_folders/dsda455  
 [2024-11-09 17:26:25] local.INFO: Shareable folder deleted from database: 17  
 [2024-11-09 17:26:25] local.INFO: Transaction committed successfully for shareable folder ID: 17  
+[2024-11-09 17:30:34] local.INFO: Starting destroy function for shareable folder ID: eyJpdiI6IjZoT1VwT05Ma3NFMjhkTDM3SzAvdGc9PSIsInZhbHVlIjoiMHNwdVRrZnJrSHlEVERuYkQ1Nld3Zz09IiwibWFjIjoiY2I5OTkyOWVkOTQ4NGUwM2RlZDE2YTYwMThkY2JjOTY0NzVjNjgyNjZjYTQ2MGYxMjM2OWZkNWY1OWRmNzE4ZSIsInRhZyI6IiJ9  
+[2024-11-09 17:30:34] local.INFO: Decrypted shareable folder ID: 16  
+[2024-11-09 17:30:34] local.INFO: Shareable folder found: lancekian12  
+[2024-11-09 17:30:34] local.INFO: Storage directory deleted at: public/users/2/shared_folders/lancekian12  
+[2024-11-09 17:30:34] local.INFO: Shareable folder deleted from database: 16  
+[2024-11-09 17:30:34] local.INFO: Transaction committed successfully for shareable folder ID: 16  

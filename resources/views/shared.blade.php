@@ -28,11 +28,14 @@
                                         <li>
                                             <form
                                                 action="{{ route('folder.shareable.destroy', ['id' => Crypt::encryptString($folder->id)]) }}"
-                                                method="POST" style="display: inline;">
+                                                method="POST" style="display: inline;"
+                                                id="delete-form-{{ $folder->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="dropdown-item"><i
-                                                        class="bx bx-trash me-2"></i> Delete Folder</button>
+                                                <button type="button" class="dropdown-item"
+                                                    onclick="confirmDelete('{{ $folder->id }}')">
+                                                    <i class="bx bx-trash me-2"></i> Delete Folder
+                                                </button>
                                             </form>
                                         </li>
                                     </ul>
@@ -295,5 +298,23 @@
                 });
             });
         });
+    </script>
+    <script>
+        function confirmDelete(folderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirmed the deletion
+                    document.getElementById('delete-form-' + folderId).submit();
+                }
+            });
+        }
     </script>
 @endsection
