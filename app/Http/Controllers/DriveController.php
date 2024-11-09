@@ -369,6 +369,73 @@ class DriveController extends Controller
     /**
      * Helper function to build the full path for any level of nested folders.
      */
+
+    public function rename(Request $request, string $id)
+    {
+        Log::info("Received request data for rename:", $request->all());
+
+        // Validate inputs
+        $request->validate([
+            'new_name' => 'required|string|max:255'
+        ]);
+
+        // Try decrypting the file ID
+        try {
+            $decryptedId = Crypt::decryptString($id);
+            Log::info("Decrypted file ID:", ['id' => $decryptedId]);
+        } catch (\Exception $e) {
+            Log::error("Failed to decrypt file ID:", ['error' => $e->getMessage()]);
+            return response()->json(['type' => 'error', 'message' => 'Failed to decrypt file ID.']);
+        }
+
+        // Fetch the file record from the database
+        $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+        if (!$fileRecord) {
+            Log::error("File not found for ID:", ['file_id' => $decryptedId]);
+            return response()->json(['type' => 'error', 'message' => 'File not found.']);
+        }
+
+        // Determine the folder ID to use for path building
+        $folderId = $fileRecord->users_folder_id;
+        if ($fileRecord->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $fileRecord->subfolder_id;
+        }
+
+        // Build the full path using the helper function
+        $basePath = "public/users/{$fileRecord->users_id}";
+        $fullPath = $this->buildFullPath($folderId, $basePath);
+
+        if (!$fullPath) {
+            Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
+            return response()->json(['type' => 'error', 'message' => 'Folder does not exist.']);
+        }
+
+        $oldFileName = $fileRecord->files;
+        $newFileName = $request->input('new_name');
+
+        // Build the full paths for the old and new files
+        $oldFilePath = "$fullPath/$oldFileName";
+        $newFilePath = "$fullPath/$newFileName";
+
+        Log::info("Old File Path: $oldFilePath, New File Path: $newFilePath");
+
+        // Check if the old file exists
+        if (Storage::exists($oldFilePath)) {
+            // Rename the file in storage
+            Storage::move($oldFilePath, $newFilePath);
+            Log::info("File moved in storage from $oldFilePath to $newFilePath");
+
+            // Update the file name in the database
+            DB::table('users_folder_files')->where('id', $decryptedId)->update(['files' => $newFileName]);
+            Log::info("Database update status for file ID $decryptedId:", ['new_name' => $newFileName]);
+
+            return response()->json(['type' => 'success', 'message' => 'File renamed successfully.']);
+        } else {
+            Log::warning("Old file path does not exist:", ['path' => $oldFilePath]);
+            return response()->json(['type' => 'error', 'message' => 'Old file does not exist.']);
+        }
+    }
     private function buildFullPath($folderId, $basePath)
     {
         // Check if it's a main folder in users_folder
@@ -388,49 +455,6 @@ class DriveController extends Controller
 
         // If neither a main folder nor a subfolder was found, return null (invalid path)
         return null;
-    }
-
-
-
-    public function rename(Request $request, string $id)
-    {
-        // Decrypt the ID to get the actual database ID
-        $decryptedId = Crypt::decryptString($id);
-
-        // Validate the incoming request to ensure a new name is provided
-        $request->validate([
-            'new_name' => 'required|string|max:255',
-        ]);
-
-        // Fetch the file record from the database
-        $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
-
-        if (!$fileRecord) {
-            return response()->json(['type' => 'error', 'message' => 'File not found.']);
-        }
-
-        // Get the current folder title and the old file name
-        $folder = DB::table('users_folder')->where('id', $fileRecord->users_folder_id)->first();
-        $oldFileName = $fileRecord->files;
-        $newFileName = $request->input('new_name');
-        $userId = $fileRecord->users_id;
-
-        // Construct the file path in storage
-        $oldFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $oldFileName;
-        $newFilePath = 'public/users/' . $userId . '/' . $folder->title . '/' . $newFileName;
-
-        // Check if the old file exists
-        if (Storage::exists($oldFilePath)) {
-            // Rename the file in storage
-            Storage::move($oldFilePath, $newFilePath);
-
-            // Update the file name in the database
-            DB::table('users_folder_files')->where('id', $decryptedId)->update(['files' => $newFileName]);
-
-            return response()->json(['type' => 'success', 'message' => 'File renamed successfully.']);
-        } else {
-            return response()->json(['type' => 'error', 'message' => 'File does not exist in storage.']);
-        }
     }
     /**
      * Move a file to another folder.

@@ -4,9 +4,15 @@
 
     <div class="row">
         <script>
+            // Check if the skipNotification flag is set
             if (sessionStorage.getItem('skipNotification') === 'true') {
-                document.write('<style>.alert { display: none; }</style>');
-                sessionStorage.removeItem('skipNotification'); // Clear the flag for future visits
+                // Hide notifications
+                document.addEventListener('DOMContentLoaded', function() {
+                    const alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(alert => alert.style.display = 'none');
+                });
+                // Clear the flag for future visits
+                sessionStorage.removeItem('skipNotification');
             }
         </script>
         @if (isset($query) &&
@@ -609,6 +615,17 @@
         });
     </script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the skipNotification flag is set
+            if (sessionStorage.getItem('skipNotification') === 'true') {
+                // Hide notifications
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => alert.style.display = 'none');
+                // Clear the flag for future visits
+                sessionStorage.removeItem('skipNotification');
+            }
+        });
+
         function handleBack() {
             sessionStorage.setItem('skipNotification', 'true');
             history.back();

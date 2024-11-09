@@ -50,7 +50,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', 'store')->name('files.store');
         Route::post('/store/decrypt', 'decryptStore')->name('files.decrypt.store');
         Route::get('/file/download/{id}', [FilesController::class, 'download'])->name('file.download');
-        Route::post('/update', 'update')->name('files.update');
         Route::post('/rename', 'rename')->name('files.rename');
         Route::get('/destroy/{id}', 'destroy')->name('files.destroy');
     });
