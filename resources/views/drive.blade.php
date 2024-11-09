@@ -3,6 +3,12 @@
     @include('includes.create-sub-folder-modal')
 
     <div class="row">
+        <script>
+            if (sessionStorage.getItem('skipNotification') === 'true') {
+                document.write('<style>.alert { display: none; }</style>');
+                sessionStorage.removeItem('skipNotification'); // Clear the flag for future visits
+            }
+        </script>
         @if (isset($query) &&
                 count($query) == 0 &&
                 (isset($subfolders) && count($subfolders) == 0) &&
@@ -18,14 +24,17 @@
 
             <!-- Add Create Button -->
             <div class="col-12 mb-3 d-flex justify-content-start">
-                <button class="btn btn-secondary me-2" onclick="location.href='{{ route('home') }}'">
+                <button class="btn btn-secondary me-2" onclick="handleBack()">
                     <i class="ri-arrow-left-line"></i> Back
                 </button>
 
+
                 <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
-                    style="min-width: 160px;">
+                    data-folder-id="{{ $folderId }}" style="min-width: 160px;">
                     <i class="ri-file-add-line fs-5 me-1"></i> Create New File
                 </button>
+
+
                 <button class="btn btn-primary text-uppercase mx-2" onclick="createSubFolder('{{ $folderId }}')">
                     <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Sub Folder
                 </button>
@@ -379,33 +388,34 @@
         }
 
         document.getElementById('createFileButton').addEventListener('click', function() {
-            const folderId = '{{ $folderId }}'; // Pass the folder_id from the Blade template
+            const folderId = this.getAttribute(
+                'data-folder-id'); // Get the dynamic folderId from the button's data attribute
 
             Swal.fire({
                 title: '<strong>Create New File</strong>',
                 icon: 'folder-plus',
                 html: `
-            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <label for="fileName" style="flex-basis: 30%; text-align: left;">File Name:</label>
-                    <input type="text" id="fileName" class="swal2-input" placeholder="Enter the file name" style="flex-basis: 70%;">
-                </div>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <label for="fileType" style="flex-basis: 30%; text-align: left;">File Type:</label>
-                    <select id="fileType" class="swal2-input" style="flex-basis: 70%;">
-                        <option value="docx">Word File (.docx)</option>
-                    </select>
-                </div>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <label for="isProtected" style="flex-basis: 30%; text-align: left;">Protected:</label>
-                    <input type="checkbox" id="isProtected" class="swal2-checkbox" style="flex-basis: 70%;">
-                </div>
-                <div style="display: flex; align-items: center; width: 100%;" id="passwordField" hidden>
-                    <label for="password" style="flex-basis: 30%; text-align: left;">Password:</label>
-                    <input type="password" id="password" class="swal2-input" placeholder="Enter the password" style="flex-basis: 70%;">
-                </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <label for="fileName" style="flex-basis: 30%; text-align: left;">File Name:</label>
+                <input type="text" id="fileName" class="swal2-input" placeholder="Enter the file name" style="flex-basis: 70%;">
             </div>
-            <input type="hidden" id="folderId" value="${folderId}">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <label for="fileType" style="flex-basis: 30%; text-align: left;">File Type:</label>
+                <select id="fileType" class="swal2-input" style="flex-basis: 70%;">
+                    <option value="docx">Word File (.docx)</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: center; width: 100%;">
+                <label for="isProtected" style="flex-basis: 30%; text-align: left;">Protected:</label>
+                <input type="checkbox" id="isProtected" class="swal2-checkbox" style="flex-basis: 70%;">
+            </div>
+            <div style="display: flex; align-items: center; width: 100%;" id="passwordField" hidden>
+                <label for="password" style="flex-basis: 30%; text-align: left;">Password:</label>
+                <input type="password" id="password" class="swal2-input" placeholder="Enter the password" style="flex-basis: 70%;">
+            </div>
+        </div>
+        <input type="hidden" id="folderId" value="${folderId}"> <!-- Use the dynamic folderId here -->
         `,
                 showCancelButton: true,
                 confirmButtonText: 'Create',
@@ -419,7 +429,8 @@
                 preConfirm: () => {
                     const fileName = document.getElementById('fileName').value;
                     const fileType = document.getElementById('fileType').value;
-                    const folderId = document.getElementById('folderId').value;
+                    const folderId = document.getElementById('folderId')
+                        .value; // Use the dynamic folderId
                     const isProtected = document.getElementById('isProtected').checked;
                     const password = document.getElementById('password').value;
                     const requestBody = {
@@ -480,9 +491,6 @@
                 }
             });
         });
-
-
-
 
 
         function renameFile(fileId, oldName) {
@@ -599,5 +607,11 @@
                 }
             });
         });
+    </script>
+    <script>
+        function handleBack() {
+            sessionStorage.setItem('skipNotification', 'true');
+            history.back();
+        }
     </script>
 @endsection
