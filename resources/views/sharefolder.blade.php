@@ -38,17 +38,6 @@
                 {{-- <a href="{{ url()->previous() }}" class="btn btn-secondary me-2"> <i class="ri-arrow-left-line"></i> Back
                 </a> --}}
 
-
-
-                <button class="btn btn-primary d-flex align-items-center justify-content-center" id="createFileButton"
-                    data-folder-id="{{ $folderId }}" style="min-width: 160px;">
-                    <i class="ri-file-add-line fs-5 me-1"></i> Create New File
-                </button>
-
-
-                <button class="btn btn-primary text-uppercase mx-2" onclick="createSubFolder('{{ $folderId }}')">
-                    <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Sub Folder
-                </button>
             </div>
 
             <!-- Display Subfolders -->

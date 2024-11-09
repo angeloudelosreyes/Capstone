@@ -7,6 +7,18 @@
     </div>
 
     <div class="row">
+        <script>
+            // Check if the skipNotification flag is set
+            if (sessionStorage.getItem('skipNotification') === 'true') {
+                // Hide notifications
+                document.addEventListener('DOMContentLoaded', function() {
+                    const alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(alert => alert.style.display = 'none');
+                });
+                // Clear the flag for future visits
+                sessionStorage.removeItem('skipNotification');
+            }
+        </script>
         @if (count($query) == 0)
             <div class="col-12">
                 <div class="alert alert-warning">You haven't created a folder yet.</div>

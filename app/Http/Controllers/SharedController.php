@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\UsersFolder;
 use App\Models\UsersShareableFile;
 use Illuminate\Support\Facades\Log;
-
+use ZipArchive;
 
 class SharedController extends Controller
 {
@@ -223,16 +223,161 @@ class SharedController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        Log::info("Starting edit function for shareable file ID: $id");
+
+        try {
+            // Decrypt the ID
+            $decryptedId = Crypt::decryptString($id);
+
+            // Find the record in users_shareable_files based on users_folder_files_id
+            $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
+
+            if ($shareableFile) {
+                Log::info("Shareable file found with users_folder_files_id: $decryptedId");
+
+                // Get the file record from users_folder_files table
+                $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+                if ($query) {
+                    $filePath = "public/{$query->file_path}";
+                    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                    // Initialize the content to display
+                    $content = '';
+
+                    // If the file is a .docx file, read its content
+                    if ($extension === 'docx') {
+                        if (Storage::exists($filePath)) {
+                            try {
+                                $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app/' . $filePath));
+                                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+                                $writer->save($tempFile);
+                                $content = file_get_contents($tempFile);
+                                unlink($tempFile);
+                            } catch (\Exception $e) {
+                                return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
+                            }
+                        } else {
+                            Log::warning("File does not exist in storage at path: $filePath");
+                            return redirect()->back()->with('error', 'File not found in storage.');
+                        }
+                    }
+
+                    // Get folder title for display
+                    $folderTitle = $this->getFolderTitle($query);
+
+                    // Return the edit view with the compacted variables
+                    return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
+                } else {
+                    throw new \Exception("File record not found in users_folder_files for ID: $decryptedId");
+                }
+            } else {
+                throw new \Exception("No shareable file found with users_folder_files_id: $decryptedId");
+            }
+        } catch (\Exception $e) {
+            Log::error("Error loading shareable file for editing: " . $e->getMessage());
+            return redirect()->back()->with([
+                'message' => 'Error loading shareable file.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
     }
+
+    private function getFolderTitle($query)
+    {
+        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            return $folder ? $folder->name : 'Unknown Folder';
+        }
+        return $folder->title;
+    }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        Log::info("Starting update function for shareable file ID: $id");
+
+        $request->validate([
+            'new_name' => 'required|string|max:255',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Decrypt the ID
+            $decryptedId = Crypt::decryptString($id);
+
+            // Find the record in users_shareable_files based on users_folder_files_id
+            $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
+
+            if ($shareableFile) {
+                Log::info("Shareable file found with users_folder_files_id: $decryptedId");
+
+                // Get the file record from users_folder_files table
+                $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+                if ($fileRecord) {
+                    $oldFilePath = "public/{$fileRecord->file_path}";
+                    $extension = pathinfo($oldFilePath, PATHINFO_EXTENSION); // Preserve file extension
+
+                    // Check if the new name already includes the extension, and add it only if it’s missing
+                    $newName = $request->input('new_name');
+                    if (pathinfo($newName, PATHINFO_EXTENSION) !== $extension) {
+                        $newFileName = "{$newName}.{$extension}";
+                    } else {
+                        $newFileName = $newName;
+                    }
+
+                    $newFilePath = "public/users/{$fileRecord->users_id}/shared_folders/{$newFileName}";
+
+                    // Check if the file exists in storage and rename it
+                    if (Storage::exists($oldFilePath)) {
+                        Storage::move($oldFilePath, $newFilePath);
+                        Log::info("Storage file renamed from: $oldFilePath to: $newFilePath");
+                    } else {
+                        Log::warning("File does not exist in storage at path: $oldFilePath");
+                        throw new \Exception("File not found in storage.");
+                    }
+
+                    // Update the file reference in the database
+                    DB::table('users_folder_files')->where('id', $decryptedId)->update([
+                        'file_path' => str_replace('public/', '', $newFilePath),
+                        'files' => $newFileName,
+                        'updated_at' => now(),
+                    ]);
+                    Log::info("File reference updated in users_folder_files for ID: $decryptedId");
+
+                    DB::commit();
+                    Log::info("Transaction committed successfully for shareable file update with users_folder_files_id: $decryptedId");
+
+                    return back()->with([
+                        'message' => 'File has been updated successfully.',
+                        'type' => 'success',
+                        'title' => 'System Notification'
+                    ]);
+                } else {
+                    throw new \Exception("File record not found in users_folder_files for ID: $decryptedId");
+                }
+            } else {
+                throw new \Exception("No shareable file found with users_folder_files_id: $decryptedId");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Error updating shareable file: " . $e->getMessage());
+
+            return back()->with([
+                'message' => 'Error updating shareable file.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -294,5 +439,94 @@ class SharedController extends Controller
                 'title' => 'System Notification'
             ]);
         }
+    }
+    public function download(Request $request, $id)
+    {
+        // Validate the password input
+        $request->validate([
+            'password' => 'required|string'
+        ]);
+
+        $password = $request->input('password');
+        Log::info('Password entered by user: ' . $password);
+
+        try {
+            // Decrypt the provided file ID
+            $decryptedId = Crypt::decryptString($id);
+            Log::info('Decrypted ID: ' . $decryptedId);
+
+            // Retrieve the file details
+            $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+            if (!$query) {
+                Log::error('File not found in users_folder_files table.');
+                return response()->json(['error' => 'File not found.'], 404);
+            }
+
+            Log::info('File query result: ' . json_encode($query));
+
+            // If there's no folder ID, use the file path directly
+            $filePath = "public/{$query->file_path}";
+
+            Log::info('File path: ' . $filePath);
+
+            // Check if the file exists in storage
+            if (Storage::exists($filePath)) {
+                Log::info('File exists in storage.');
+
+                $fileContent = Storage::get($filePath);
+                $encryptedContent = Crypt::encrypt($fileContent);
+
+                $storagePath = storage_path('app/protected');
+                if (!File::exists($storagePath)) {
+                    File::makeDirectory($storagePath, 0755, true);
+                }
+
+                // Create a password-protected ZIP file
+                $zip = new ZipArchive();
+                $zipFileName = $storagePath . '/protected-file.zip';
+
+                if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                    $zip->addFromString($query->files, $encryptedContent);
+                    $zip->setEncryptionName($query->files, ZipArchive::EM_AES_128, $password);
+                    $zip->close();
+
+                    // Return the zip file for download
+                    return response()->download($zipFileName)->deleteFileAfterSend(true);
+                } else {
+                    Log::error('Failed to open the ZIP file.');
+                    return response()->json(['error' => 'Failed to create the zip file.'], 500);
+                }
+            } else {
+                Log::error('File not found in storage.');
+                return response()->json(['error' => 'File not found.'], 404);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error occurred: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+        }
+    }
+
+    private function buildFullPath($folderId, $basePath)
+    {
+        // Check if it's a main folder in users_folder
+        $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
+        if ($mainFolder) {
+            // If it's the main folder, just return its path
+            Log::info("Found main folder: " . $mainFolder->title);
+            return $basePath . '/' . $mainFolder->title;
+        }
+
+        // Otherwise, assume it's a subfolder and try to retrieve it
+        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+        if ($subfolder) {
+            // Recursively call this function to get the parent path
+            $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
+            Log::info("Found subfolder: " . $subfolder->name . " with parent path: " . $parentPath);
+            return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
+        }
+
+        // If neither a main folder nor a subfolder was found, return null (invalid path)
+        Log::error("No folder found for ID: " . $folderId);
+        return null;
     }
 }

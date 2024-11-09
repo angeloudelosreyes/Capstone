@@ -2,9 +2,9 @@
 @section('container')
     <div class="row">
         <!-- Display created shareable folders -->
-        @if ($createdFolders->isEmpty())
+        @if ($createdFolders->isEmpty() && $sharedFiles->isEmpty())
             <div class="col-12">
-                <div class="alert alert-warning">You haven't created any shared folders yet.</div>
+                <div class="alert alert-warning">You haven't created any folders yet.</div>
             </div>
         @else
             <h5 class="mb-4 text-uppercase fw-bolder">My Shared Folders and Files</h5>
@@ -77,6 +77,12 @@
                                         <li><a class="dropdown-item download-button" href="javascript:void(0)"
                                                 data-file-id="{{ Crypt::encryptString($data->id) }}"><i
                                                     class="bx bx-download me-2"></i> Download</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('shared.edit', ['id' => Crypt::encryptString($data->id)]) }}"><i
+                                                    class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="renameFile2('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
+                                                    class="bx bx-rename me-2"></i> Rename</a></li>
                                         <li>
                                             <form
                                                 action="{{ route('shared.destroy', ['id' => Crypt::encryptString($data->id)]) }}"
@@ -138,84 +144,9 @@
             </div>
         </div>
     </div>
-
-    <!-- Rename Modal -->
-    <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="newFileName" class="form-control" placeholder="Enter new file name">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmRenameButton">Rename</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @section('custom_js')
     <script>
-        function downloadFile(fileId) {
-            Swal.fire({
-                title: 'Enter Password',
-                input: 'password',
-                inputLabel: 'Password',
-                inputPlaceholder: 'Enter your password',
-                showCancelButton: true,
-                confirmButtonText: 'Download',
-                showLoaderOnConfirm: true,
-                preConfirm: (password) => {
-                    if (!password) {
-                        Swal.showValidationMessage('Password is required');
-                        return;
-                    }
-
-                    return fetch(
-                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
-                                method: 'GET',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
-                            })
-                        .then(response => {
-                            if (!response.ok) {
-                                return response.text().then(text => {
-                                    console.error('Response text:', text); // Log the response text
-                                    throw new Error(text);
-                                });
-                            }
-                            return response.blob();
-                        })
-                        .then(blob => {
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.style.display = 'none';
-                            a.href = url;
-                            a.download = 'protected-file.zip'; // Use the fixed name for the downloaded file
-                            document.body.appendChild(a);
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                        })
-                        .catch(error => {
-                            Swal.showValidationMessage(`Request failed: ${error}`);
-                        });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
-            });
-        }
-
-        document.querySelectorAll('.download-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                downloadFile(fileId);
-            });
-        });
-
         function openFile(fileId, isProtected, hasPassword) {
             if (isProtected === 'YES' && hasPassword) {
                 $('#passwordModal').modal('show');
@@ -249,66 +180,6 @@
                 text: '{{ session('error') }}'
             });
         @endif
-
-        document.querySelectorAll('.rename-file-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                const fileName = this.getAttribute('data-file-name'); // Get the file name
-
-                // Set the current file name in the input field
-                $('#newFileName').val(fileName);
-
-                $('#renameModal').modal('show');
-
-                // Handle rename confirmation
-                $('#confirmRenameButton').off('click').on('click', function() {
-                    const newFileName = $('#newFileName').val().trim();
-                    if (!newFileName) {
-                        alert('New file name is required');
-                        return;
-                    }
-
-                    // Send the rename request to the server
-                    fetch(`{{ url('drive/rename') }}/${fileId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                new_name: newFileName
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            $('#renameModal').modal('hide');
-                            if (data.type === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Renamed',
-                                    text: data.message,
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: data.message,
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error renaming file:', error);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Failed to rename file.',
-                            });
-                        });
-                });
-            });
-        });
     </script>
     <script>
         function confirmDelete(folderId) {
@@ -344,17 +215,20 @@
                         return;
                     }
 
-                    return fetch(
-                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
-                                method: 'GET',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }
+                    return fetch(`{{ url('shared') }}/${fileId}/download`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                password: password
                             })
+                        })
                         .then(response => {
                             if (!response.ok) {
                                 return response.text().then(text => {
-                                    console.error('Response text:', text); // Log the response text
+                                    console.error('Response text:', text);
                                     throw new Error(text);
                                 });
                             }
@@ -365,7 +239,7 @@
                             const a = document.createElement('a');
                             a.style.display = 'none';
                             a.href = url;
-                            a.download = 'protected-file.zip'; // Use the fixed name for the downloaded file
+                            a.download = 'protected-file.zip';
                             document.body.appendChild(a);
                             a.click();
                             window.URL.revokeObjectURL(url);
@@ -384,5 +258,57 @@
                 downloadFile(fileId);
             });
         });
+    </script>
+    <script>
+        function renameFile2(fileId, oldName) {
+            Swal.fire({
+                title: 'Rename File',
+                input: 'text',
+                inputLabel: 'Enter the new file name',
+                inputValue: oldName,
+                showCancelButton: true,
+                confirmButtonText: 'Rename',
+                showLoaderOnConfirm: true,
+                preConfirm: (newName) => {
+                    if (!newName.trim()) {
+                        Swal.showValidationMessage('File name cannot be empty');
+                        return;
+                    }
+                    return fetch(`{{ route('shared.update', '') }}/${fileId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                new_name: newName
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.type === 'success') {
+                                Swal.fire('Renamed!', 'File has been renamed successfully.', 'success')
+                                    .then(() => {
+                                        location.reload(); // Reload the page after successful rename
+                                    });
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire('Renamed!', 'File has been renamed successfully.', 'success').then(
+                                () => {
+                                    location.reload(); // Reload the page after successful rename
+                                });
+
+                        });
+                }
+            });
+        }
     </script>
 @endsection

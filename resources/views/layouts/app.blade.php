@@ -30,7 +30,7 @@
                                     <div class="mt-3 text-uppercase fs-5 mt-lg-0">
                                         <button onclick="createShareableFolderModal()"
                                             class="btn btn-primary text-uppercase">
-                                            <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create Shareable
+                                            <i class="bx bx-folder-plus fs-3 align-middle me-2"></i> Create
                                             Folder
                                         </button>
 

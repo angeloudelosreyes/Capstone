@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UsersFolder;
 use App\Models\UsersFolderShareable;
 use App\Models\UsersShareableFile;
 use Illuminate\Http\Request;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use Illuminate\Support\Facades\File;
+
 
 class UsersFolderShareableController extends Controller
 {
@@ -157,26 +161,55 @@ class UsersFolderShareableController extends Controller
     // Show a specific shared folder
     public function show($id)
     {
+        // Decrypt the provided encrypted ID
         $decryptedId = Crypt::decryptString($id);
+        Log::info("Decrypted ID: {$decryptedId}");
 
-        $folderShareable = UsersFolderShareable::with('shareableFiles')->find($decryptedId);
+        // Try to find the folder in the users_folder_shareable table
+        $shareableFolder = DB::table('users_folder_shareable')->where('id', $decryptedId)->first();
 
-        if (!$folderShareable) {
-            return back()->with([
-                'message' => 'Shared folder not found.',
-                'type' => 'error',
-                'title' => 'System Notification'
+        // If the folder is not found in users_folder_shareable, look in users_folder
+        if (!$shareableFolder) {
+            Log::warning("No shareable folder found with ID: {$decryptedId} in users_folder_shareable.");
+
+            // Check in the users_folder table
+            $folderModel = UsersFolder::find($decryptedId);
+
+            if (!$folderModel) {
+                // Return error if the folder is not found in both tables
+                return redirect()->back()->with([
+                    'message' => 'Folder not found.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Fetch related subfolders and files if folder is found in users_folder
+            $subfolders = $folderModel->subfolders()->paginate(10, ['*'], 'subfolders');
+            $files = $folderModel->files()->paginate(10, ['*'], 'files');
+
+            // Render view with data from users_folder
+            return view('sharefolder', [
+                'title' => $folderModel->title ?? 'Folder',
+                'shareableFolder' => $folderModel,
+                'subfolders' => $subfolders,
+                'files' => $files,
+                'folderId' => $id
+            ]);
+        } else {
+            Log::info("Found shareable folder with ID: {$shareableFolder->id} in users_folder_shareable.");
+
+            // If found in users_folder_shareable, assume it's a shareable folder without direct subfolders/files
+            return view('sharefolder', [
+                'title' => $shareableFolder->title ?? 'Shareable Folder',
+                'shareableFolder' => $shareableFolder,
+                'subfolders' => null,
+                'files' => null,
+                'folderId' => $id
             ]);
         }
-
-        $files = $folderShareable->shareableFiles()->paginate(10);
-
-        return view('shared_drive', [
-            'title' => $folderShareable->title,
-            'files' => $files,
-            'folderId' => $id
-        ]);
     }
+
 
     public function update(Request $request)
     {
