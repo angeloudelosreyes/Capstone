@@ -54,9 +54,24 @@
     }
 
     function share_file(users_folder_files_id) {
-        $('#shared_modal').modal('show');
-        $('#users_folder_files_id').val(users_folder_files_id)
-    }
+
+$('#shared_modal').modal('show');
+
+$('#users_folder_files_id').val(users_folder_files_id);
+
+$('#users_folder_id').val(''); // Clear folder ID if it was previously set
+
+}
+
+function share_folder(users_folder_id) {
+
+$('#shared_modal').modal('show');
+
+$('#users_folder_id').val(users_folder_id);
+
+$('#users_folder_files_id').val(''); // Clear file ID if it was previously set
+
+}
 
     function create_account() {
         $('#create_account').modal('show')

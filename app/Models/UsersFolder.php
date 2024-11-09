@@ -11,7 +11,7 @@ class UsersFolder extends Model
 
     protected $table = 'users_folder';
 
-    protected $fillable = ['users_id', 'title'];
+    protected $fillable = ['users_id', 'title', 'file_path'];
 
 
     // Define relationship to User
