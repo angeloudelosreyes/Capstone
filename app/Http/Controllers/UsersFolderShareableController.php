@@ -86,8 +86,7 @@ class UsersFolderShareableController extends Controller
             // Store the shared folder in the database with a reference to the user's ID
             $folderShareable = UsersFolderShareable::create([
                 'title' => $request->input('title'),
-                'users_id' => Auth::id(), // ID of the authenticated user (creator)
-                'recipient_id' => $recipient->id, // ID of the recipient
+                'users_id' => $recipient->id,
                 'can_edit' => $request->input('can_edit', false),
                 'can_delete' => $request->input('can_delete', false),
             ]);

@@ -78,6 +78,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('shared')->controller(SharedController::class)->group(function () {
         Route::get('/', 'index')->name('shared');
         Route::post('/store', 'store')->name('shared.store');
+        Route::delete('/{id}', 'destroy')->name('shared.destroy'); // New delete route for destroy method
+
     });
 
     // Account Routes

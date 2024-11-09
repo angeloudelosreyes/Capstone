@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Models\UsersFolder;
+use App\Models\UsersShareableFile;
 use Illuminate\Support\Facades\Log;
 
 
@@ -236,8 +237,62 @@ class SharedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        Log::info("Starting destroy function for shareable file ID: $id");
+
+        DB::beginTransaction();
+
+        try {
+            // Decrypt the ID
+            $decryptedId = Crypt::decryptString($id);
+
+            // Find the record in users_shareable_files based on users_folder_files_id
+            $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
+
+            if ($shareableFile) {
+                Log::info("Shareable file found with users_folder_files_id: $decryptedId, deleting...");
+
+                // Get the file path from users_folder_files table
+                $fileRecord = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+                if ($fileRecord) {
+                    $filePath = "public/{$fileRecord->file_path}";
+
+                    // Delete the file from storage
+                    if (Storage::exists($filePath)) {
+                        Storage::delete($filePath);
+                        Log::info("Storage file deleted at: $filePath");
+                    }
+
+                    // Delete the file reference from users_folder_files table
+                    DB::table('users_folder_files')->where('id', $decryptedId)->delete();
+                    Log::info("File reference deleted from users_folder_files for ID: $decryptedId");
+                }
+
+                // Delete the shareable file record from users_shareable_files table
+                DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->delete();
+                Log::info("Shareable file reference deleted from users_shareable_files for users_folder_files_id: $decryptedId");
+
+                DB::commit();
+                Log::info("Transaction committed successfully for shareable file with users_folder_files_id: $decryptedId");
+
+                return back()->with([
+                    'message' => 'Shareable file has been deleted successfully.',
+                    'type' => 'success',
+                    'title' => 'System Notification'
+                ]);
+            } else {
+                throw new \Exception("No shareable file found with users_folder_files_id: $decryptedId");
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Error deleting shareable file: " . $e->getMessage());
+
+            return back()->with([
+                'message' => 'Error deleting shareable file.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
     }
 }
