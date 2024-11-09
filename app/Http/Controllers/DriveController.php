@@ -245,14 +245,47 @@ class DriveController extends Controller
      */
     public function edit(string $id)
     {
-        $query = DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->first();
-        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
+        // Decrypt the file ID
+        $decryptedId = Crypt::decryptString($id);
+
+        // Query for the file details in the database
+        $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
+
+        // Determine the folder ID to use for path building
+        $folderId = $query->users_folder_id;
+        if ($query->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $query->subfolder_id;
+        }
+
+        // Build the full path using the helper function
+        $basePath = "public/users/{$query->users_id}";
+        $fullPath = $this->buildFullPath($folderId, $basePath);
+
+        if (!$fullPath) {
+            return redirect()->back()->with('error', 'Folder does not exist.');
+        }
+
+        // Attempt to get the folder title from the main folder first
+        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
+
+        // If the main folder is not found, try to get the name from the subfolder
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            if (!$folder) {
+                return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
+            }
+            $folderTitle = $folder->name; // Use the subfolder's name
+        } else {
+            $folderTitle = $folder->title; // Use the main folder's title
+        }
+
         $title = $query->files;
         $extension = $query->extension;
         $content = '';
 
         if ($extension == 'docx') {
-            $filePath = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
+            $filePath = "$fullPath/$title"; // Use the full path here
             if (Storage::exists($filePath)) {
                 try {
                     $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app/' . $filePath));
@@ -267,7 +300,7 @@ class DriveController extends Controller
             }
         }
 
-        return view('edit', compact('query', 'content', 'extension'));
+        return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
     }
 
     /**
@@ -449,26 +482,6 @@ class DriveController extends Controller
             return response()->json(['type' => 'error', 'message' => 'Old file does not exist.']);
         }
     }
-    private function buildFullPath($folderId, $basePath)
-    {
-        // Check if it's a main folder in users_folder
-        $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
-        if ($mainFolder) {
-            // If it's the main folder, just return its path
-            return $basePath . '/' . $mainFolder->title;
-        }
-
-        // Otherwise, assume it's a subfolder and try to retrieve it
-        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
-        if ($subfolder) {
-            // Recursively call this function to get the parent path
-            $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
-            return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
-        }
-
-        // If neither a main folder nor a subfolder was found, return null (invalid path)
-        return null;
-    }
     /**
      * Move a file to another folder.
      */
@@ -509,11 +522,16 @@ class DriveController extends Controller
         // Log the folder title to confirm its value
         Log::info("Destination folder title: " . $destinationFolder->title);
 
-        // Define source and destination paths
+        // Define user ID
         $userId = $file->users_id;
-        $sourceFolderTitle = DB::table('users_folder')->where('id', $file->users_folder_id)->value('title');
-        $sourcePath = 'public/users/' . $userId . '/' . $sourceFolderTitle . '/' . $file->files;
-        $destinationPath = 'public/users/' . $userId . '/' . $destinationFolder->title . '/' . $file->files;
+
+        // Build the source path using the helper function
+        $sourceBasePath = "public/users/$userId";
+        $sourcePath = $this->buildFullPath($file->users_folder_id, $sourceBasePath) . '/' . $file->files;
+
+        // Build the destination path using the helper function
+        $destinationBasePath = "public/users/$userId";
+        $destinationPath = $this->buildFullPath($decryptedDestinationFolderId, $destinationBasePath) . '/' . $file->files;
 
         // Log the constructed paths
         Log::info("Constructed source path: " . $sourcePath);
@@ -543,6 +561,8 @@ class DriveController extends Controller
             ]);
         }
     }
+
+
     public function copy(Request $request, string $fileId)
     {
         Log::info("Copying file with ID: " . $fileId);
@@ -627,8 +647,6 @@ class DriveController extends Controller
         }
     }
 
-    // Helper function remains unchanged...
-
     // Helper function to generate a unique file name if the file already exists
     private function generateUniqueFileName($fileName, $folderId)
     {
@@ -652,5 +670,25 @@ class DriveController extends Controller
         }
 
         return $newName;
+    }
+    private function buildFullPath($folderId, $basePath)
+    {
+        // Check if it's a main folder in users_folder
+        $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
+        if ($mainFolder) {
+            // If it's the main folder, just return its path
+            return $basePath . '/' . $mainFolder->title;
+        }
+
+        // Otherwise, assume it's a subfolder and try to retrieve it
+        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+        if ($subfolder) {
+            // Recursively call this function to get the parent path
+            $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
+            return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
+        }
+
+        // If neither a main folder nor a subfolder was found, return null (invalid path)
+        return null;
     }
 }
