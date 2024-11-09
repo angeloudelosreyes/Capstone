@@ -538,9 +538,25 @@ class DriveController extends Controller
             ]);
         }
 
-        // Retrieve the file and destination folder from the database
+        // Retrieve the file from the users_folder_files table
         $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
+
+        // If the file is not found, check in the subfolders
+        if (!$file) {
+            $file = DB::table('subfolders')->where('id', $decryptedFileId)->first();
+            if ($file) {
+                // If found in subfolders, set the users_folder_id to the parent folder's ID
+                $file->users_folder_id = $file->parent_folder_id; // Assuming subfolder has a parent_folder_id
+            }
+        }
+
+        // Retrieve the destination folder from the users_folder table
         $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
+
+        // If the destination folder is not found, check in the subfolders
+        if (!$destinationFolder) {
+            $destinationFolder = DB::table('subfolders')->where('id', $decryptedDestinationFolderId)->first();
+        }
 
         // Check if both file and destination folder exist
         if (!$file || !$destinationFolder) {
@@ -560,26 +576,39 @@ class DriveController extends Controller
 
         // Build the source path using the helper function
         $sourceBasePath = "public/users/$userId";
-        $sourcePath = $this->buildFullPath($file->users_folder_id, $sourceBasePath) . '/' . $file->files;
+        $sourceFolderPath = $this->buildFullPath($file->users_folder_id, $sourceBasePath);
+        if (!$sourceFolderPath) {
+            Log::error("Failed to build source folder path for ID: " . $file->users_folder_id);
+            return redirect()->back()->with(['error' => 'Source folder path could not be determined.']);
+        }
+        $sourcePath = "$sourceFolderPath/{$file->files}";
 
         // Build the destination path using the helper function
         $destinationBasePath = "public/users/$userId";
-        $destinationPath = $this->buildFullPath($decryptedDestinationFolderId, $destinationBasePath) . '/' . $file->files;
+        $destinationFolderPath = $this->buildFullPath($decryptedDestinationFolderId, $destinationBasePath);
+        if (!$destinationFolderPath) {
+            Log::error("Failed to build destination folder path for ID: " . $decryptedDestinationFolderId);
+            return redirect()->back()->with(['error' => 'Destination folder path could not be determined.']);
+        }
+        $destinationPath = "$destinationFolderPath/{$file->files}";
 
         // Log the constructed paths
         Log::info("Constructed source path: " . $sourcePath);
         Log::info("Constructed destination path: " . $destinationPath);
 
-        // Move the file if it exists
+        // Check if the old file exists
         if (Storage::exists($sourcePath)) {
+            // Move the file in storage
             Storage::move($sourcePath, $destinationPath);
+            Log::info("File moved in storage from $sourcePath to $destinationPath");
 
-            // Update file's folder reference in the database
+            // Update the file's folder reference in the database
             DB::table('users_folder_files')->where('id', $decryptedFileId)->update([
                 'users_folder_id' => $decryptedDestinationFolderId,
             ]);
 
-            Log::info("File moved successfully from $sourcePath to $destinationPath.");
+            Log::info("Database update status for file ID $decryptedFileId:", ['new_folder_id' => $decryptedDestinationFolderId]);
+
             return redirect()->back()->with([
                 'message' => 'File moved successfully.',
                 'type' => 'success',

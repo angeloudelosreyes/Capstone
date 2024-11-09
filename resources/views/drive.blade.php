@@ -499,52 +499,6 @@
         });
 
 
-        function renameFile(fileId, oldName) {
-            Swal.fire({
-                title: 'Rename File',
-                input: 'text',
-                inputLabel: 'Enter the new file name',
-                inputValue: oldName,
-                showCancelButton: true,
-                confirmButtonText: 'Rename',
-                showLoaderOnConfirm: true,
-                preConfirm: (newName) => {
-                    if (!newName.trim()) {
-                        Swal.showValidationMessage('File name cannot be empty');
-                        return;
-                    }
-                    return fetch('{{ route('files.rename') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                oldName: oldName,
-                                newName: newName,
-                                folder_id: '{{ $folderId }}'
-                            })
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.type === 'success') {
-                                Swal.fire('Renamed!', 'File has been renamed successfully.', 'success')
-                                    .then(() => {
-                                        location.reload(); // Reload the page after successful rename
-                                    });
-                            }
-                        })
-                        .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
-                            'error'));
-                }
-            });
-        }
-
         function downloadFile(fileId) {
             Swal.fire({
                 title: 'Enter Password',
@@ -613,6 +567,62 @@
                 }
             });
         });
+    </script>
+    <script>
+        function showRenameModal(id, oldName) {
+            document.getElementById('fileId').value = id;
+            document.getElementById('new_name').value = oldName; // Set the current name as default
+            var modal = new bootstrap.Modal(document.getElementById('renameModal'));
+            modal.show();
+            // Update the form action URL with the encrypted ID
+            document.getElementById('renameForm').action = `{{ route('drive.rename', '') }}/${id}`;
+        }
+
+        function renameFile(fileId, oldName) {
+            Swal.fire({
+                title: 'Rename File',
+                input: 'text',
+                inputLabel: 'Enter the new file name',
+                inputValue: oldName,
+                showCancelButton: true,
+                confirmButtonText: 'Rename',
+                showLoaderOnConfirm: true,
+                preConfirm: (newName) => {
+                    if (!newName.trim()) {
+                        Swal.showValidationMessage('File name cannot be empty');
+                        return;
+                    }
+                    return fetch(`{{ url('drive/rename') }}/${fileId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                new_name: newName
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.type === 'success') {
+                                Swal.fire('Renamed!', 'File has been renamed successfully.', 'success')
+                                    .then(() => {
+                                        location.reload(); // Reload the page after successful rename
+                                    });
+                            } else {
+                                Swal.fire('Error!', data.message, 'error');
+                            }
+                        })
+                        .catch(() => Swal.fire('Error!', 'An error occurred while renaming the file.',
+                            'error'));
+                }
+            });
+        }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
