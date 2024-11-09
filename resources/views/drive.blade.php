@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('container')
     @include('includes.create-sub-folder-modal')
+    @include('includes.file-details-modal')
+
 
     <div class="row">
         <script>
@@ -165,6 +167,13 @@
                                                         <i class="bx bx-trash me-2"></i> Delete
                                                     </button>
                                                 </form>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                    onclick="viewFileDetails('{{ Crypt::encryptString($file->id) }}')">
+                                                    <i class="bx bx-info-circle me-2"></i> View Details
+                                                </a>
+
                                             </li>
                                         </ul>
                                     </div>
@@ -639,6 +648,75 @@
         function handleBack() {
             sessionStorage.setItem('skipNotification', 'true');
             history.back();
+        }
+    </script>
+    <script>
+        // Updated AJAX request URL in `viewFileDetails` function
+        function viewFileDetails(encryptedFileId) {
+            $.ajax({
+                url: `/files/details/${encryptedFileId}`,
+                method: 'GET',
+                success: function(response) {
+                    if (response.file) {
+                        const createdAt = new Date(response.file.created_at).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        });
+                        const updatedAt = new Date(response.file.updated_at).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        });
+
+                        $('#file-details-modal .modal-body').html(`
+                    <p><strong>File Name:</strong> ${response.file.files}</p>
+                    <p><strong>Size:</strong> ${response.file.size} bytes</p>
+                    <p><strong>Extension:</strong> ${response.file.extension}</p>
+                    <p><strong>Protected:</strong> ${response.file.protected}</p>
+                    <p><strong>Password:</strong> ${response.file.password ? 'Yes' : 'No'}</p>
+                    <p><strong>Created At:</strong> ${createdAt}</p>
+                    <p><strong>Updated At:</strong> ${updatedAt}</p>
+                `);
+                        $('#file-details-modal').modal('show');
+                    } else {
+                        alert('File details not found');
+                    }
+                },
+                error: function() {
+                    alert('Could not retrieve file details.');
+                }
+            });
+        }
+    </script>
+    <script>
+        public
+
+        function showFileDetails($id) {
+            // Decrypt the file ID
+            try {
+                $fileId = Crypt::decryptString($id);
+            } catch (\Exception $e) {
+                Log::error('Failed to decrypt file ID: '.$e - > getMessage());
+                return response() - > json(['error' => 'Invalid file ID'], 400);
+            }
+
+            // Fetch the file details
+            $file = UsersFolderFile::where('id', $fileId) - > first();
+
+            if (!$file) {
+                Log::error("File not found for ID: $fileId");
+                return response() - > json(['error' => 'File not found'], 404);
+            }
+
+            // Return the file details as a JSON response
+            return response() - > json(['file' => $file], 200);
         }
     </script>
 @endsection

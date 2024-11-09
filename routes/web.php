@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/file/download/{id}', [FilesController::class, 'download'])->name('file.download');
         Route::post('/rename', 'rename')->name('files.rename');
         Route::get('/destroy/{id}', 'destroy')->name('files.destroy');
+        Route::get('/details/{id}', 'showFileDetails')->name('files.details'); // Adjusted URL and fixed controller name
     });
 
     // Drive Routes

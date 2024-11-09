@@ -15,12 +15,13 @@ class UsersFolderFile extends Model
         'users_id',
         'users_folder_id',
         'subfolder_id',
-
         'files',
         'size',
         'extension',
         'protected',
         'password',
+        'created_at',
+        'updated_at',
     ];
 
     // Relationships

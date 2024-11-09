@@ -84,6 +84,7 @@
     @include('includes.upload-subfiles-modal')
     @include('includes.move-file-modal')
     @include('includes.copy-file-modal')
+    @include('includes.file-details-modal')
 
     @include('layouts.scripts')
     @yield('custom_js')

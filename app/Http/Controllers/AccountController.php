@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Throwable;
 use Illuminate\Support\Facades\Hash;
+
 class AccountController extends Controller
 {
     /**
@@ -19,13 +20,13 @@ class AccountController extends Controller
         $query = DB::table('users')->where(['roles' => 'USER'])->get();
         // etong view() at compact(), etong view, dito mo dinidisplay yong files mo na tatawagin na para pag inaccess mo daw yong specific page,  anong file ang makikita mo.
         // yong compact naman, dito mo isesend yong mga gusto mo makita pag inaccess mo yong account na file.
-        return view('account',compact('title','query'));
+        return view('account', compact('title', 'query'));
     }
-    
+
     public function profile()
     {
         $title = 'Account';
-        return view('profile',compact('title'));
+        return view('profile', compact('title'));
     }
 
     /**
@@ -41,17 +42,17 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // etong request validate, eto yong built in form validation ng laravel, etong required meaning nirerequire mo yong form na meron
         // dapat laman bago mo isend, or else hindi nya i aaccept,  etong unique, eto yong sinasabi na dapat hindi pa existing sa table mo (users)
         // yong email na ilalagay mo kasi kong existing na. ivavalidate nya na like yong email daw ay hindi na available.
         $request->validate([
             'name'       => ['required'],
             'department' => ['required'],
-            'email'      => ['required','unique:users,email'],
+            'email'      => ['required', 'unique:users,email'],
             'age'        => ['required'],
             'address'    => ['required'],
-        ],[
+        ], [
             'name.required'       => 'This field is required',
             'department.required' => 'This field is required',
             'email.required'      => 'This field is required',
@@ -73,14 +74,14 @@ class AccountController extends Controller
                 'address'    => $request->address,
                 'age'        => $request->age,
                 'password'   => Hash::make('12345678')
-            ]); 
+            ]);
             //Hash::make() eto yong built in function ni laravel na kong saan e yong ilalagay mo na string ay i ha Hash nya.  
-            
-            
+
+
             // etong DB::commit(), after mo daw ma save, need mo daw i commit na like oh nag save ka pero kelangan mo pa i commit or i sure na 
             // yong gagawin mong pag save sa table e mag sesave talaga.
             DB::commit();
-            
+
             // return back()->with(),  eto yong function na gagamitin mo na kong saan e kong na sure mo na na ok na yong pag save, then ano daw gusto mo gawin,
             // so sabi dito sa with(), ang gusto mo gawin ay 
             // 1.  idisplay mo yong message, 
@@ -124,21 +125,21 @@ class AccountController extends Controller
      */
     public function update(Request $request)
     {
-        
+
         $request->validate([
             'name'       => ['required'],
             'department' => ['required'],
-            'email'      => ['required','email'],
+            'email'      => ['required', 'email'],
             'age'        => ['required'],
             'address'    => ['required'],
-        ],[
+        ], [
             'name.required'       => 'This field is required',
             'department.required' => 'This field is required',
             'email.required'      => 'This field is required',
             'address.required'    => 'This field is required',
             'age.required'        => 'This field is required',
         ]);
-        
+
         try {
             DB::beginTransaction();
             DB::table('users')->where(['id' => Crypt::decryptString($request->account_id)])->update([
@@ -147,16 +148,14 @@ class AccountController extends Controller
                 'email'      => $request->email,
                 'address'    => $request->address,
                 'age'        => $request->age,
-            ]); 
-            
+            ]);
+
             DB::commit();
             return back()->with([
                 'message' => 'Selected user has been updated.',
                 'type'    => 'success',
                 'title'   => 'System notification'
             ]);
-        
-            
         } catch (Throwable $th) {
             DB::rollback();
             return back()->with([
@@ -166,31 +165,31 @@ class AccountController extends Controller
             ]);
         }
     }
-    
+
     public function update_profile(Request $request)
     {
-        
-        if(is_null($request->password)) {
+
+        if (is_null($request->password)) {
             $request->validate([
-                'email'          => ['required','email'],
-            ],[
+                'email'          => ['required', 'email'],
+            ], [
                 'email.required' => 'This field is required',
             ]);
         } else {
             $request->validate([
                 'email'    => ['required'],
-                'password' => ['required','confirmed'],
-            ],[
+                'password' => ['required', 'confirmed'],
+            ], [
                 'password.required'   => 'This field is required',
             ]);
         }
-        
+
 
         try {
             DB::beginTransaction();
-            if(is_null($request->password)) {
-                DB::table('users')->where(['id' => Crypt::decryptString($request->account_id)])->update(['email' => $request->email]); 
-                
+            if (is_null($request->password)) {
+                DB::table('users')->where(['id' => Crypt::decryptString($request->account_id)])->update(['email' => $request->email]);
+
                 DB::commit();
                 return back()->with([
                     'message' => 'Your information has been updated.',
@@ -201,8 +200,8 @@ class AccountController extends Controller
                 DB::table('users')->where(['id' => auth()->user()->id])->update([
                     'email'    => $request->email,
                     'password' => Hash::make($request->password),
-                ]); 
-                
+                ]);
+
                 DB::commit();
                 return back()->with([
                     'message' => 'Information has been updated.',
@@ -210,7 +209,6 @@ class AccountController extends Controller
                     'title'   => 'System notification'
                 ]);
             }
-            
         } catch (Throwable $th) {
             DB::rollback();
             return back()->with([
@@ -227,7 +225,7 @@ class AccountController extends Controller
     public function destroy(string $id)
     {
         $query = DB::table('users')->where(['id' => Crypt::decryptString($id)])->delete();
-        if($query) {
+        if ($query) {
             return back()->with([
                 'message' => 'Selected user has been deleted.',
                 'type'    => 'success',

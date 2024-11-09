@@ -533,4 +533,20 @@ class FilesController extends Controller
             ]);
         }
     }
+    public function showFileDetails($id)
+    {
+        // Decrypt the file ID
+        $fileId = Crypt::decryptString($id);
+
+        // Fetch the file details
+        $file = UsersFolderFile::where('id', $fileId)->first();
+
+        if (!$file) {
+            // If file not found, return a JSON response with an error message
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+
+        // Return the file details as a JSON response
+        return response()->json(['file' => $file]);
+    }
 }
