@@ -102,20 +102,54 @@ class DriveController extends Controller
      */
     public function show(string $id)
     {
-        $query = DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->first();
-        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
+        // Decrypt the file ID
+        $decryptedId = Crypt::decryptString($id);
+
+        // Query for the file details in the database
+        $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
+
+        // Determine the folder ID to use for path building
+        $folderId = $query->users_folder_id;
+        if ($query->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $query->subfolder_id;
+        }
+
+        // Build the full path using the helper function
+        $basePath = "public/users/{$query->users_id}";
+        $fullPath = $this->buildFullPath($folderId, $basePath);
+
+        if (!$fullPath) {
+            return redirect()->back()->with('error', 'Folder does not exist.');
+        }
+
+        // Attempt to get the folder title from the main folder first
+        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
+
+        // If the main folder is not found, try to get the name from the subfolder
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            if (!$folder) {
+                return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
+            }
+            $folderTitle = $folder->name; // Use the subfolder's name
+        } else {
+            $folderTitle = $folder->title; // Use the main folder's title
+        }
+
         $title = $query->files;
         $extension = $query->extension;
+        $content = '';
 
         if ($extension == 'pdf') {
-            $content = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
+            $content = "$fullPath/$title"; // Use the full path for PDF
         } elseif ($extension == 'docx') {
-            $filePath = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
+            $filePath = "$fullPath/$title"; // Use the full path for DOCX
             if (Storage::exists($filePath)) {
                 try {
-                    $phpWord = IOFactory::load(storage_path('app/' . $filePath));
+                    $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app/' . $filePath));
                     $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                    $writer = IOFactory::createWriter($phpWord, 'HTML');
+                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
                     $writer->save($tempFile);
                     $htmlContent = file_get_contents($tempFile);
                     unlink($tempFile);
@@ -127,10 +161,9 @@ class DriveController extends Controller
             } else {
                 return redirect()->back()->with('error', 'File not found.');
             }
-        } else {
-            $content = '';
         }
-        return view('read', compact('title', 'query', 'content', 'extension'));
+
+        return view('read', compact('title', 'query', 'content', 'extension', 'folderTitle'));
     }
 
 
