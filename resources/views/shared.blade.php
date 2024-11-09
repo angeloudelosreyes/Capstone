@@ -1,64 +1,111 @@
 @extends('layouts.app')
 @section('container')
     <div class="row">
-        @if(count($query) == 0)
+        <!-- Display created shareable folders -->
+        @if ($createdFolders->isEmpty())
             <div class="col-12">
-                <div class="alert alert-warning">You haven't created a folder yet.</div>
+                <div class="alert alert-warning">You haven't created any shared folders yet.</div>
             </div>
         @else
-            <h5 class="mb-4 text-uppercase fw-bolder">{{$title}}</h5>
+            <h5 class="mb-4 text-uppercase fw-bolder">My Shared Folders and Files</h5>
+            @foreach ($createdFolders as $folder)
+                <div class="col-md-2 col-6 folder-card">
+                    <div class="card bg-light shadow-none">
+                        <div class="card-body">
+                            <div class="d-flex mb-1">
+                                <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
+                                    <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ri-more-2-fill fs-16 align-bottom"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item"
+                                                href="{{ route('folder.shareable.show', ['id' => Crypt::encryptString($folder->id)]) }}"><i
+                                                    class="bx bx-link me-2"></i> Open Folder</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="rename_folder('{{ Crypt::encryptString($folder->id) }}', '{{ $folder->title }}')"><i
+                                                    class="bx bx-edit me-2"></i> Rename</a></li>
+                                        <li>
+                                            <form
+                                                action="{{ route('folder.shareable.destroy', ['id' => Crypt::encryptString($folder->id)]) }}"
+                                                method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item"><i
+                                                        class="bx bx-trash me-2"></i> Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                <h6 class="fs-15 folder-name">{{ $folder->title }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
 
-            @foreach($query as $data)
+            {{ $createdFolders->links() }}
+        @endif
+
+        <!-- Display shared files -->
+        @if ($sharedFiles->isEmpty())
+            <div class="col-12">
+            </div>
+        @else
+            @foreach ($sharedFiles as $data)
                 <div class="col-md-2 col-6 folder-card">
                     <div class="card bg-light shadow-none" id="folder-1">
                         <div class="card-body">
                             <div class="d-flex mb-1">
-                                <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                </div>
-                                <div class="dropdown">
+                                <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
                                     <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ri-more-2-fill fs-16 align-bottom"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item open-file-button" href="javascript:void(0)" data-file-id="{{ Crypt::encryptString($data->id) }}" data-protected="{{ $data->protected }}" data-password="{{ $data->password }}"><i class="bx bx-link me-2"></i> Open File</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0)" onclick="share_file('{{Crypt::encryptString($data->id)}}')"><i class="bx bx-share me-2"></i> Share</a></li>
-                                        <li>
-                                        <a class="dropdown-item rename-file-button" href="javascript:void(0)"
-                                        data-file-id="{{ Crypt::encryptString($data->id) }}"
-                                        data-file-name="{{ $data->files }}">
-                                        <i class="bx bx-edit me-2"></i> Rename
-                                        </a>
-                                        </li>
-                                        
-                                        <li><a class="dropdown-item download-button" href="javascript:void(0)" data-file-id="{{ Crypt::encryptString($data->id) }}" data-protected="{{ $data->protected }}" data-password="{{ $data->password }}"><i class="bx bx-download me-2"></i> Download</a></li>
+                                        <li><a class="dropdown-item open-file-button" href="javascript:void(0)"
+                                                data-file-id="{{ Crypt::encryptString($data->id) }}"
+                                                data-protected="{{ $data->protected }}"
+                                                data-password="{{ $data->password }}"><i class="bx bx-link me-2"></i> Open
+                                                File</a></li>
+                                        <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                data-file-id="{{ Crypt::encryptString($data->id) }}"
+                                                data-protected="{{ $data->protected }}"
+                                                data-password="{{ $data->password }}"><i class="bx bx-download me-2"></i>
+                                                Download</a></li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="text-center">
                                 <div class="mb-2">
-                                    @if($data->extension == 'txt')
-                                        <i class="ri-file-2-fill align-bottom text-default display-5"></i>
-                                    @elseif($data->extension == 'pdf')
+                                    @php
+                                        $extension = strtolower(pathinfo($data->files, PATHINFO_EXTENSION));
+                                    @endphp
+                                    @if (in_array($extension, ['doc', 'docx']))
+                                        <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                    @elseif(in_array($extension, ['pdf', 'ppt', 'pptx']))
                                         <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                    @elseif($data->extension == 'docx')
-                                        <i class="ri-file-word-fill align-bottom text-success display-5"></i>
+                                    @elseif(in_array($extension, ['xls', 'xlsx']))
+                                        <i class="ri-file-excel-line align-bottom text-success display-5"></i>
                                     @else
                                         <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                     @endif
                                 </div>
-                                <h6 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"class="fs-15 folder-name">{{$data->files}}</h6>
+                                <h6 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                    class="fs-15 folder-name">{{ $data->files }}</h6>
                             </div>
 
                         </div>
                     </div>
                 </div>
             @endforeach
-            {{$query->links()}}
+            {{ $sharedFiles->links() }}
         @endif
     </div>
-
     <!-- Password Modal -->
     <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -78,24 +125,24 @@
         </div>
     </div>
 
-   <!-- Rename Modal -->
-<div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="text" id="newFileName" class="form-control" placeholder="Enter new file name">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirmRenameButton">Rename</button>
+    <!-- Rename Modal -->
+    <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameModalLabel">Rename File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="newFileName" class="form-control" placeholder="Enter new file name">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmRenameButton">Rename</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 @section('custom_js')
     <script>
@@ -114,12 +161,13 @@
                         return;
                     }
 
-                    return fetch(`{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
-                        method: 'GET',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
+                    return fetch(
+                            `{{ url('drive/download') }}/${fileId}?password=${encodeURIComponent(password)}`, {
+                                method: 'GET',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                }
+                            })
                         .then(response => {
                             if (!response.ok) {
                                 return response.text().then(text => {
@@ -163,7 +211,8 @@
                         alert('Password is required');
                         return;
                     }
-                    window.location.href = `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
+                    window.location.href =
+                        `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
                 });
             } else {
                 window.location.href = `{{ url('drive/sharedShow') }}/${fileId}`;
@@ -179,72 +228,72 @@
             });
         });
 
-        @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ session('error') }}'
-        });
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}'
+            });
         @endif
 
         document.querySelectorAll('.rename-file-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const fileId = this.getAttribute('data-file-id');
-        const fileName = this.getAttribute('data-file-name'); // Get the file name
+            button.addEventListener('click', function() {
+                const fileId = this.getAttribute('data-file-id');
+                const fileName = this.getAttribute('data-file-name'); // Get the file name
 
-        // Set the current file name in the input field
-        $('#newFileName').val(fileName);
+                // Set the current file name in the input field
+                $('#newFileName').val(fileName);
 
-        $('#renameModal').modal('show');
+                $('#renameModal').modal('show');
 
-        // Handle rename confirmation
-        $('#confirmRenameButton').off('click').on('click', function() {
-            const newFileName = $('#newFileName').val().trim();
-            if (!newFileName) {
-                alert('New file name is required');
-                return;
-            }
+                // Handle rename confirmation
+                $('#confirmRenameButton').off('click').on('click', function() {
+                    const newFileName = $('#newFileName').val().trim();
+                    if (!newFileName) {
+                        alert('New file name is required');
+                        return;
+                    }
 
-            // Send the rename request to the server
-            fetch(`{{ url('drive/rename') }}/${fileId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ new_name: newFileName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                $('#renameModal').modal('hide');
-                if (data.type === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Renamed',
-                        text: data.message,
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: data.message,
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error renaming file:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to rename file.',
+                    // Send the rename request to the server
+                    fetch(`{{ url('drive/rename') }}/${fileId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                new_name: newFileName
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            $('#renameModal').modal('hide');
+                            if (data.type === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Renamed',
+                                    text: data.message,
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message,
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error renaming file:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to rename file.',
+                            });
+                        });
                 });
             });
         });
-    });
-});
-
-
     </script>
 @endsection

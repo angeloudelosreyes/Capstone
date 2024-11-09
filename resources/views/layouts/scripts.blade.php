@@ -8,7 +8,6 @@
 <script src="{{ asset('storage/FreezeUi/freeze-ui.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/min/dropzone.min.js"></script>
 
-
 <!-- App js -->
 <script src="{{ asset('storage/js/app.js') }}"></script>
 
@@ -17,17 +16,21 @@
         $('#create_folder').modal('show');
     }
 
+    function createShareableFolderModal() {
+        $('#create_folder_shareable').modal('show');
+    }
+
+
     function createSubFolder(parentId) {
         $('#parent_id').val(parentId);
         $('#title').val('');
         $('#create_folder').modal('show');
     }
 
-
     function update_folder(id, old) {
-        $('#old,#new').val(old)
-        $('#id').val(id)
-        $('#update_folder').modal('show')
+        $('#old,#new').val(old);
+        $('#id').val(id);
+        $('#update_folder').modal('show');
     }
 
     function update_subfolder(id, old) {
@@ -37,65 +40,63 @@
     }
 
     function create_files(id, title) {
-        $('#caption').html(title)
-        $('#folder_id').val(id)
-        $('#folder').val(title)
-        $('#create_files').modal('show')
+        $('#caption').html(title);
+        $('#folder_id').val(id);
+        $('#folder').val(title);
+        $('#create_files').modal('show');
         dropzone.removeAllFiles();
     }
 
     function create_subfiles(id, title) {
         console.log(title);
-        $('#caption_subfolder').html(title)
-        $('#parent_id').val(id)
-        $('#subfolder_name').val(title)
-        $('#create_subfiles').modal('show')
+        $('#caption_subfolder').html(title);
+        $('#parent_id').val(id);
+        $('#subfolder_name').val(title);
+        $('#create_subfiles').modal('show');
         dropzone.removeAllFiles();
     }
 
     function share_file(users_folder_files_id) {
 
-$('#shared_modal').modal('show');
+        $('#shared_modal').modal('show');
 
-$('#users_folder_files_id').val(users_folder_files_id);
+        $('#users_folder_files_id').val(users_folder_files_id);
 
-$('#users_folder_id').val(''); // Clear folder ID if it was previously set
+        $('#users_folder_id').val(''); // Clear folder ID if it was previously set
 
-}
+    }
 
-function share_folder(users_folder_id) {
-
-$('#shared_modal').modal('show');
-
-$('#users_folder_id').val(users_folder_id);
-
-$('#users_folder_files_id').val(''); // Clear file ID if it was previously set
-
-}
+    function share_folder(users_folder_id, title) {
+        $('#share_folder_modal').modal('show');
+        $('#share_folder_title').val(title);
+        $('#folder_users_folder_id').val(users_folder_id);
+        $('#folder_users_folder_files_id').val('');
+    }
 
     function create_account() {
-        $('#create_account').modal('show')
+        $('#create_account').modal('show');
     }
 
     $("#category").change(e => {
         var category = $('#category').val();
         if (category != 'Individual') {
-            $('#show_email').attr('hidden', true)
+            $('#show_email').attr('hidden', true);
         } else {
-            $('#show_email').attr('hidden', false)
+            $('#show_email').attr('hidden', false);
         }
-    })
+    });
 
     function account_update(id, name, department, email, address, age) {
-        $('#update_account').modal('show')
-        $('#account_id').val(id)
-        $('#name').val(name)
-        $('#department').val(department)
-        $('#email').val(email)
-        $('#address').val(address)
-        $('#age').val(age)
+        $('#update_account').modal('show');
+        $('#account_id').val(id);
+        $('#name').val(name);
+        $('#department').val(department);
+        $('#email').val(email);
+        $('#address').val(address);
+        $('#age').val(age);
     }
 </script>
+
 @if (Session::has('message'))
     <script>
         Swal.fire({
@@ -105,12 +106,13 @@ $('#users_folder_files_id').val(''); // Clear file ID if it was previously set
         });
     </script>
 @endif
+
 <script>
     $('.freeze').click(e => {
         FreezeUI({
             selector: '.component',
             text: 'Processing'
-        })
-    })
+        });
+    });
     UnFreezeUI();
 </script>

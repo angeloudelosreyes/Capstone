@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     DriveController,
     SharedController,
     AccountController,
-    SubfolderController
+    SubfolderController,
+    UsersFolderShareableController
 };
 use Illuminate\Support\Facades\Auth;
 
@@ -95,5 +96,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', 'update')->name('subfolder.update');
         Route::get('/show/{id}', 'show')->name('subfolder.show');
         Route::delete('/destroy/{id}', 'destroy')->name('subfolder.destroy');
+    });
+
+    Route::prefix('folder/shareable')->controller(UsersFolderShareableController::class)->group(function () {
+        Route::post('/store', 'store')->name('folder.shareable.store');
+        Route::post('/add-file/{folderShareableId}', 'addShareableFile')->name('folder.shareable.addFile');
+        Route::get('/view', 'viewSharedFolders')->name('folder.shareable.view');
+        Route::get('/show/{id}', 'show')->name('folder.shareable.show');
+        Route::post('/update', 'update')->name('folder.shareable.update');
+        Route::delete('/destroy/{id}', 'destroy')->name('folder.shareable.destroy');
+        Route::get('/shared', 'index')->name('folder.shareable.index');
+        Route::post('/share', 'createSharedFolder')->name('folder.shareable.share');
     });
 });

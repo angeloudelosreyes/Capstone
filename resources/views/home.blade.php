@@ -33,7 +33,7 @@
                                                 onclick="create_files('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-upload me-2"></i> Upload Files</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="share_folder('{{ Crypt::encryptString($data->id) }}')"><i
+                                                onclick="share_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-share me-2"></i> Share Folder</a></li>
                                         {{-- <li>
                                             <a class="dropdown-item" href="javascript:void(0)"

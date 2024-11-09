@@ -1,15 +1,16 @@
-<form action="{{ route('shared.store') }}" method="POST">
+<form action="{{ route('folder.shareable.share') }}" method="POST">
     @csrf
     @honeypot
-    <input type="hidden" name="users_folder_files_id" id="users_folder_files_id">
-    <input type="hidden" name="users_folder_id" id="users_folder_id"> <!-- Hidden input for folder ID -->
+    <input type="hidden" name="users_folder_files_id" id="folder_users_folder_files_id">
+    <input type="hidden" name="users_folder_id" id="folder_users_folder_id">
+    <input type="hidden" name="title" id="share_folder_title"> <!-- Hidden input for the title -->
 
-    <div class="modal component fade" id="shared_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal component fade" id="share_folder_modal" tabindex="-1" aria-labelledby="shareFolderModalLabel"
         aria-hidden="true">
         <div class="modal-dialog content">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share File</h5> <!-- Updated title -->
+                    <h5 class="modal-title" id="shareFolderModalLabel">Share Folder</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -17,7 +18,7 @@
                         <div class="col-12">
                             <div>
                                 <label for="category" class="form-label">Category</label>
-                                <select name="category" class="form-control" id="category" required>
+                                <select name="category" class="form-control" id="folder_category" required>
                                     <option value="Individual">Individual</option>
                                     @if (auth()->user()->roles == 'ADMIN')
                                         <optgroup label="Department">
