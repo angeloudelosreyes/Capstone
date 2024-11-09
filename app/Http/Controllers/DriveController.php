@@ -54,49 +54,128 @@ class DriveController extends Controller
     }
 
     public function sharedShow(Request $request, string $id)
-    {
-        $query = DB::table('users_folder_files')->where(['id' => Crypt::decryptString($id)])->first();
-        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
-        $title = $query->files;
-        $extension = $query->extension;
 
-        if ($query->protected === 'YES') {
-            $request->validate([
-                'password' => 'required|string'
-            ]);
+{
 
-            if ($request->password !== $query->password) {
-                return redirect()->back()->with('error', 'Incorrect password.');
-            }
-        }
+    // Decrypt the file ID
 
-        if ($extension == 'pdf') {
-            $content = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
-        } elseif ($extension == 'docx') {
-            $filePath = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
-            if (Storage::exists($filePath)) {
-                try {
-                    $phpWord = IOFactory::load(storage_path('app/' . $filePath));
-                    $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                    $writer = IOFactory::createWriter($phpWord, 'HTML');
-                    $writer->save($tempFile);
-                    $htmlContent = file_get_contents($tempFile);
-                    unlink($tempFile);
-                    $content = $htmlContent;
-                } catch (\Exception $e) {
-                    Log::error('Error loading .docx file: ' . $e->getMessage());
-                    return redirect()->back()->with('error', 'Error loading .docx file.');
-                }
-            } else {
-                return redirect()->back()->with('error', 'File not found.');
-            }
-        } else {
-            $content = '';
-        }
+    $fileId = Crypt::decryptString($id);
 
-        return view('read', compact('title', 'query', 'content', 'extension'));
+
+    // Query for the file details in the database
+
+    $query = DB::table('users_folder_files')->where('id', $fileId)->first();
+
+
+    if (!$query) {
+
+        return redirect()->back()->with('error', 'File not found.');
+
     }
 
+
+    // Build the user-specific path
+
+    $userId = $query->users_id; // Get the user ID from the file record
+
+    $filePath = ltrim($query->file_path, '/'); // Ensure no leading slash
+
+
+    // Log the file path
+
+    Log::info('File path from database: ' . $filePath);
+
+
+    // Check if the file exists in the storage
+
+    if (!Storage::disk('public')->exists($filePath)) {
+
+        $fullStoragePath = storage_path('app/public/' . $filePath);
+
+        Log::error('File not found at path: ' . $fullStoragePath);
+
+        return redirect()->back()->with('error', 'File not found in the specified directory.');
+
+    }
+
+
+    // Prepare file details
+
+    $title = $query->files;
+
+    $extension = $query->extension;
+
+    $content = '';
+
+
+    // Check for password protection
+
+    if ($query->protected === 'YES') {
+
+        $request->validate([
+
+            'password' => 'required|string'
+
+        ]);
+
+
+        if ($request->password !== $query->password) {
+
+            return redirect()->back()->with('error', 'Incorrect password.');
+
+        }
+
+    }
+
+
+    // Determine the file content based on its extension
+
+    if ($extension == 'pdf') {
+
+        $content = Storage::url($filePath); // Use the URL for PDF
+
+    } elseif ($extension == 'docx') {
+
+        if (Storage::disk('public')->exists($filePath)) {
+
+            try {
+
+                $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app/public/' . $filePath));
+
+                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+
+                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                $writer->save($tempFile);
+
+                $htmlContent = file_get_contents($tempFile);
+
+                unlink($tempFile);
+
+                $content = $htmlContent;
+
+            } catch (\Exception $e) {
+
+                Log::error('Error loading .docx file: ' . $e->getMessage());
+
+                return redirect()->back()->with('error', 'Error loading .docx file.');
+
+            }
+
+        } else {
+
+            Log::error('File not found at path: ' . $filePath); // Log the file path for debugging
+
+            return redirect()->back()->with('error', 'File not found.');
+
+        }
+
+    }
+
+
+    return view('read', compact('title', 'query', 'content', 'extension'));
+
+}
     /**
      * Display the specified resource.
      */

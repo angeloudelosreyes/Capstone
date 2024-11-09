@@ -42,236 +42,233 @@ class FilesController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-    {
-        Log::info('Create function called.');
+{
+    Log::info('Create function called.');
 
-        $request->validate([
-            'fileName' => 'required|string|max:255',
-            'fileType' => 'required|string|in:docx',
-            'folder_id' => 'required|string',
-            'isProtected' => 'nullable|boolean',
-            'password' => 'nullable|string|required_if:isProtected,true'
+    $request->validate([
+        'fileName' => 'required|string|max:255',
+        'fileType' => 'required|string|in:docx',
+        'folder_id' => 'required|string',
+        'isProtected' => 'nullable|boolean',
+        'password' => 'nullable|string|required_if:isProtected,true'
+    ]);
+
+    // Decrypt folder_id
+    $folderId = Crypt::decryptString($request->input('folder_id'));
+    $subfolderId = null;
+
+    // Step 1: Check if folderId is a subfolder
+    $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+
+    if ($subfolder) {
+        $subfolderId = $folderId;
+        $folderId = null;
+        Log::info("Folder ID belongs to a subfolder. Subfolder ID: $subfolderId");
+    } else {
+        $folder = DB::table('users_folder')->where('id', $folderId)->first();
+        if (!$folder) {
+            Log::error("Folder not found for ID: $folderId");
+            return response()->json(['error' => 'Folder not found'], 404);
+        }
+        Log::info("Folder ID belongs to a main folder. Folder ID: $folderId");
+    }
+
+    $fileName = $request->input('fileName');
+    $fileType = $request->input('fileType');
+    $userId = auth()->user()->id;
+    $isProtected = $request->input('isProtected', false);
+    $password = $isProtected ? $request->input('password') : null;
+
+    Log::info("Attempting to create file: $fileName.$fileType for user ID: $userId");
+
+    // Check for duplicate file name
+    $duplicateFileQuery = DB::table('users_folder_files')->where('files', $fileName . '.' . $fileType);
+    if ($folderId) {
+        $duplicateFileQuery->where('users_folder_id', $folderId);
+    } elseif ($subfolderId) {
+        $duplicateFileQuery->where('subfolder_id', $subfolderId);
+    }
+    $duplicateFile = $duplicateFileQuery->exists();
+
+    if ($duplicateFile) {
+        Log::warning("Duplicate file name found: $fileName.$fileType in the specified folder or subfolder.");
+        return response()->json(['error' => 'File with the same name already exists in this folder or subfolder'], 400);
+    }
+
+    // Build the directory path
+    $directoryBase = 'users/' . $userId;
+    $directory = $folderId ? $this->buildFullPath($folderId, $directoryBase) : $this->buildFullPath($subfolderId, $directoryBase);
+
+    if (!$directory) {
+        Log::error("Folder or subfolder not found for ID: " . ($folderId ?? $subfolderId));
+        return response()->json(['error' => 'Folder or subfolder not found'], 404);
+    }
+
+    if (!Storage::disk('public')->exists($directory)) {
+        Log::info("Creating directory at: $directory");
+        Storage::disk('public')->makeDirectory($directory);
+    }
+
+    $filePath = $directory . '/' . $fileName . '.' . $fileType;
+    Log::info("Resolved file path: $filePath");
+
+    if (!Storage::disk('public')->exists($filePath)) {
+        if ($fileType === 'docx') {
+            try {
+                $phpWord = new PhpWord();
+                $section = $phpWord->addSection();
+                $section->addText('');
+
+                $tempFilePath = tempnam(sys_get_temp_dir(), 'phpword');
+                $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+                $objWriter->save($tempFilePath);
+
+                Storage::disk('public')->put($filePath, file_get_contents($tempFilePath));
+                unlink($tempFilePath);
+                Log::info("File created and stored at: $filePath");
+            } catch (\Exception $e) {
+                Log::error("Error creating docx file: " . $e->getMessage());
+                return response()->json(['error' => 'Error creating file'], 500);
+            }
+        }
+
+        $fileSize = Storage ::disk('public')->size($filePath);
+        Log::info("File size determined: $fileSize bytes");
+
+        // Insert the file record, including the file_path
+        DB::table('users_folder_files')->insert([
+            'users_id' => $userId,
+            'users_folder_id' => $folderId,
+            'subfolder_id' => $subfolderId,
+            'files' => $fileName . '.' . $fileType,
+            'size' => $fileSize,
+            'extension' => $fileType,
+            'protected' => $isProtected ? 'YES' : 'NO',
+            'password' => $password,
+            'file_path' => $filePath, // Add this line
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        // Decrypt folder_id
-        $folderId = Crypt::decryptString($request->input('folder_id'));
-        $subfolderId = null;
+        Log::info("File record inserted into database: $fileName.$fileType");
 
-        // Step 1: Check if folderId is a subfolder
-        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+        return response()->json(['fileName' => $fileName], 201);
+    } else {
+        Log::warning("File already exists at path: $filePath");
+        return response()->json(['error' => 'File already exists'], 400);
+    }
+}
 
-        if ($subfolder) {
-            // If it’s a subfolder, use subfolderId and set folderId to null
-            $subfolderId = $folderId;
-            $folderId = null;
-            Log::info("Folder ID belongs to a subfolder. Subfolder ID: $subfolderId");
-        } else {
-            // Step 2: If not a subfolder, treat it as a main folder
-            $folder = DB::table('users_folder')->where('id', $folderId)->first();
-            if (!$folder) {
-                Log::error("Folder not found for ID: $folderId");
-                return response()->json(['error' => 'Folder not found'], 404);
+public function store(Request $request)
+{
+    Log::info('Store function called.');
+
+    $validator = Validator::make($request->all(), [
+        'files.*' => ['required', 'mimes:pdf,docx'],
+        'isEncrypted' => ['nullable', 'boolean'],
+        'password' => ['nullable', 'string']
+    ]);
+
+    if ($validator->fails()) {
+        Log::error('Validation failed: ' . json_encode($validator->errors()));
+        return back()->withErrors($validator)->withInput();
+    }
+
+    $userId = auth()->user()->id;
+    $folderId = Crypt::decryptString($request->folder_id);
+    $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
+    $password = $isEncrypted ? $request->password : null;
+
+    Log::info('User  ID: ' . $userId);
+    Log::info('Folder ID: ' . $folderId);
+    Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
+
+    // Base path for the user's files
+    $basePath = 'users/' . $userId;
+    $directory = $this->buildFullPath($folderId, $basePath);
+
+    if (!$directory) {
+        Log::error("Folder ID $folderId not found or is invalid.");
+        return back()->with([
+            'message' => 'Folder not found. Please check if the folder or subfolder exists.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+
+    Log::info('Final directory path for file storage:', ['directory' => $directory]);
+
+    if ($request->hasFile('files')) {
+        foreach ($request->file('files') as $file) {
+            $name = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+
+            // Check for duplicate file name
+            $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
+            if (DB::table('users_folder')->where('id', $folderId)->exists()) {
+                $duplicateFileQuery->where('users_folder_id', $folderId);
+            } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
+                $duplicateFileQuery->where('subfolder_id', $folderId);
             }
-            Log::info("Folder ID belongs to a main folder. Folder ID: $folderId");
-        }
+            $duplicateFile = $duplicateFileQuery->exists();
 
-        $fileName = $request->input('fileName');
-        $fileType = $request->input('fileType');
-        $userId = auth()->user()->id;
-        $isProtected = $request->input('isProtected', false);
-        $password = $isProtected ? $request->input('password') : null;
+            if ($duplicateFile) {
+                return back()->with([
+                    'message' => 'A file with the same name already exists in this folder.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
 
-        Log::info("Attempting to create file: $fileName.$fileType for user ID: $userId");
-
-        // Check for duplicate file name in the specified folder or subfolder
-        $duplicateFileQuery = DB::table('users_folder_files')->where('files', $fileName . '.' . $fileType);
-        if ($folderId) {
-            $duplicateFileQuery->where('users_folder_id', $folderId);
-        } elseif ($subfolderId) {
-            $duplicateFileQuery->where('subfolder_id', $subfolderId);
-        }
-        $duplicateFile = $duplicateFileQuery->exists();
-
-        if ($duplicateFile) {
-            Log::warning("Duplicate file name found: $fileName.$fileType in the specified folder or subfolder.");
-            return response()->json(['error' => 'File with the same name already exists in this folder or subfolder'], 400);
-        }
-
-        // Build the directory path
-        $directoryBase = 'users/' . $userId;
-        $directory = $folderId ? $this->buildFullPath($folderId, $directoryBase) : $this->buildFullPath($subfolderId, $directoryBase);
-
-        if (!$directory) {
-            Log::error("Folder or subfolder not found for ID: " . ($folderId ?? $subfolderId));
-            return response()->json(['error' => 'Folder or subfolder not found'], 404);
-        }
-
-        if (!Storage::disk('public')->exists($directory)) {
-            Log::info("Creating directory at: $directory");
+            // Ensure the directory exists
             Storage::disk('public')->makeDirectory($directory);
-        }
 
-        $filePath = $directory . '/' . $fileName . '.' . $fileType;
-        Log::info("Resolved file path: $filePath");
+            // Store the file directly to the desired path
+            $path = $directory . '/' . $name;
+            Storage::disk('public')->put($path, file_get_contents($file));
 
-        if (!Storage::disk('public')->exists($filePath)) {
-            if ($fileType === 'docx') {
-                try {
-                    $phpWord = new PhpWord();
-                    $section = $phpWord->addSection();
-                    $section->addText('');
+            $fileSize = $file->getSize();
 
-                    $tempFilePath = tempnam(sys_get_temp_dir(), 'phpword');
-                    $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-                    $objWriter->save($tempFilePath);
+            Log::info('File uploaded: ' . $name);
+            Log::info('File path: ' . $path);
+            Log::info('File size: ' . $fileSize);
 
-                    Storage::disk('public')->put($filePath, file_get_contents($tempFilePath));
-                    unlink($tempFilePath);
-                    Log::info("File created and stored at: $filePath");
-                } catch (\Exception $e) {
-                    Log::error("Error creating docx file: " . $e->getMessage());
-                    return response()->json(['error' => 'Error creating file'], 500);
-                }
-            }
-
-            $fileSize = Storage::disk('public')->size($filePath);
-            Log::info("File size determined: $fileSize bytes");
-
-            // Insert the file record, either in the main folder or subfolder
-            DB::table('users_folder_files')->insert([
+            // Prepare data for insertion based on folder type
+            $fileData = [
                 'users_id' => $userId,
-                'users_folder_id' => $folderId,
-                'subfolder_id' => $subfolderId,
-                'files' => $fileName . '.' . $fileType,
-                'size' => $fileSize,
-                'extension' => $fileType,
-                'protected' => $isProtected ? 'YES' : 'NO',
+                'files' => $name,
+                ' size' => $fileSize,
+                'extension' => $extension,
+                'protected' => $isEncrypted ? 'YES' : 'NO',
                 'password' => $password,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+                'file_path' => $path, // Add this line to include the file path
+            ];
 
-            Log::info("File record inserted into database: $fileName.$fileType");
-
-            return response()->json(['fileName' => $fileName], 201);
-        } else {
-            Log::warning("File already exists at path: $filePath");
-            return response()->json(['error' => 'File already exists'], 400);
-        }
-    }
-
-
-
-    public function store(Request $request)
-    {
-        Log::info('Store function called.');
-
-        $validator = Validator::make($request->all(), [
-            'files.*' => ['required', 'mimes:pdf,docx'],
-            'isEncrypted' => ['nullable', 'boolean'],
-            'password' => ['nullable', 'string']
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()));
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $userId = auth()->user()->id;
-        $folderId = Crypt::decryptString($request->folder_id);
-        $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
-        $password = $isEncrypted ? $request->password : null;
-
-        Log::info('User ID: ' . $userId);
-        Log::info('Folder ID: ' . $folderId);
-        Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
-
-        // Base path for the user's files
-        $basePath = 'users/' . $userId;
-        $directory = $this->buildFullPath($folderId, $basePath);
-
-        if (!$directory) {
-            Log::error("Folder ID $folderId not found or is invalid.");
-            return back()->with([
-                'message' => 'Folder not found. Please check if the folder or subfolder exists.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        Log::info('Final directory path for file storage:', ['directory' => $directory]);
-
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $name = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-
-                // Check for duplicate file name in the same folder
-                $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
-                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
-                    $duplicateFileQuery->where('users_folder_id', $folderId);
-                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
-                    $duplicateFileQuery->where('subfolder_id', $folderId);
-                }
-                $duplicateFile = $duplicateFileQuery->exists();
-
-                if ($duplicateFile) {
-                    return back()->with([
-                        'message' => 'A file with the same name already exists in this folder.',
-                        'type' => 'error',
-                        'title' => 'System Notification'
-                    ]);
-                }
-
-                // Ensure the directory exists
-                Storage::disk('public')->makeDirectory($directory);
-
-                // Store the file directly to the desired path
-                $path = $directory . '/' . $name;
-                Storage::disk('public')->put($path, file_get_contents($file));
-
-                $fileSize = $file->getSize();
-
-                Log::info('File uploaded: ' . $name);
-                Log::info('File path: ' . $path);
-                Log::info('File size: ' . $fileSize);
-
-                // Prepare data for insertion based on folder type
-                $fileData = [
-                    'users_id' => $userId,
-                    'files' => $name,
-                    'size' => $fileSize,
-                    'extension' => $extension,
-                    'protected' => $isEncrypted ? 'YES' : 'NO',
-                    'password' => $password,
-                ];
-
-                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
-                    $fileData['users_folder_id'] = $folderId;
-                    $fileData['subfolder_id'] = null;
-                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
-                    $fileData['users_folder_id'] = null;
-                    $fileData['subfolder_id'] = $folderId;
-                }
-
-                // Insert the file record
-                DB::table('users_folder_files')->insert($fileData);
+            if (DB::table('users_folder')->where('id', $folderId)->exists()) {
+                $fileData['users_folder_id'] = $folderId;
+                $fileData['subfolder_id'] = null;
+            } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
+                $fileData['users_folder_id'] = null;
+                $fileData['subfolder_id'] = $folderId;
             }
-            return back()->with([
-                'message' => 'New file has been uploaded.',
-                'type' => 'success',
-                'title' => 'System Notification'
-            ]);
-        } else {
-            Log::error('No files uploaded.');
-            return back()->with([
-                'message' => 'Upload failed.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-    }
 
+            // Insert the file record
+            DB::table('users_folder_files')->insert($fileData);
+        }
+        return back()->with([
+            'message' => 'New file has been uploaded.',
+            'type' => 'success',
+            'title' => 'System Notification'
+        ]);
+    } else {
+        Log::error('No files uploaded.');
+        return back()->with([
+            'message' => 'Upload failed.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+}
     /**
      * Helper function to recursively build the full path from a subfolder to the root.
      */
