@@ -96,6 +96,13 @@
                                                 </button>
                                             </form>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="viewFileDetails('{{ Crypt::encryptString($data->id) }}')">
+                                                <i class="bx bx-info-circle me-2"></i> View Details
+                                            </a>
+
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -307,6 +314,51 @@
                                 });
 
                         });
+                }
+            });
+        }
+    </script>
+    <script>
+        // Updated AJAX request URL in `viewFileDetails` function
+        function viewFileDetails(encryptedFileId) {
+            $.ajax({
+                url: `/files/details/${encryptedFileId}`,
+                method: 'GET',
+                success: function(response) {
+                    if (response.file) {
+                        const createdAt = new Date(response.file.created_at).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        });
+                        const updatedAt = new Date(response.file.updated_at).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        });
+
+                        $('#file-details-modal .modal-body').html(`
+                    <p><strong>File Name:</strong> ${response.file.files}</p>
+                    <p><strong>Size:</strong> ${response.file.size} bytes</p>
+                    <p><strong>Extension:</strong> ${response.file.extension}</p>
+                    <p><strong>Protected:</strong> ${response.file.protected}</p>
+                    <p><strong>Password:</strong> ${response.file.password ? 'Yes' : 'No'}</p>
+                    <p><strong>Created At:</strong> ${createdAt}</p>
+                    <p><strong>Updated At:</strong> ${updatedAt}</p>
+                `);
+                        $('#file-details-modal').modal('show');
+                    } else {
+                        alert('File details not found');
+                    }
+                },
+                error: function() {
+                    alert('Could not retrieve file details.');
                 }
             });
         }
