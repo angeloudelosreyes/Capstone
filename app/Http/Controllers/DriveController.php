@@ -325,16 +325,28 @@ class DriveController extends Controller
             ]);
         }
 
-        // Get the folder title
-        $title = DB::table('users_folder')->where('id', $query->users_folder_id)->first()->title;
+        // Base directory path for the user
+        $baseDirectory = 'public/users/' . $query->users_id;
 
-        // Build the directory path
-        $directory = 'public/users/' . $query->users_id . '/' . $title . '/' . $query->files;
+        // Use the helper function to build the full path
+        $directory = $this->buildFullPath($query->users_folder_id ?? $query->subfolder_id, $baseDirectory);
+
+        // If the directory path is invalid, return an error
+        if (!$directory) {
+            return back()->with([
+                'message' => 'Folder or subfolder not found.',
+                'type'    => 'error',
+                'title'   => 'System Notification'
+            ]);
+        }
+
+        // Add the file name to the directory path
+        $filePath = $directory . '/' . $query->files;
 
         // Check if the file exists in storage
-        if (Storage::exists($directory)) {
+        if (Storage::exists($filePath)) {
             // Delete the file from storage
-            Storage::delete($directory);
+            Storage::delete($filePath);
 
             // Delete the record from the database
             DB::table('users_folder_files')->where('id', $fileId)->delete();
@@ -352,6 +364,32 @@ class DriveController extends Controller
             ]);
         }
     }
+
+
+    /**
+     * Helper function to build the full path for any level of nested folders.
+     */
+    private function buildFullPath($folderId, $basePath)
+    {
+        // Check if it's a main folder in users_folder
+        $mainFolder = DB::table('users_folder')->where('id', $folderId)->first();
+        if ($mainFolder) {
+            // If it's the main folder, just return its path
+            return $basePath . '/' . $mainFolder->title;
+        }
+
+        // Otherwise, assume it's a subfolder and try to retrieve it
+        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+        if ($subfolder) {
+            // Recursively call this function to get the parent path
+            $parentPath = $this->buildFullPath($subfolder->parent_folder_id, $basePath);
+            return $parentPath . '/' . $subfolder->name; // Append the current folder's name to the parent path
+        }
+
+        // If neither a main folder nor a subfolder was found, return null (invalid path)
+        return null;
+    }
+
 
 
     public function rename(Request $request, string $id)
