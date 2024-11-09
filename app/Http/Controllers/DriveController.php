@@ -164,13 +164,27 @@ class DriveController extends Controller
             $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
             Log::info('File query result: ' . json_encode($query));
 
-            $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first()->title;
-            Log::info('Folder title: ' . $folder);
+            // Determine the folder ID to use for path building
+            $folderId = $query->users_folder_id;
+            if ($query->subfolder_id) {
+                // If there's a subfolder, use that ID
+                $folderId = $query->subfolder_id;
+            }
+
+            // Build the full path using the helper function
+            $basePath = "public/users/{$query->users_id}";
+            $fullPath = $this->buildFullPath($folderId, $basePath);
+
+            if (!$fullPath) {
+                Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
+                return response()->json(['error' => 'Folder does not exist.'], 404);
+            }
 
             $title = $query->files; // Original file name
             Log::info('Original file name: ' . $title);
 
-            $filePath = 'public/users/' . $query->users_id . '/' . $folder . '/' . $title;
+            // Construct the full file path
+            $filePath = "$fullPath/$title";
             Log::info('File path: ' . $filePath);
 
             // Check if the file exists in the storage
@@ -209,8 +223,6 @@ class DriveController extends Controller
                     $zip->close();
                     Log::info('ZIP file closed successfully.');
 
-                    Log::info(storage_path('app/protected/protected-file.zip'));
-
                     // Return the zip file for download with a custom filename
                     return response()->download(storage_path('app/protected/protected-file.zip'))->deleteFileAfterSend(true);
                 } else {
@@ -226,6 +238,7 @@ class DriveController extends Controller
             return response()->json(['error' => 'An error occurred while processing the request.'], 500);
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
