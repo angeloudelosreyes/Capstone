@@ -125,6 +125,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'second_layer_key' => env('SECOND_LAYER_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
