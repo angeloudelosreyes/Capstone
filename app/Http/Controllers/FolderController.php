@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use ZipArchive;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class FolderController extends Controller
 {
@@ -241,6 +244,94 @@ class FolderController extends Controller
             // Delete the current subfolder itself
             Subfolder::where('id', $currentFolderId)->delete();
             Log::info("Deleted folder ID: " . $currentFolderId);
+        }
+    }
+    public function download(Request $request, $encryptedId)
+    {
+        try {
+            // Decrypt the folder ID
+            $folderId = Crypt::decryptString($encryptedId);
+            $folder = UsersFolder::find($folderId);
+
+            if (!$folder) {
+                return back()->with([
+                    'message' => 'Folder not found.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Validate password if the folder is password protected
+            if ($folder->protected === 'YES') {
+                $request->validate([
+                    'password' => 'required|string'
+                ]);
+
+                // Check if the provided password matches
+                if (!Hash::check($request->input('password'), $folder->password)) {
+                    return back()->with([
+                        'message' => 'Incorrect password.',
+                        'type' => 'error',
+                        'title' => 'System Notification'
+                    ]);
+                }
+            }
+
+            // Define the path to the folder in storage
+            $storagePath = storage_path("app/public/{$folder->folder_path}");
+
+            if (!File::exists($storagePath)) {
+                return back()->with([
+                    'message' => 'Folder does not exist in storage.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Define the path for the zip file
+            $zipFileName = $folder->title . '.zip';
+            $zipFilePath = storage_path("app/public/temp/{$zipFileName}");
+
+            // Ensure the temporary directory exists
+            if (!File::exists(dirname($zipFilePath))) {
+                File::makeDirectory(dirname($zipFilePath), 0755, true);
+            }
+
+            // Create the zip file
+            $zip = new ZipArchive;
+            if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                // Add files and folders to the zip file
+                $this->addFolderToZip($storagePath, $zip, strlen(dirname($storagePath)) + 1);
+                $zip->close();
+            } else {
+                Log::error("Failed to create zip file at path: {$zipFilePath}");
+                return back()->withErrors('Failed to create zip file.');
+            }
+
+            // Return the zip file as a download and delete after send
+            return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            Log::error('Error occurred during folder download: ' . $e->getMessage());
+            return back()->withErrors('An error occurred while processing the download request.');
+        }
+    }
+
+    /**
+     * Recursively add files and folders to the zip archive.
+     */
+    private function addFolderToZip($folderPath, &$zip, $basePathLength)
+    {
+        $files = File::allFiles($folderPath);
+
+        foreach ($files as $file) {
+            $relativePath = substr($file->getPathname(), $basePathLength);
+            $zip->addFile($file->getPathname(), $relativePath);
+        }
+
+        $directories = File::directories($folderPath);
+
+        foreach ($directories as $directory) {
+            $this->addFolderToZip($directory, $zip, $basePathLength);
         }
     }
 }

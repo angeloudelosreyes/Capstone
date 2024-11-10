@@ -35,12 +35,9 @@
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="share_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-share me-2"></i> Share Folder</a></li>
-                                        {{-- <li>
-                                            <a class="dropdown-item" href="javascript:void(0)"
-                                                onclick="upload_encrypted_files('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
-                                                    class="bx bx-lock me-2"></i> Upload Encrypted Files
-                                            </a>
-                                        </li> --}}
+                                        <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                data-file-id="{{ Crypt::encryptString($data->id) }}"><i
+                                                    class="bx bx-download me-2"></i> Download</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="update_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-pencil me-2"></i> Rename</a></li>
@@ -203,6 +200,68 @@
                 } else {
                     folder.style.display = 'none';
                 }
+            });
+        });
+    </script>
+    <script>
+        function downloadFolder(folderId) {
+            Swal.fire({
+                title: 'Enter Password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                showCancelButton: true,
+                confirmButtonText: 'Download',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    // Check if password is provided
+                    if (!password) {
+                        Swal.showValidationMessage('Password is required');
+                        return;
+                    }
+
+                    // Fetch request to download folder
+                    return fetch(`{{ url('folder/download') }}/${folderId}`, {
+                            method: 'POST', // Changed to GET if no password is needed
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                password: password
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.text().then(text => {
+                                    console.error('Response text:', text);
+                                    throw new Error(text);
+                                });
+                            }
+                            return response.blob();
+                        })
+                        .then(blob => {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = url;
+                            a.download = 'folder-download.zip'; // Use the folder name if needed
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Request failed: ${error}`);
+                        });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+
+        document.querySelectorAll('.download-folder-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const folderId = this.getAttribute('data-folder-id');
+                downloadFolder(folderId);
             });
         });
     </script>

@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/update', 'update')->name('folder.update');
         Route::get('/show/{id}', 'show')->name('folder.show');
         Route::delete('/destroy/{id}', 'destroy')->name('folder.destroy');
+        Route::get('/download/{id}', 'download')->name('folder.download');
     });
 
     // Files Routes

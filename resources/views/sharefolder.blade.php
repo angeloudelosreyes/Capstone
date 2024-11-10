@@ -179,32 +179,7 @@
                 @endforeach
             @endif
 
-            <!-- Display Storage Files -->
-            @if (isset($storageFiles) && count($storageFiles) > 0)
-                <h5 class="mt-4">Files from Storage</h5>
-                @foreach ($storageFiles as $storageFile)
-                    <div class="col-md-2 col-6 folder-card">
-                        <div class="card bg-light shadow-none">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-center position-relative">
-                                    <a href="{{ Storage::url($storageFile) }}" class="text-decoration-none"
-                                        target="_blank">
-                                        @if (pathinfo($storageFile, PATHINFO_EXTENSION) == 'pdf')
-                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                        @elseif (pathinfo($storageFile, PATHINFO_EXTENSION) == 'jpg' || pathinfo($storageFile, PATHINFO_EXTENSION) == 'png')
-                                            <img src="{{ Storage::url($storageFile) }}" class="img-fluid"
-                                                alt="File Image">
-                                        @else
-                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
-                                        @endif
-                                    </a>
-                                </div>
-                                <h6 class="fs-15 folder-name text-center mt-2">{{ basename($storageFile) }}</h6>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            @endif
+
 
             <!-- Display Existing Folder Contents -->
             @if (isset($query) && count($query) > 0)
