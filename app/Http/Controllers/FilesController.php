@@ -139,17 +139,17 @@ class FilesController extends Controller
     
                     // Encrypt the file contents if protection is enabled
                     if ($isProtected) {
-                        // Hash the password to create a secure key
-                        $hashedPassword = hash('sha256', $password, false);
-Log::info("Hashed password value: '" . $hashedPassword . "'");
-
-if (ctype_xdigit($hashedPassword) && strlen($hashedPassword) === 64) {
-    $binaryKey = hex2bin($hashedPassword);
-    Log::info("Binary key: " . bin2hex($binaryKey)); // Log the binary key as hex
-} else {
-    Log::error("Hashed password is not a valid hex string: " . $hashedPassword);
-    return response()->json(['error' => 'Invalid password format'], 400);
-}
+                        // Hash the password using SHA-256
+                        $hashedPassword = hash('sha256', $password, false); // Use SHA-256 to hash the password
+                        Log::info("Hashed password value: '" . $hashedPassword . "'");
+                    
+                        if (ctype_xdigit($hashedPassword) && strlen($hashedPassword) === 64) {
+                            $binaryKey = hex2bin($hashedPassword);
+                            Log::info("Binary key: " . bin2hex($binaryKey)); // Log the binary key as hex
+                        } else {
+                            Log::error("Hashed password is not a valid hex string: " . $hashedPassword);
+                            return response()->json(['error' => 'Invalid password format'], 400);
+                        }
                     }
     
                     // Store the (possibly encrypted) file contents
@@ -174,7 +174,7 @@ if (ctype_xdigit($hashedPassword) && strlen($hashedPassword) === 64) {
                 'size' => $fileSize,
                 'extension' => $fileType,
                 'protected' => $isProtected ? 'YES' : 'NO',
-                'password' => $isProtected ? $password : null,
+                'password' => $isProtected ? $hashedPassword : null,
                 'file_path' => $filePath, // Add this line
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -282,8 +282,8 @@ public function store(Request $request)
                         Log::info("Valid hex string detected: " . $hashedPassword); // Log for debugging
                         Log::info("Attempting to convert hashed password to binary: " . $hashedPassword);
                         $binaryKey = hex2bin($hashedPassword);
-                        $encryptionService = new TwoLayeredEncryptionService(new TwofishEncryptionService($binaryKey));
-                        $fileContents = $encryptionService->encrypt($fileContents);
+                        //$encryptionService = new TwoLayeredEncryptionService(new TwofishEncryptionService($binaryKey));
+                        //$fileContents = $encryptionService->encrypt($fileContents);
                     } else {
                         Log::error("Hashed password is not a valid hex string: " . $hashedPassword);
                         return back()->with([
@@ -310,7 +310,7 @@ public function store(Request $request)
                 'files' => $name,
                 'extension' => $extension,
                 'protected' => $isEncrypted ? 'YES' : 'NO',
-                'password' => $isEncrypted ? $password : null,
+                'password' => $isEncrypted ? $hashedPassword : null,
                 'file_path' => $path,
                 'created_at' => now(),
                 'updated_at' => now(),
