@@ -272,76 +272,76 @@ class DriveController extends Controller
         $request->validate([
             'password' => 'required|string'
         ]);
-    
+
         $password = $request->input('password');
         Log::info('Password entered by user: ' . $password);
-    
+
         // Query for the file and folder details in the database
         try {
             $decryptedId = Crypt::decryptString($id);
             Log::info('Decrypted ID: ' . $decryptedId);
-    
+
             $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
             Log::info('File query result: ' . json_encode($query));
-    
+
             // Determine the folder ID to use for path building
             $folderId = $query->users_folder_id;
             if ($query->subfolder_id) {
                 $folderId = $query->subfolder_id;
             }
-    
+
             // Build the full path
             $basePath = "public/users/{$query->users_id}";
             $fullPath = $this->buildFullPath($folderId, $basePath);
-    
+
             if (!$fullPath) {
                 Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
                 return response()->json(['error' => 'Folder does not exist.'], 404);
             }
-    
+
             $title = $query->files; // Original file name
             Log::info('Original file name: ' . $title);
-    
+
             // Construct the full file path
             $filePath = "$fullPath/$title";
             Log::info('File path: ' . $filePath);
-    
+
             // Check if the file exists in the storage
             if (!Storage::exists($filePath)) {
                 Log::error('File not found in storage.');
                 return response()->json(['error' => 'File not found.'], 404);
             }
-    
+
             Log::info('File exists in storage.');
-    
+
             // Read the file content
             $fileContent = Storage::get($filePath);
-    
+
             // Ensure the storage directory exists
             $storagePath = storage_path('app/protected');
             if (!File::exists($storagePath)) {
                 File::makeDirectory($storagePath, 0755, true);
             }
-    
+
             // Create a ZIP file
             $zip = new \ZipArchive();
             $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
             Log::info('ZIP file name: ' . $zipFileName);
-    
+
             if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
                 Log::info('ZIP file opened successfully.');
-    
+
                 // Add the original content to the zip
                 $zip->addFromString($title, $fileContent);
-                
+
                 // Fetch the hashed password from the database
                 $correctPassword = $this->getPasswordForFile($query->id); // Fetch the hashed password
-    
+
                 // Hash the provided password and compare
                 if (hash('sha256', $password, false) === $correctPassword) {
                     // Password is correct, encrypt the ZIP file
                     Log::info('Password is correct, file will be encrypted.');
-    
+
                     // Encrypt the ZIP file with the provided password
                     $zip->setEncryptionName($title, \ZipArchive::EM_AES_256, $password);
                 } else {
@@ -349,10 +349,10 @@ class DriveController extends Controller
                     Log::info('Password is incorrect. Download will not proceed.');
                     return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
                 }
-    
+
                 $zip->close();
                 Log::info('ZIP file closed successfully.');
-    
+
                 // Return the zip file for download with a custom filename
                 return response()->download($zipFileName)->deleteFileAfterSend(true);
             } else {
@@ -364,7 +364,7 @@ class DriveController extends Controller
             return response()->json(['error' => ' An error occurred while processing the request.'], 500);
         }
     }
-    
+
     private function getPasswordForFile($fileId)
     {
         // Fetch the hashed password from your storage
@@ -492,7 +492,7 @@ class DriveController extends Controller
         // Retrieve the file record
         $query = DB::table('users_folder_files')->where('id', $fileId)->first();
 
-        // Check if the file exists
+        // Check if the file exists in the database
         if (!$query) {
             return back()->with([
                 'message' => 'File not found.',
@@ -502,7 +502,7 @@ class DriveController extends Controller
         }
 
         // Base directory path for the user
-        $baseDirectory = 'public/users/' . $query->users_id;
+        $baseDirectory = 'users/' . $query->users_id; // Exclude 'public/' prefix
 
         // Use the helper function to build the full path
         $directory = $this->buildFullPath($query->users_folder_id ?? $query->subfolder_id, $baseDirectory);
@@ -519,10 +519,13 @@ class DriveController extends Controller
         // Add the file name to the directory path
         $filePath = $directory . '/' . $query->files;
 
+        // Remove 'public/' from the file path to align with Laravel's storage path
+        $storagePath = str_replace('public/', '', $filePath);
+
         // Check if the file exists in storage
-        if (Storage::exists($filePath)) {
+        if (Storage::disk('public')->exists($storagePath)) {
             // Delete the file from storage
-            Storage::delete($filePath);
+            Storage::disk('public')->delete($storagePath);
 
             // Delete the record from the database
             DB::table('users_folder_files')->where('id', $fileId)->delete();
@@ -540,6 +543,7 @@ class DriveController extends Controller
             ]);
         }
     }
+
 
 
     /**

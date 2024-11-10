@@ -9,7 +9,7 @@ class Subfolder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'parent_folder_id', 'name'];
+    protected $fillable = ['user_id', 'parent_folder_id', 'name', 'subfolder_path'];
 
     // Define relationship to User
     public function user()

@@ -43,12 +43,23 @@ class FolderController extends Controller
             'title.required' => 'This field is required'
         ]);
 
+        // Define the directory path
         $directory = 'public/users/' . auth()->user()->id . '/' . $request->title;
-        // Storage::exists() eto yong way para macheck mo sa file system mo kong existing na ba directory na ina upload mo.
+
+        // Check if the directory already exists
         if (!Storage::exists($directory)) {
-            // Storage::makeDirectory(),  eto naman yong way para makapag create ka ng directory if hindi pa existing yung directory na gusto mo gawin.
+            // Create the directory if it doesn't exist
             Storage::makeDirectory($directory);
-            DB::table('users_folder')->insert(['users_id' => auth()->user()->id, 'title' => $request->title]);
+
+            // Insert the folder record, including the folder_path
+            DB::table('users_folder')->insert([
+                'users_id' => auth()->user()->id,
+                'title' => $request->title,
+                'folder_path' => $directory, // Save the folder path
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
             return back()->with([
                 'message' => 'New folder has been created.',
                 'type'    => 'success',
@@ -62,6 +73,7 @@ class FolderController extends Controller
             ]);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -145,6 +157,10 @@ class FolderController extends Controller
             $folder = UsersFolder::findOrFail($folderId);
             Log::info("Folder found: " . $folder->title);
 
+            // Get the folder path from the database
+            $folderPath = str_replace('public/', '', $folder->folder_path); // Ensure 'public/' is not included
+            Log::info("Adjusted folder path for storage deletion: $folderPath");
+
             // Delete all subfolders and their files
             $this->deleteSubfoldersAndFilesIteratively($folder->id);
             Log::info("Deleted all subfolders and files for folder ID: $folderId");
@@ -153,9 +169,17 @@ class FolderController extends Controller
             UsersFolderFile::where('users_folder_id', $folder->id)->delete();
             Log::info("Deleted all files in the main folder ID: $folderId");
 
-            // Delete the main folder
+            // Delete the main folder record in the database
             $folder->delete();
             Log::info("Main folder deleted: $folderId");
+
+            // Delete the folder from storage
+            if (Storage::disk('public')->exists($folderPath)) {
+                Storage::disk('public')->deleteDirectory($folderPath);
+                Log::info("Deleted folder directory from storage: $folderPath");
+            } else {
+                Log::warning("Folder path does not exist in storage: $folderPath");
+            }
 
             DB::commit();
             Log::info("Transaction committed successfully for folder ID: $folderId");
@@ -176,6 +200,8 @@ class FolderController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * Iteratively delete all subfolders and their files for a given parent folder ID.
@@ -203,6 +229,12 @@ class FolderController extends Controller
                 // Delete files within this subfolder
                 UsersFolderFile::where('subfolder_id', $subfolder->id)->delete();
                 Log::info("Deleted files in subfolder ID: " . $subfolder->id);
+
+                // Delete subfolder directory from storage
+                if (Storage::disk('public')->exists($subfolder->folder_path)) {
+                    Storage::disk('public')->deleteDirectory($subfolder->folder_path);
+                    Log::info("Deleted subfolder directory from storage: " . $subfolder->folder_path);
+                }
             }
 
             // Delete the current subfolder itself

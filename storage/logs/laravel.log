@@ -5025,3 +5025,346 @@
 [2024-11-09 21:18:44] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
 [2024-11-09 21:18:48] local.INFO: Decrypted ID: 2  
 [2024-11-09 21:18:48] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 07:57:31] local.INFO: Starting destroy function for folder ID: eyJpdiI6InRuSDVWNEJUb3diV0dnNmVES0lHRmc9PSIsInZhbHVlIjoiTTRydFg0dzRYZFFxUXNiUVhlUENGQT09IiwibWFjIjoiNDY3NjYxNmQ3NDU4NGM0NmZkOTIxYjIyZTYzYTMyMDljZDUzMjhjYWQ2MjE3MzU0Yjk3NGMyNGIxOWViZjBlYSIsInRhZyI6IiJ9  
+[2024-11-10 07:57:31] local.INFO: Decrypted folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Folder found: dasdas  
+[2024-11-10 07:57:31] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Processing folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Queueing subfolder ID for deletion: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted files in subfolder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Queueing subfolder ID for deletion: 3  
+[2024-11-10 07:57:31] local.INFO: Deleted files in subfolder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Deleted folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Processing folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Queueing subfolder ID for deletion: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted files in subfolder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Processing folder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted folder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Processing folder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted folder ID: 2  
+[2024-11-10 07:57:31] local.INFO: Deleted all subfolders and files for folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Deleted all files in the main folder ID: 3  
+[2024-11-10 07:57:31] local.INFO: Main folder deleted: 3  
+[2024-11-10 07:57:31] local.INFO: Transaction committed successfully for folder ID: 3  
+[2024-11-10 07:58:02] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 07:58:02] local.INFO: Decrypted parent ID: {"parent_id":"4"} 
+[2024-11-10 07:58:03] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/test/vvvvvv"} 
+[2024-11-10 07:58:03] local.INFO: Directory successfully created: {"directory":"users/2/test/vvvvvv"} 
+[2024-11-10 07:58:08] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 07:58:08] local.INFO: Decrypted parent ID: {"parent_id":"4"} 
+[2024-11-10 07:58:08] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/test/vvvvv222"} 
+[2024-11-10 07:58:08] local.INFO: Directory successfully created: {"directory":"users/2/test/vvvvv222"} 
+[2024-11-10 07:58:11] local.INFO: Create function called.  
+[2024-11-10 07:58:11] local.INFO: Folder ID belongs to a subfolder. Subfolder ID: 4  
+[2024-11-10 07:58:11] local.INFO: Attempting to create file: dsada.docx for user ID: 2  
+[2024-11-10 07:58:11] local.INFO: File will not be encrypted.  
+[2024-11-10 07:58:11] local.INFO: Resolved file path: users/2/test/dsada.docx  
+[2024-11-10 07:58:11] local.INFO: Temporary file created and deleted.  
+[2024-11-10 07:58:11] local.INFO: File created and stored at: users/2/test/dsada.docx  
+[2024-11-10 07:58:11] local.INFO: File size determined: 7279 bytes  
+[2024-11-10 07:58:11] local.INFO: File record inserted into database: dsada.docx  
+[2024-11-10 08:01:28] local.INFO: Create function called.  
+[2024-11-10 08:01:28] local.INFO: Folder ID belongs to a subfolder. Subfolder ID: 4  
+[2024-11-10 08:01:28] local.INFO: Attempting to create file: dasda.docx for user ID: 2  
+[2024-11-10 08:01:28] local.INFO: File will not be encrypted.  
+[2024-11-10 08:01:28] local.INFO: Resolved file path: users/2/test/dasda.docx  
+[2024-11-10 08:01:28] local.INFO: Temporary file created and deleted.  
+[2024-11-10 08:01:28] local.INFO: File created and stored at: users/2/test/dasda.docx  
+[2024-11-10 08:01:28] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 08:01:28] local.INFO: File record inserted into database: dasda.docx  
+[2024-11-10 08:01:38] local.INFO: File/Folder sharing request received {"request":{"_token":"phXQ92OSl8lNvOJYUQdVffnCAShyBmRL9uJOpvCa","my_name_3LBceeUcfWHCr24X":null,"valid_from":"eyJpdiI6IjFlc0YwaFQ3TXkzU2tXY1VhSEU2elE9PSIsInZhbHVlIjoiNVFXL1ArQUFXandMdmt0SVd6VElFdz09IiwibWFjIjoiZmU4MTFiZmE0MmQ2YmU0ZTc3MmExYTdkODY2ZjlmYjVhOWUxYTFmMzkwNzEyM2I0ZDg1MmJiYzU1Y2RmYjNkOSIsInRhZyI6IiJ9","users_folder_files_id":"eyJpdiI6IlhabFprYmtzMGdNb1VOdTZZMWxEWFE9PSIsInZhbHVlIjoiSnovUi9IbHNFU0JNbzAzU2JLZW84QT09IiwibWFjIjoiZjQ1OTQwYjZkYzY4Mzk3YjdhNWZmOWNhYmFiNDZhYjM3ZTM4ZmFkNjE0NWE4NDRjZWQ5NGRiMTI2ZTQ3M2MwZCIsInRhZyI6IiJ9","users_folder_id":null,"category":"Individual","email":"lafa.flores.up@phinmaed.com"}} 
+[2024-11-10 08:01:38] local.INFO: Recipient found {"recipient":{"stdClass":{"id":2,"name":"Lafa Flores","age":25,"address":"Address1","department":"CCS","email":"lafa.flores.up@phinmaed.com","email_verified_at":"2024-11-09 20:33:17","password":"$2y$10$qRLplU9foJuW8ukFSnqd2.CazIj76Pc4Y93fJ56/wjjOpOzK22xhS","remember_token":"1D4NlqC8M1uj5Qp15ZKjTUN1yKwujAMVnQBmULyldWTCqARPTGDtta64iJpn","roles":"USER","created_at":"2024-11-09 20:33:17","updated_at":"2024-11-09 20:33:17"}}} 
+[2024-11-10 08:01:38] local.INFO: Original file retrieved {"originalFileId":"13","originalFile":{"stdClass":{"id":13,"users_id":2,"users_folder_id":null,"users_folder_shareable_id":null,"subfolder_id":4,"files":"dsada.docx","size":7279,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 07:58:11","updated_at":"2024-11-10 07:58:11","file_path":"users/2/test/dsada.docx"}}} 
+[2024-11-10 08:01:38] local.INFO: Storage directory created at: public/users/2/shared_folders/  
+[2024-11-10 08:01:38] local.INFO: File copied successfully {"original":"users/2/test/dsada.docx","new":"public/users/2/shared_folders/dsada.docx"} 
+[2024-11-10 08:01:38] local.INFO: New file reference created {"newFileId":15} 
+[2024-11-10 08:01:42] local.INFO: Notification sent to recipient {"email":"lafa.flores.up@phinmaed.com"} 
+[2024-11-10 08:01:42] local.INFO: Shareable file reference stored {"newFileId":15} 
+[2024-11-10 08:01:47] local.INFO: File/Folder sharing request received {"request":{"_token":"phXQ92OSl8lNvOJYUQdVffnCAShyBmRL9uJOpvCa","my_name_24iHXGcwKvzZV2Wk":null,"valid_from":"eyJpdiI6IlYzeTVUV1JNdmcrME1oV2RvZENBVWc9PSIsInZhbHVlIjoiZjdOWjZqYUVWOEJuNDNlODF1c0JkUT09IiwibWFjIjoiMDg0NDM0ZmJmZThiNjE4NjA4ZmY0ZGM2ZTgxNWUyNzhlNTcwMjdkNTgyNzgwNmUzODg0MTViODg3YTFhNzYzZSIsInRhZyI6IiJ9","users_folder_files_id":"eyJpdiI6IkUwTGNYc2c4ZEpQSjlmS1JUUnRzN1E9PSIsInZhbHVlIjoiQVBXVklCZG94YU9JaThzcGRicld3QT09IiwibWFjIjoiMDA3NDkyYzBlMjkyZmYyNzBkODMzNjFlY2M4N2ZjNTI2MWExZThkYjBhZjk4ZDYwMTA5NDQ5M2JjNDQzZWVjMSIsInRhZyI6IiJ9","users_folder_id":null,"category":"Individual","email":"lafa.flores.up@phinmaed.com"}} 
+[2024-11-10 08:01:47] local.INFO: Recipient found {"recipient":{"stdClass":{"id":2,"name":"Lafa Flores","age":25,"address":"Address1","department":"CCS","email":"lafa.flores.up@phinmaed.com","email_verified_at":"2024-11-09 20:33:17","password":"$2y$10$qRLplU9foJuW8ukFSnqd2.CazIj76Pc4Y93fJ56/wjjOpOzK22xhS","remember_token":"1D4NlqC8M1uj5Qp15ZKjTUN1yKwujAMVnQBmULyldWTCqARPTGDtta64iJpn","roles":"USER","created_at":"2024-11-09 20:33:17","updated_at":"2024-11-09 20:33:17"}}} 
+[2024-11-10 08:01:47] local.INFO: Original file retrieved {"originalFileId":"13","originalFile":{"stdClass":{"id":13,"users_id":2,"users_folder_id":null,"users_folder_shareable_id":null,"subfolder_id":4,"files":"dsada.docx","size":7279,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 07:58:11","updated_at":"2024-11-10 07:58:11","file_path":"users/2/test/dsada.docx"}}} 
+[2024-11-10 08:01:47] local.INFO: File copied successfully {"original":"users/2/test/dsada.docx","new":"public/users/2/shared_folders/dsada.docx"} 
+[2024-11-10 08:01:47] local.INFO: New file reference created {"newFileId":16} 
+[2024-11-10 08:01:50] local.INFO: Notification sent to recipient {"email":"lafa.flores.up@phinmaed.com"} 
+[2024-11-10 08:01:50] local.INFO: Shareable file reference stored {"newFileId":16} 
+[2024-11-10 08:03:20] local.INFO: Starting destroy function for folder ID: eyJpdiI6IlNhUXNiYVlNM1J5WjNwQ2VWcUpZMmc9PSIsInZhbHVlIjoiU2g1dlIxZE5xWkNZK0NBdTdPTUNOdz09IiwibWFjIjoiNmJmOTNkNzYyODI5Y2YzMWZiMDczNTliODM5MjhkNmYzNTE5NTUwOTA3OTE3ZTU1NjM2ZGEyMjRjNThlMGUzMiIsInRhZyI6IiJ9  
+[2024-11-10 08:03:20] local.INFO: Decrypted folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Folder found: ads  
+[2024-11-10 08:03:20] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Processing folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Deleted folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Deleted all subfolders and files for folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Deleted all files in the main folder ID: 5  
+[2024-11-10 08:03:20] local.INFO: Main folder deleted: 5  
+[2024-11-10 08:03:20] local.INFO: Transaction committed successfully for folder ID: 5  
+[2024-11-10 08:03:24] local.INFO: Starting destroy function for folder ID: eyJpdiI6IjFiR3paQ2pDMDRNL3JYWEJBdnkvaGc9PSIsInZhbHVlIjoiZVB3WEV4WXlYQVMzbXlLMlVNUCtJQT09IiwibWFjIjoiYThiNDUxMzUzODEwZDY2MWI2YWNjNWQ5M2YzNDMxZmQwODVlZWNiNDdiMGVkNzNmZGExNTgzNDc1ZDlkOTdjZSIsInRhZyI6IiJ9  
+[2024-11-10 08:03:24] local.INFO: Decrypted folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Folder found: test  
+[2024-11-10 08:03:24] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Processing folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Queueing subfolder ID for deletion: 4  
+[2024-11-10 08:03:24] local.INFO: Deleted files in subfolder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Deleted folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Processing folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Deleted folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Deleted all subfolders and files for folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Deleted all files in the main folder ID: 4  
+[2024-11-10 08:03:24] local.INFO: Main folder deleted: 4  
+[2024-11-10 08:03:24] local.INFO: Transaction committed successfully for folder ID: 4  
+[2024-11-10 08:09:31] local.ERROR: There are no commands defined in the "migration" namespace.
+
+Did you mean this?
+    migrate {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"migration\" namespace.
+
+Did you mean this?
+    migrate at D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php:669)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(720): Symfony\\Component\\Console\\Application->findNamespace('migration')
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(266): Symfony\\Component\\Console\\Application->find('migration:fresh')
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 D:\\HackathonRepository\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 {main}
+"} 
+[2024-11-10 08:09:41] local.ERROR: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'file_path' (Connection: mysql, SQL: alter table `users_folder_files` add `file_path` varchar(255) null) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S21): SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'file_path' (Connection: mysql, SQL: alter table `users_folder_files` add `file_path` varchar(255) null) at D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:829)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback('alter table `us...', Array, Object(Closure))
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(588): Illuminate\\Database\\Connection->run('alter table `us...', Array, Object(Closure))
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(110): Illuminate\\Database\\Connection->statement('alter table `us...')
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(602): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(444): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Illuminate\\Database\\Schema\\Builder->table('users_folder_fi...', Object(Closure))
+#6 D:\\HackathonRepository\\RevisedSystem\\database\\migrations\\2024_11_09_035722_add_file_path_to_users_folder_files_table.php(20): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(493): Illuminate\\Database\\Migrations\\Migration@anonymous->up()
+#8 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(410): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Migrations\\Migration@anonymous), 'up')
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(419): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(216): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(Illuminate\\Database\\Migrations\\Migration@anonymous), 'up')
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\View\\Components\\Task.php(37): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(756): Illuminate\\Console\\View\\Components\\Task->render('2024_11_09_0357...', Object(Closure))
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(216): Illuminate\\Database\\Migrations\\Migrator->write('Illuminate\\\\Cons...', '2024_11_09_0357...', Object(Closure))
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(181): Illuminate\\Database\\Migrations\\Migrator->runUp('D:\\\\HackathonRep...', 1, false)
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(124): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(92): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(633): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(104): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(68): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(28): Illuminate\\Console\\Command->runCommand('migrate', Array, Object(Illuminate\\Console\\OutputStyle))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\FreshCommand.php(59): Illuminate\\Console\\Command->call('migrate', Array)
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\FreshCommand->handle()
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\FreshCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#42 D:\\HackathonRepository\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#43 {main}
+
+[previous exception] [object] (PDOException(code: 42S21): SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'file_path' at D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:587)
+[stacktrace]
+#0 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(587): PDOStatement->execute()
+#1 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(816): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('alter table `us...', Array)
+#2 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback('alter table `us...', Array, Object(Closure))
+#3 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(588): Illuminate\\Database\\Connection->run('alter table `us...', Array, Object(Closure))
+#4 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(110): Illuminate\\Database\\Connection->statement('alter table `us...')
+#5 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(602): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#6 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(444): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#7 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Illuminate\\Database\\Schema\\Builder->table('users_folder_fi...', Object(Closure))
+#8 D:\\HackathonRepository\\RevisedSystem\\database\\migrations\\2024_11_09_035722_add_file_path_to_users_folder_files_table.php(20): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#9 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(493): Illuminate\\Database\\Migrations\\Migration@anonymous->up()
+#10 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(410): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Migrations\\Migration@anonymous), 'up')
+#11 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(419): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#12 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(216): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(Illuminate\\Database\\Migrations\\Migration@anonymous), 'up')
+#13 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\View\\Components\\Task.php(37): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#14 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(756): Illuminate\\Console\\View\\Components\\Task->render('2024_11_09_0357...', Object(Closure))
+#15 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(216): Illuminate\\Database\\Migrations\\Migrator->write('Illuminate\\\\Cons...', '2024_11_09_0357...', Object(Closure))
+#16 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(181): Illuminate\\Database\\Migrations\\Migrator->runUp('D:\\\\HackathonRep...', 1, false)
+#17 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(124): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#18 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(92): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#19 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(633): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#20 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(104): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#21 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#22 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#23 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#24 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#25 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#26 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#27 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#28 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#29 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(68): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#30 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Concerns\\CallsCommands.php(28): Illuminate\\Console\\Command->runCommand('migrate', Array, Object(Illuminate\\Console\\OutputStyle))
+#31 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\FreshCommand.php(59): Illuminate\\Console\\Command->call('migrate', Array)
+#32 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\FreshCommand->handle()
+#33 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#34 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#35 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#36 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#37 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#38 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#39 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#40 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#41 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\FreshCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#42 D:\\HackathonRepository\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#43 D:\\HackathonRepository\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#44 D:\\HackathonRepository\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#45 {main}
+"} 
+[2024-11-10 08:15:46] local.INFO: Store function called.  
+[2024-11-10 08:15:46] local.INFO: User  ID: 2  
+[2024-11-10 08:15:46] local.INFO: Folder ID: 1  
+[2024-11-10 08:15:46] local.INFO: Is Encrypted: NO  
+[2024-11-10 08:15:46] local.INFO: Files will not be encrypted.  
+[2024-11-10 08:15:46] local.INFO: Final directory path for file storage: {"directory":"users/2/test"} 
+[2024-11-10 08:15:46] local.INFO: DOCX file uploaded: ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-10 08:15:46] local.INFO: File record inserted into database: ITE 307_SAS 23 - PT Rating Sheet (1).docx  
+[2024-11-10 08:19:58] local.INFO: Create function called.  
+[2024-11-10 08:19:58] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-10 08:19:58] local.INFO: Attempting to create file: dsada.docx for user ID: 2  
+[2024-11-10 08:19:58] local.INFO: File will not be encrypted.  
+[2024-11-10 08:19:58] local.INFO: Resolved directory path: users/2/test  
+[2024-11-10 08:19:58] local.INFO: Resolved file path: users/2/test/dsada.docx  
+[2024-11-10 08:19:58] local.INFO: Temporary file created and deleted.  
+[2024-11-10 08:19:58] local.INFO: File created and stored at: users/2/test/dsada.docx  
+[2024-11-10 08:19:58] local.INFO: File size determined: 7279 bytes  
+[2024-11-10 08:19:58] local.INFO: Updating folder path for folder ID: 1 to path: users/2/test  
+[2024-11-10 08:19:58] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-10 08:19:58] local.INFO: File record inserted into database: dsada.docx  
+[2024-11-10 08:21:46] local.INFO: Starting destroy function for folder ID: eyJpdiI6Ik53WE9ublh3SHBnMGpSaW5ueG9YUnc9PSIsInZhbHVlIjoiTnlWV2k3MFJPTVJGOWpOS2dSU3dmZz09IiwibWFjIjoiYTEyMzc3YjUxMjAzYjQwY2FmZDk4MjNkNTk4ZjEzY2FiNzg0OWI0OWM5MDUxMjlmMTFmNWFiNGEzZGNhZTdjNyIsInRhZyI6IiJ9  
+[2024-11-10 08:21:46] local.INFO: Decrypted folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Folder found: fsaf  
+[2024-11-10 08:21:46] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Processing folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Deleted folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Deleted all subfolders and files for folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Deleted all files in the main folder ID: 2  
+[2024-11-10 08:21:46] local.INFO: Main folder deleted: 2  
+[2024-11-10 08:21:46] local.INFO: Transaction committed successfully for folder ID: 2  
+[2024-11-10 08:21:51] local.INFO: Starting destroy function for folder ID: eyJpdiI6ImVMYWRUOURFVG1tWWFyQ0xHS1RPSFE9PSIsInZhbHVlIjoiZFVkK2VaOWlVbVc4Y09uTEo3MGVPUT09IiwibWFjIjoiOTE4OTNmMDk5MDVhNjYwMTkyYzZkZDZhOGY4N2JlZDJjNzRjMzMyMjUwMDcxYWE2NWQ1Yjg5MDJhMzI3ZmUyNyIsInRhZyI6IiJ9  
+[2024-11-10 08:21:51] local.INFO: Decrypted folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Folder found: dsa  
+[2024-11-10 08:21:51] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Processing folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Deleted folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Deleted all subfolders and files for folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Deleted all files in the main folder ID: 3  
+[2024-11-10 08:21:51] local.INFO: Main folder deleted: 3  
+[2024-11-10 08:21:51] local.INFO: Transaction committed successfully for folder ID: 3  
+[2024-11-10 08:21:57] local.INFO: Starting destroy function for folder ID: eyJpdiI6IkQrTWJlcGNYRkZBZlptTmJ1cGdQK3c9PSIsInZhbHVlIjoibVdsUCt5WkJYcVNEb1J1eDVycmsyUT09IiwibWFjIjoiODNhMDUwMGM4Y2VjZjlkYWQ1MDE3N2JhNDU3NWI1NDc0NDIxNTAxN2NlYjBlMmNjNjc0NmVkYjZkOGViNzY1OSIsInRhZyI6IiJ9  
+[2024-11-10 08:21:57] local.INFO: Decrypted folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Folder found: test  
+[2024-11-10 08:21:57] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Processing folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Deleted folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Deleted all subfolders and files for folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Deleted all files in the main folder ID: 1  
+[2024-11-10 08:21:57] local.INFO: Main folder deleted: 1  
+[2024-11-10 08:21:57] local.INFO: Transaction committed successfully for folder ID: 1  
+[2024-11-10 08:23:20] local.INFO: Starting destroy function for folder ID: eyJpdiI6IkFOekNXNmlVRVFTV3FGQ0ZJeWVUNUE9PSIsInZhbHVlIjoic0ZrNlpLTGFoTk9NRnFnVUJ0OWE0dz09IiwibWFjIjoiYTZjNjE2ZDQ3M2E0YjA5YzQ1M2JlOTVkMDU5NzQwMzM3ZWZhOTk0YWQxYmExMjBmYTY3MTQ2NmRjYjczZmFhMiIsInRhZyI6IiJ9  
+[2024-11-10 08:23:20] local.INFO: Decrypted folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Folder found: dasda  
+[2024-11-10 08:23:20] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Processing folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Deleted folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Deleted all subfolders and files for folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Deleted all files in the main folder ID: 4  
+[2024-11-10 08:23:20] local.INFO: Main folder deleted: 4  
+[2024-11-10 08:23:20] local.INFO: Transaction committed successfully for folder ID: 4  
+[2024-11-10 08:23:31] local.INFO: Starting destroy function for folder ID: eyJpdiI6InBLa2JBd0VOdjNlL2ZOLzVaelF6RGc9PSIsInZhbHVlIjoiMzNTMG04NERkdzNrQ2RGaXduOU5qQT09IiwibWFjIjoiM2U0Njg2YTE0MWM1NjI5ZWYwOTFlNTBlYTg2YzUyNGJhZTY1MTQ4NjQ1NzM4N2U3NGE0MTMwNGUyYjFiNDhiMSIsInRhZyI6IiJ9  
+[2024-11-10 08:23:31] local.INFO: Decrypted folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Folder found: test  
+[2024-11-10 08:23:31] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Processing folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Deleted folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Deleted all subfolders and files for folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Deleted all files in the main folder ID: 5  
+[2024-11-10 08:23:31] local.INFO: Main folder deleted: 5  
+[2024-11-10 08:23:31] local.INFO: Transaction committed successfully for folder ID: 5  
+[2024-11-10 08:24:27] local.INFO: Starting destroy function for folder ID: eyJpdiI6IjBKTlh5QVZ2Vy9PWEZFZEkvTVlIQXc9PSIsInZhbHVlIjoib3Q2ejlYTUkrWFRmZHd3RWdvZm1nQT09IiwibWFjIjoiNmJlNGY0NmQ5MTVkMzU1Yzc3Yjk1MTBmZDlmYTZhMzcyZjU3MjBiNmY2ODdjNzg5ZWY1MDk5MjI2MzYzZjJmNyIsInRhZyI6IiJ9  
+[2024-11-10 08:24:27] local.INFO: Decrypted folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Folder found: test2  
+[2024-11-10 08:24:27] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Processing folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Deleted folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Deleted all subfolders and files for folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Deleted all files in the main folder ID: 6  
+[2024-11-10 08:24:27] local.INFO: Main folder deleted: 6  
+[2024-11-10 08:24:27] local.WARNING: Folder path does not exist in storage: public/users/2/test2  
+[2024-11-10 08:24:27] local.INFO: Transaction committed successfully for folder ID: 6  
+[2024-11-10 08:26:13] local.INFO: Starting destroy function for folder ID: eyJpdiI6Ijh1WkY2NDV2ODNFZCsvWEVqaTdDZ1E9PSIsInZhbHVlIjoiWnlhUElOeC9NdG9ncUJvcHJ2dzVXQT09IiwibWFjIjoiNzNlOGU5ZmY4NmQ4MDgwYzBkZWRkYWNkMWE4MzQ1M2ExZjZmZTQwMDYwMTQxOThhZTM0YzNiOWJiNjZjY2RiYSIsInRhZyI6IiJ9  
+[2024-11-10 08:26:13] local.INFO: Decrypted folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Folder found: testt  
+[2024-11-10 08:26:13] local.INFO: Adjusted folder path for storage deletion: users/2/testt  
+[2024-11-10 08:26:13] local.INFO: Deleting subfolders and files iteratively for parent folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Processing folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Deleted folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Deleted all subfolders and files for folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Deleted all files in the main folder ID: 7  
+[2024-11-10 08:26:13] local.INFO: Main folder deleted: 7  
+[2024-11-10 08:26:13] local.INFO: Deleted folder directory from storage: users/2/testt  
+[2024-11-10 08:26:13] local.INFO: Transaction committed successfully for folder ID: 7  
+[2024-11-10 08:26:34] local.INFO: Create function called.  
+[2024-11-10 08:26:34] local.INFO: Folder ID belongs to a main folder. Folder ID: 8  
+[2024-11-10 08:26:34] local.INFO: Attempting to create file: dasda.docx for user ID: 2  
+[2024-11-10 08:26:34] local.INFO: File will not be encrypted.  
+[2024-11-10 08:26:34] local.INFO: Resolved directory path: users/2/dasd  
+[2024-11-10 08:26:34] local.INFO: Resolved file path: users/2/dasd/dasda.docx  
+[2024-11-10 08:26:34] local.INFO: Temporary file created and deleted.  
+[2024-11-10 08:26:34] local.INFO: File created and stored at: users/2/dasd/dasda.docx  
+[2024-11-10 08:26:34] local.INFO: File size determined: 7279 bytes  
+[2024-11-10 08:26:34] local.INFO: Updating folder path for folder ID: 8 to path: users/2/dasd  
+[2024-11-10 08:26:34] local.INFO: Updated folder path for folder ID: 8, Rows affected: 1  
+[2024-11-10 08:26:34] local.INFO: File record inserted into database: dasda.docx  
+[2024-11-10 08:26:47] local.INFO: Found main folder: dasd  
+[2024-11-10 08:28:05] local.INFO: Create function called.  
+[2024-11-10 08:28:05] local.INFO: Folder ID belongs to a main folder. Folder ID: 8  
+[2024-11-10 08:28:05] local.INFO: Attempting to create file: test.docx for user ID: 2  
+[2024-11-10 08:28:05] local.INFO: File will not be encrypted.  
+[2024-11-10 08:28:05] local.INFO: Resolved directory path: users/2/dasd  
+[2024-11-10 08:28:05] local.INFO: Resolved file path: users/2/dasd/test.docx  
+[2024-11-10 08:28:05] local.INFO: Temporary file created and deleted.  
+[2024-11-10 08:28:05] local.INFO: File created and stored at: users/2/dasd/test.docx  
+[2024-11-10 08:28:05] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 08:28:05] local.INFO: Updating folder path for folder ID: 8 to path: users/2/dasd  
+[2024-11-10 08:28:05] local.INFO: Updated folder path for folder ID: 8, Rows affected: 0  
+[2024-11-10 08:28:05] local.INFO: File record inserted into database: test.docx  
+[2024-11-10 08:28:15] local.INFO: Found main folder: dasd  
+[2024-11-10 08:28:25] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 08:28:25] local.INFO: Decrypted parent ID: {"parent_id":"8"} 
+[2024-11-10 08:28:25] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasd/dasdad"} 
+[2024-11-10 08:28:25] local.INFO: Directory successfully created: {"directory":"users/2/dasd/dasdad"} 
+[2024-11-10 08:31:44] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 08:31:44] local.INFO: Decrypted parent ID: {"parent_id":"1"} 
+[2024-11-10 08:31:44] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:31:44] local.INFO: Directory successfully created: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:32:52] local.INFO: Attempting to delete directory from storage: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:32:52] local.INFO: Directory deleted from storage: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:33:51] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 08:33:51] local.INFO: Decrypted parent ID: {"parent_id":"1"} 
+[2024-11-10 08:33:51] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasda/test5"} 
+[2024-11-10 08:33:51] local.INFO: Directory successfully created: {"directory":"users/2/dasda/test5"} 
+[2024-11-10 08:33:54] local.INFO: Attempting to delete directory from storage: {"directory":"users/2/dasda/test5"} 
+[2024-11-10 08:33:54] local.INFO: Directory deleted from storage: {"directory":"users/2/dasda/test5"} 
+[2024-11-10 08:34:06] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 08:34:06] local.INFO: Decrypted parent ID: {"parent_id":"1"} 
+[2024-11-10 08:34:06] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:34:06] local.INFO: Directory successfully created: {"directory":"users/2/dasda/dasda"} 
+[2024-11-10 08:34:13] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-10 08:34:13] local.INFO: Decrypted parent ID: {"parent_id":"1"} 
+[2024-11-10 08:34:13] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasda/vvv"} 
+[2024-11-10 08:34:13] local.INFO: Directory successfully created: {"directory":"users/2/dasda/vvv"} 
+[2024-11-10 08:34:19] local.INFO: Attempting to delete directory from storage: {"directory":"users/2/dasda/vvv"} 
+[2024-11-10 08:34:19] local.INFO: Directory deleted from storage: {"directory":"users/2/dasda/vvv"} 

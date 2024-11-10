@@ -91,11 +91,12 @@ class SubfolderController extends Controller
                 Storage::disk('public')->makeDirectory($directory);
                 Log::info('Directory successfully created:', ['directory' => $directory]);
 
-                // Insert the subfolder into the `subfolders` table
+                // Insert the subfolder into the `subfolders` table with subfolder_path
                 DB::table('subfolders')->insert([
                     'user_id' => $userId,
                     'parent_folder_id' => $isRootFolder ? null : $parentId, // Set parent folder ID
                     'name' => $request->title,
+                    'subfolder_path' => $directory, // Save the full path as subfolder_path
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -110,6 +111,7 @@ class SubfolderController extends Controller
             return back()->withErrors('Failed to create subfolder. Please try again.');
         }
     }
+
 
 
 
@@ -263,13 +265,12 @@ class SubfolderController extends Controller
             ]);
         }
 
-        // Build the full directory path including the parent folder
-        $basePath = 'users/' . auth()->user()->id; // Base path for the user
-        $directory = $this->buildFullPath($subfolder->parent_folder_id, $basePath) . '/' . $subfolder->name; // Full path to the subfolder
+        // Use the subfolder_path stored in the database for deletion
+        $directory = $subfolder->subfolder_path;
 
-        Log::info("Attempting to delete directory:", ['directory' => $directory]);
+        Log::info("Attempting to delete directory from storage:", ['directory' => $directory]);
 
-        // Check if the directory exists and delete it from cloud storage
+        // Check if the directory exists and delete it from storage
         if (Storage::disk('public')->exists($directory)) {
             Storage::disk('public')->deleteDirectory($directory);
             Log::info("Directory deleted from storage:", ['directory' => $directory]);

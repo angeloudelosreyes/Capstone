@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('files');
             $table->integer('size')->default(0);
             $table->string('extension');
+
             $table->enum('protected', ['YES', 'NO'])->default('NO');
             $table->string('password')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
