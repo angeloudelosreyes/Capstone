@@ -5382,3 +5382,161 @@ Did you mean this?
 #9 C:\\Users\\renek\\Desktop\\client\\SYSTEM\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #10 {main}
 "} 
+[2024-11-10 10:27:42] local.INFO: Create function called.  
+[2024-11-10 10:27:42] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-10 10:27:42] local.INFO: Attempting to create file: file1.docx for user ID: 1  
+[2024-11-10 10:27:42] local.INFO: File will not be encrypted.  
+[2024-11-10 10:27:42] local.INFO: Resolved directory path: users/1/yah  
+[2024-11-10 10:27:42] local.INFO: Resolved file path: users/1/yah/file1.docx  
+[2024-11-10 10:27:42] local.INFO: Temporary file created and deleted.  
+[2024-11-10 10:27:42] local.INFO: File created and stored at: users/1/yah/file1.docx  
+[2024-11-10 10:27:42] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 10:27:42] local.INFO: Updating folder path for folder ID: 1 to path: users/1/yah  
+[2024-11-10 10:27:42] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-10 10:27:42] local.INFO: File record inserted into database: file1.docx  
+[2024-11-10 10:28:26] local.INFO: Folder sharing request received {"request":{"_token":"2SrIrHUcRLev3Ic4eU5Jyw9e9IfzahbenMAwVSGS","my_name_8dEKmrGf1CoubCWX":null,"valid_from":"eyJpdiI6ImNlUUdicVZvU2tLdm5MMm15OFhBYXc9PSIsInZhbHVlIjoiTVljRFdEUFFmYWh3SVJZUE8zb3BBQT09IiwibWFjIjoiNDcyZTBmMmIxODQ5ZWY0ZDM0MzNkNjEyYThmOTkxMzk3MmIyZTkxYzI0OGJlODY5YjRkY2EwMzY1MjM1ZDRhMSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IkljSmVSTXN0T0tkUlAyYTJJeTI1QkE9PSIsInZhbHVlIjoiK214dlpnVjkyZ0hwOEdPQUU3RVo0UT09IiwibWFjIjoiMjY1ZWY2NzFkZGU5ZjJkZTY2OTkyNDY0Yjg4NjNkYzI2MjUyMGZiOTE3ZTMzNTI1MDlmYzFjMmE0MzQ5ZmU0NyIsInRhZyI6IiJ9","title":"yah","category":"Individual","email":"bruh@gmail.com"}} 
+[2024-11-10 10:28:26] local.INFO: Storage directory created at: public/users/4/shared_folders/67308acaa16f2._.yah  
+[2024-11-10 10:28:26] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67308acaa411d_yah","users_id":4,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:28:26.000000Z","created_at":"2024-11-10T10:28:26.000000Z","id":1}}} 
+[2024-11-10 10:28:40] local.INFO: Decrypted ID: 1  
+[2024-11-10 10:28:40] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 10:28:40] local.INFO: Decrypted ID: 1  
+[2024-11-10 10:28:40] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 10:31:12] local.INFO: Storage directory created at: public/users/1/shared_folders/what  
+[2024-11-10 10:31:44] local.INFO: Create function called.  
+[2024-11-10 10:31:44] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-10 10:31:44] local.INFO: Attempting to create file: file1.docx for user ID: 1  
+[2024-11-10 10:31:44] local.INFO: File will not be encrypted.  
+[2024-11-10 10:31:44] local.INFO: Resolved directory path: users/1/what  
+[2024-11-10 10:31:44] local.INFO: Resolved file path: users/1/what/file1.docx  
+[2024-11-10 10:31:44] local.INFO: Temporary file created and deleted.  
+[2024-11-10 10:31:44] local.INFO: File created and stored at: users/1/what/file1.docx  
+[2024-11-10 10:31:44] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 10:31:44] local.INFO: Updating folder path for folder ID: 1 to path: users/1/what  
+[2024-11-10 10:31:44] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-10 10:31:44] local.INFO: File record inserted into database: file1.docx  
+[2024-11-10 10:32:20] local.INFO: Folder sharing request received {"request":{"_token":"7NSYzoDkZfshjmngp8MbvMCdwhylDhoVWjJnc8zk","my_name_WFHwf2Nay6GbWtmT":null,"valid_from":"eyJpdiI6Ikl2MXJ4a1FqVWJsQVl4Vkl0QmZPTkE9PSIsInZhbHVlIjoiU21oVkg3Y3hMbkVsVFcyZjEyVkJPdz09IiwibWFjIjoiZjcyMzk4OTNkNjJiN2Q4YjQxYWFiMjQ4OGE5NjY4NmIzZDQwOWVhYTViZWJlNTU3NGIzZTg1NDM1MmViZWFmNyIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6Imd0bVlUOXQ3eXhwRkR4L2ZvczZ0OXc9PSIsInZhbHVlIjoieFNwUEE3RVY0QjFsR1ViOGRGaFREQT09IiwibWFjIjoiYTRhMDRkMTlkNzcyM2ZmNjIyNmMwODY2NWYwZTE0ZTk3ZDgyODczYzc2NmE0ZDY4MWU3NjRhNDhlNTEzYzZkNCIsInRhZyI6IiJ9","title":"what","category":"Individual","email":"bruh@gmail.com"}} 
+[2024-11-10 10:32:20] local.INFO: Storage directory created at: public/users/4/shared_folders/67308bb490c80._.what  
+[2024-11-10 10:32:21] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67308bb49333e_what","users_id":4,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:32:20.000000Z","created_at":"2024-11-10T10:32:20.000000Z","id":2}}} 
+[2024-11-10 10:32:48] local.INFO: Decrypted ID: 2  
+[2024-11-10 10:32:48] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 10:32:49] local.INFO: Decrypted ID: 2  
+[2024-11-10 10:32:49] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 10:32:51] local.INFO: Decrypted ID: 2  
+[2024-11-10 10:32:51] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 10:35:01] local.INFO: Create function called.  
+[2024-11-10 10:35:01] local.INFO: Folder ID belongs to a main folder. Folder ID: 2  
+[2024-11-10 10:35:01] local.INFO: Attempting to create file: who.docx for user ID: 4  
+[2024-11-10 10:35:01] local.INFO: File will not be encrypted.  
+[2024-11-10 10:35:01] local.INFO: Resolved directory path: users/4/why  
+[2024-11-10 10:35:01] local.INFO: Resolved file path: users/4/why/who.docx  
+[2024-11-10 10:35:01] local.INFO: Temporary file created and deleted.  
+[2024-11-10 10:35:01] local.INFO: File created and stored at: users/4/why/who.docx  
+[2024-11-10 10:35:01] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 10:35:01] local.INFO: Updating folder path for folder ID: 2 to path: users/4/why  
+[2024-11-10 10:35:01] local.INFO: Updated folder path for folder ID: 2, Rows affected: 1  
+[2024-11-10 10:35:01] local.INFO: File record inserted into database: who.docx  
+[2024-11-10 10:35:29] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_XRFAyn0q83pet9Er":null,"valid_from":"eyJpdiI6ImdYejlBeWVTeW8vVE9kbW0veUtoVHc9PSIsInZhbHVlIjoiT2N4Vys4UFJQMEpNN1BzZEFYRDEwdz09IiwibWFjIjoiNTg0ZmFiZDBjY2EyMTczMWYzMTQyOGY4NmMwZTIwZTdmMzEwMTk2NWUwMGEzODY5ZDBkZDY1OGY1NjBkNjgzZSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IkdLaE9mN3I5Tzg3U0ViOXB0OENUWUE9PSIsInZhbHVlIjoiS1F2M0xCZzg2SkdqV0JjNEphbjZzZz09IiwibWFjIjoiZDc2Y2JjMDBmMzlkY2Q5MzNkZjUwYWFjODMwMjZjZThkOWU2MTg0M2I1MWFiNDZhOTQ5NjViMGZhNDExZDRiMCIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 10:35:29] local.INFO: Storage directory created at: public/users/1/shared_folders/67308c71393ac._.why  
+[2024-11-10 10:35:29] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67308c713b6f4_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:35:29.000000Z","created_at":"2024-11-10T10:35:29.000000Z","id":3}}} 
+[2024-11-10 10:37:23] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_gI1FHnhmF7EAxEbF":null,"valid_from":"eyJpdiI6IlZ4ZTR4Uk5zMHA1OWpJQzhhalFXS0E9PSIsInZhbHVlIjoiWTQzR2dueW5kR3IxM1pMQk9vN21Tdz09IiwibWFjIjoiNTdmMDcxMTM1Y2NhZGNjODU0MWYzNTFkZjBhYmM3YTlkNTBmZjNhMTg4ZDdhM2RkMzI5YjVmYmJkODI0MzljNiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IjZvYjFrWlZsT0I4M3JFbitaSTZQY0E9PSIsInZhbHVlIjoiRkdRTlJzNnZEQVVNZkhLdG41MHFZQT09IiwibWFjIjoiN2EzMDMyMmQwZWE1ZmM4ODVkZmJhMDM1ZTNhM2E4MWExODNmMjIzYjAxOWZlNzcyNTA0OWIyZDY3ZjdiZDBiYyIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 10:37:23] local.INFO: Storage directory created at: public/users/1/shared_folders/67308ce3922fb._.why  
+[2024-11-10 10:37:24] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67308ce394426_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:37:23.000000Z","created_at":"2024-11-10T10:37:23.000000Z","id":4}}} 
+[2024-11-10 10:37:24] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[]}} 
+[2024-11-10 10:49:32] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_yb0uZtMlhTPzcVMU":null,"valid_from":"eyJpdiI6IkZucERaUm12Rno2SkpkMDZzY1YxWWc9PSIsInZhbHVlIjoiVGc4MXk2V082VUZ4K3psZEVVUXlEUT09IiwibWFjIjoiY2QzOTU4YTY4NmQ0MjFiODgxYjVlNDViMDRkMjU4MGJmY2VkNjE5Mjc5MDZhMDNlNjg3NTgxZDdhNmZhZGZiMCIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6InMxVzc0b0RGWnFkMWRWb1lBMnZHbHc9PSIsInZhbHVlIjoiOThZT0FOUHNqMEl1NG5EUFNUWFdCQT09IiwibWFjIjoiMmIyNTEwZGVmZDg4NTA4ZjMzZThkY2E1NzIzMzM1Nzk2MDkyMzUzZWIyNmI1YTE1ZWI1OGExNGZiOGY4NTEzNyIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 10:49:32] local.INFO: Storage directory created at: public/users/1/shared_folders/67308fbcd8daf._.why  
+[2024-11-10 10:49:34] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67308fbcdbb04_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:49:32.000000Z","created_at":"2024-11-10T10:49:32.000000Z","id":5}}} 
+[2024-11-10 10:49:34] local.INFO: Original folder ID being queried {"originalFolderId":"eyJpdiI6InMxVzc0b0RGWnFkMWRWb1lBMnZHbHc9PSIsInZhbHVlIjoiOThZT0FOUHNqMEl1NG5EUFNUWFdCQT09IiwibWFjIjoiMmIyNTEwZGVmZDg4NTA4ZjMzZThkY2E1NzIzMzM1Nzk2MDkyMzUzZWIyNmI1YTE1ZWI1OGExNGZiOGY4NTEzNyIsInRhZyI6IiJ9"} 
+[2024-11-10 10:49:34] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[]}} 
+[2024-11-10 10:49:34] local.WARNING: No files found for the specified folder ID {"originalFolderId":"eyJpdiI6InMxVzc0b0RGWnFkMWRWb1lBMnZHbHc9PSIsInZhbHVlIjoiOThZT0FOUHNqMEl1NG5EUFNUWFdCQT09IiwibWFjIjoiMmIyNTEwZGVmZDg4NTA4ZjMzZThkY2E1NzIzMzM1Nzk2MDkyMzUzZWIyNmI1YTE1ZWI1OGExNGZiOGY4NTEzNyIsInRhZyI6IiJ9"} 
+[2024-11-10 10:55:45] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_WAfh4GSkiAwlGYiV":null,"valid_from":"eyJpdiI6IlBtSm5KQzdhSmp5d1JtNG1ZZElzR3c9PSIsInZhbHVlIjoiZUJXR0doVnl4TWUzSEorTDg2ZktyUT09IiwibWFjIjoiNGEwNDkxM2U5OTkzMzlkZGIyYzc3NjQ2NGY5YzZhYzBiMGM4NzU1YTE3ZjM0MjAwYWQxN2I3ODU2ZDQ4MjNhNSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IndVbmY3MGtRb21DTm5qZm9UaXdFQVE9PSIsInZhbHVlIjoiQXNxaWxDN3d6bGlmeWs4V215YlNZdz09IiwibWFjIjoiYTA3NjZmYjY3ZGQ4ZTE2MWE3OTVkNjY0Njg0NDM3MGE5Njk3MTIzY2Y1MWJhZDBiODc5YmUxYmI4MjYzMmUxOSIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 10:55:45] local.INFO: Storage directory created at: public/users/1/shared_folders/673091318285f._.why  
+[2024-11-10 10:55:47] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"6730913184ba4_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:55:45.000000Z","created_at":"2024-11-10T10:55:45.000000Z","id":6}}} 
+[2024-11-10 10:55:47] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 10:55:47] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 10:55:47] local.INFO: Attempting to copy file {"original":"users/4/why/who.docx","new":"public/users/1/shared_folders/673091318285f._.why/6730913359f92_who.docx"} 
+[2024-11-10 10:58:17] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_Ny11A80eTa64Et40":null,"valid_from":"eyJpdiI6Im94RU9KUWREeVZvTTJKTnZYM2RaOWc9PSIsInZhbHVlIjoiUi9oYXRmTE1ISzljdmVYNkI4dElldz09IiwibWFjIjoiMmEyOWViNmJhNDI0ZmYzODE5N2IxZmMyOTQwMzM4NDVmZjBlYzg2M2Q5MDI5YWQ2ZWIzOTIxOWU4ZjAzNDZkMCIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6InBnMzRSTnNlZS9FdlpkZCtqU3BxbkE9PSIsInZhbHVlIjoiMVBZRmMxaFVVaEcxQ2xPb3ViVXRaUT09IiwibWFjIjoiYjI1MDUzMjIwNzFiMzg5NWE5YWU0MWI5OTUwZWIyNWQzMjVlMzk4NDJjNTI4MzcxMzNkM2M5NWI3OWJmNTQ4MCIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 10:58:17] local.INFO: Storage directory created at: public/users/1/shared_folders/673091c98ee07._.why  
+[2024-11-10 10:58:19] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"673091c9910aa_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T10:58:17.000000Z","created_at":"2024-11-10T10:58:17.000000Z","id":7}}} 
+[2024-11-10 10:58:19] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 10:58:19] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 10:58:19] local.INFO: Attempting to copy file {"original":"users/4/why/who.docx","new":"public/users/1/shared_folders/673091c98ee07._.why/673091cb4dade_who.docx"} 
+[2024-11-10 10:58:19] local.ERROR: Failed to copy file {"original":"users/4/why/who.docx","new":"public/users/1/shared_folders/673091c98ee07._.why/673091cb4dade_who.docx"} 
+[2024-11-10 11:09:08] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_bd80JiYnty92Qvpu":null,"valid_from":"eyJpdiI6IlVja3pZcy9SbU5tZ2l1K0tGMmtEUnc9PSIsInZhbHVlIjoiUDl1Q1BUNVdMaXdEaGdwQkl2UWZ0UT09IiwibWFjIjoiNjFjYzY0OWFiN2M0Zjg1MzZhMDFlZjQyNTMxZDlmNWNjNjg5YzE0MDA1NDhjYzJmYTIwMTQxOGE3OGFjYzk2ZiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6InZkbUZsdzBjVmR3ek0vT2s3R25TN1E9PSIsInZhbHVlIjoibnJoVDM1MktQT1A3NFg1MDlZY05Ndz09IiwibWFjIjoiNTdlMTVhYjBkMzg2NGEzZTg0MDQ3OWEzODI0MGY5MWZhNDdkMjY4NzVhYzM0ODg2NzQ0NWU5NjRhMDI2ZjI0MiIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:09:08] local.INFO: Storage directory created at: users/1/shared_folders/67309454ed108._.why  
+[2024-11-10 11:09:10] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309454f0772_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:09:08.000000Z","created_at":"2024-11-10T11:09:08.000000Z","id":8}}} 
+[2024-11-10 11:09:10] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 11:09:10] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 11:09:10] local.INFO: Attempting to copy file {"original":"users/4/why/who.docx","new":"users/1/shared_folders/67309454ed108._.why/67309456c4b93_who.docx"} 
+[2024-11-10 11:09:10] local.ERROR: Failed to copy file {"original":"users/4/why/who.docx","new":"users/1/shared_folders/67309454ed108._.why/67309456c4b93_who.docx"} 
+[2024-11-10 11:15:35] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_yLN7Z8cgTAyThl9C":null,"valid_from":"eyJpdiI6IllMZTR3NzZ5L1FXWUtOKzBhQUZVR1E9PSIsInZhbHVlIjoiRUkrTTZZL29JbzdHaFZNQ0kxR2lsQT09IiwibWFjIjoiNWQwOGVlZGExZGY1ZGEyYzUzY2U0ZWQ3ODM1MjE1MDExZWZiMDNhZTA0ZmQ4MTY3MjJjZmM5NDUxNWI3MjE0NyIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IkwzNFhFYzBiT0FCVnpMdHorbDNpc3c9PSIsInZhbHVlIjoiWjR6ZTYxYS96bEV3N2xTWG9IcVZFUT09IiwibWFjIjoiZGYxNWNjMDI0NTRiM2ZlNmFlZTIyN2RkYjk0YTdmNDUyZjQ0ZTYwZGQ0MjdkMjA0ZTdjYzU3YjU3N2I3YjAzYyIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:15:35] local.INFO: Storage directory created at: users/1/shared_folders/673095d786c7cwhy  
+[2024-11-10 11:15:37] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"673095d789182_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:15:35.000000Z","created_at":"2024-11-10T11:15:35.000000Z","id":9}}} 
+[2024-11-10 11:15:37] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 11:15:37] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 11:15:37] local.INFO: Attempting to copy file {"original":"users/4/why/who.docx","new":"users/1/shared_folders/673095d786c7cwhy/673095d94466e_who.docx"} 
+[2024-11-10 11:15:37] local.ERROR: Source file does not exist {"file":"users/4/why/who.docx"} 
+[2024-11-10 11:16:34] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_2ApXlCOFDJkJt2wa":null,"valid_from":"eyJpdiI6ImtaaHVVUWVuN1NHTmhtOE93c1NLZFE9PSIsInZhbHVlIjoiVGpCdGN4eHR2dVZiZzVWd3p4V0hoUT09IiwibWFjIjoiMDAwNzA3OWQ3NzVlMjE0NmVhNjE1YmNjNDFlOWFjZWUxM2JlMjg1NDljZDMyNzg1ZDYwZWJiNDlmMWU3NWFiYiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IiticlY0ZUxRZEtqZW92WmxYL3ROL2c9PSIsInZhbHVlIjoiN1h0L0xTb05DelFuQzREcTJrQUROZz09IiwibWFjIjoiZTY0MTNmMTFhODA4ZjQxNGNjYzUyMDNhMjI3MjQ5YjczZDFhZTc0MTIxNjc3YjhhNmY3NGYyNmQ4ZDY4MWMxMyIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:16:34] local.INFO: Storage directory created at: public/users/1/shared_folders/67309612c0f94why  
+[2024-11-10 11:16:36] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309612c2c14_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:16:34.000000Z","created_at":"2024-11-10T11:16:34.000000Z","id":10}}} 
+[2024-11-10 11:16:36] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 11:16:36] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 11:16:36] local.INFO: Attempting to copy file {"original":"users/4/why/who.docx","new":"public/users/1/shared_folders/67309612c0f94why/673096148113d_who.docx"} 
+[2024-11-10 11:16:36] local.ERROR: Source file does not exist {"file":"users/4/why/who.docx"} 
+[2024-11-10 11:23:21] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_z1nufhcmoZMHojAl":null,"valid_from":"eyJpdiI6IlBSekJ5bUF5TVhOZnlBL2FxVDRocHc9PSIsInZhbHVlIjoiSlZIZnJFcGNkVGgrQkVqUG44RTJlUT09IiwibWFjIjoiMmRkMzNjMGE5MzAwZTkxNTk5NWRiMjY5M2ZiODk1ZWNlMWViNDY5MjA2ODgxNmVjYzIxMmIwYWJiZjI5MzQ4ZSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6Im5yeHhTT1h4MTRPdHNmdG9jVHgvTlE9PSIsInZhbHVlIjoicG96TkRYNVAvUVVWSldpc0NLK0xjZz09IiwibWFjIjoiNGZmY2EzNDE1YjQwOWNkYzM2OTQzMDUwODFiODUyM2M3MTQ0MmNiODhjYWZhZTUzN2Y3MDgxMmNmNjNjYjE2NyIsInRhZyI6IiJ9","title":"why","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:23:21] local.INFO: Storage directory created at: public/users/1/shared_folders/673097a984f22why  
+[2024-11-10 11:23:23] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"673097a98744f_why","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:23:21.000000Z","created_at":"2024-11-10T11:23:21.000000Z","id":11}}} 
+[2024-11-10 11:23:23] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 11:23:23] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"who.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 10:35:01","updated_at":"2024-11-10 10:35:01","file_path":"users/4/why/who.docx"}]}} 
+[2024-11-10 11:23:23] local.INFO: Attempting to copy file {"original":"public/users/4/why/who.docx","new":"public/users/1/shared_folders/673097a984f22why/673097ab66e79_who.docx"} 
+[2024-11-10 11:23:23] local.INFO: Source file exists {"file":"public/users/4/why/who.docx"} 
+[2024-11-10 11:23:23] local.INFO: File copied successfully {"newFilePath":"public/users/1/shared_folders/673097a984f22why/673097ab66e79_who.docx"} 
+[2024-11-10 11:31:57] local.INFO: Create function called.  
+[2024-11-10 11:31:57] local.INFO: Folder ID belongs to a main folder. Folder ID: 3  
+[2024-11-10 11:31:57] local.INFO: Attempting to create file: file1.docx for user ID: 4  
+[2024-11-10 11:31:57] local.INFO: File will not be encrypted.  
+[2024-11-10 11:31:57] local.INFO: Resolved directory path: users/4/one more  
+[2024-11-10 11:31:57] local.INFO: Resolved file path: users/4/one more/file1.docx  
+[2024-11-10 11:31:57] local.INFO: Temporary file created and deleted.  
+[2024-11-10 11:31:57] local.INFO: File created and stored at: users/4/one more/file1.docx  
+[2024-11-10 11:31:57] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 11:31:57] local.INFO: Updating folder path for folder ID: 3 to path: users/4/one more  
+[2024-11-10 11:31:57] local.INFO: Updated folder path for folder ID: 3, Rows affected: 1  
+[2024-11-10 11:31:57] local.INFO: File record inserted into database: file1.docx  
+[2024-11-10 11:32:03] local.INFO: Create function called.  
+[2024-11-10 11:32:03] local.INFO: Folder ID belongs to a main folder. Folder ID: 3  
+[2024-11-10 11:32:03] local.INFO: Attempting to create file: file1.docx for user ID: 4  
+[2024-11-10 11:32:03] local.INFO: File will not be encrypted.  
+[2024-11-10 11:32:03] local.WARNING: Duplicate file name found: file1.docx in the specified folder or subfolder.  
+[2024-11-10 11:32:07] local.INFO: Create function called.  
+[2024-11-10 11:32:07] local.INFO: Folder ID belongs to a main folder. Folder ID: 3  
+[2024-11-10 11:32:07] local.INFO: Attempting to create file: file2.docx for user ID: 4  
+[2024-11-10 11:32:07] local.INFO: File will not be encrypted.  
+[2024-11-10 11:32:07] local.INFO: Resolved directory path: users/4/one more  
+[2024-11-10 11:32:07] local.INFO: Resolved file path: users/4/one more/file2.docx  
+[2024-11-10 11:32:07] local.INFO: Temporary file created and deleted.  
+[2024-11-10 11:32:07] local.INFO: File created and stored at: users/4/one more/file2.docx  
+[2024-11-10 11:32:07] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 11:32:07] local.INFO: Updating folder path for folder ID: 3 to path: users/4/one more  
+[2024-11-10 11:32:07] local.INFO: Updated folder path for folder ID: 3, Rows affected: 0  
+[2024-11-10 11:32:07] local.INFO: File record inserted into database: file2.docx  
+[2024-11-10 11:32:23] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_xLN7bPyU8oyRs6s7":null,"valid_from":"eyJpdiI6IlRmV0tSbWFVaFg0RGtFSHVmQUtHYWc9PSIsInZhbHVlIjoiMWlFcGY4VXhJc1dXc2s4K00yUGZhZz09IiwibWFjIjoiNTgxMjQzOGU3ZTBjNjc5MmExNzk3YzdiNzBjMTYyYTZkNjEyM2VjZTkzY2JiZDlhYTEwZGJhZjQ2ZmQ0NTU2NCIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6Ikt5MXhIT2tleGlTZkQ2QmJpWDFMUGc9PSIsInZhbHVlIjoicjhZNUthdXJ2a3RZUlNSdDNseDVYQT09IiwibWFjIjoiMGVjMjlkYjAzMTQyYTQ2M2ViZjdkNTQ2NmUxODE2ZDJiZGM3YWY1OTQ5ODgxY2Y1YTllMDliOThlODNmMDk3YSIsInRhZyI6IiJ9","title":"one more","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:32:23] local.INFO: Storage directory created at: public/users/1/shared_folders/673099c704992one more  
+[2024-11-10 11:32:23] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"673099c706be2_one more","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:32:23.000000Z","created_at":"2024-11-10T11:32:23.000000Z","id":12}}} 
+[2024-11-10 11:32:23] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"3"} 
+[2024-11-10 11:32:23] local.ERROR: Error creating shared folder {"error":"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'manager_2.users_folders' doesn't exist (Connection: mysql, SQL: select * from `users_folders` where `id` = 3 limit 1)"} 
+[2024-11-10 11:33:48] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_3mYJHyCz3HhMPYwB":null,"valid_from":"eyJpdiI6IkFSZ3hpdy9TZHRtT2FDVnZ2MnllWXc9PSIsInZhbHVlIjoiYzBKdEtXM0xKZnkvV1V1QnpvbkhqUT09IiwibWFjIjoiZDUyYWZjZGUwZThmNTQ4NjlhMzkyNmEyOWRlOWY4NmZmNjc4MWJhNDI2MWQwMjZjNWY2OGE2NTYxMDliZDM3NCIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6ImkrYWFWRTJ1VUFXUEpoK25Wc2FVQUE9PSIsInZhbHVlIjoidVR4ajEwU213aFVMY044ODNvZCtTUT09IiwibWFjIjoiYmU2ZDVkOWU4ZGViNGRhMjhiOTFmMzlmMzViYTNkZjI1ZjAyMDBjZTM1YTk1ZGE3OWNjODY5NmJkMWU3MzM3ZiIsInRhZyI6IiJ9","title":"one more","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:33:48] local.INFO: Storage directory created at: public/users/1/shared_folders/67309a1cd6b90one more  
+[2024-11-10 11:33:50] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309a1cd8aef_one more","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:33:48.000000Z","created_at":"2024-11-10T11:33:48.000000Z","id":13}}} 
+[2024-11-10 11:33:50] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"3"} 
+[2024-11-10 11:33:50] local.ERROR: Error creating shared folder {"error":"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'manager_2.users_folders' doesn't exist (Connection: mysql, SQL: select * from `users_folders` where `id` = 3 limit 1)"} 
+[2024-11-10 11:35:38] local.INFO: Folder sharing request received {"request":{"_token":"YGsZDEYySClkyCDwcNscSrhotsux9660Gn43p6wO","my_name_jHJ95NBsXYe8280q":null,"valid_from":"eyJpdiI6Im5jY0VTUXVHZUZRd25XbTBlN1hFU3c9PSIsInZhbHVlIjoiR3FabGJ3em5qajR5NG1sY3FYY2ZYQT09IiwibWFjIjoiOTU0ODVhZDNlNDJhODRiZjRmOTYyMzQ1MzhmMTkyYmYyZTQ1OGQ2NTU3MmExYWU4YTM5YTllNzk0MmYzNDY3ZiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IjdBQnJrOW9CWUhaR3JMZkRnUjNjY0E9PSIsInZhbHVlIjoicG1IMjRIcmRkeStmZGgyNnY5eGxsdz09IiwibWFjIjoiNWE4NzBhMzYyNDE3NzNmNDI4ODdlMTM0NjA5NWFiNzdiODMyMTJmNWEwOWNjMWVjYjhkMDI2ZGQ2NTU3MGY2NSIsInRhZyI6IiJ9","title":"one more","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 11:35:38] local.INFO: Storage directory created at: public/users/1/shared_folders/67309a8abc0a2one more  
+[2024-11-10 11:35:39] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309a8abe499_one more","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:35:38.000000Z","created_at":"2024-11-10T11:35:38.000000Z","id":14}}} 
+[2024-11-10 11:35:39] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"3"} 
+[2024-11-10 11:35:39] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":3,"users_id":4,"users_folder_id":3,"users_folder_shareable_id":null,"subfolder_id":null,"files":"file1.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 11:31:57","updated_at":"2024-11-10 11:31:57","file_path":"users/4/one more/file1.docx"},{"id":4,"users_id":4,"users_folder_id":3,"users_folder_shareable_id":null,"subfolder_id":null,"files":"file2.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 11:32:07","updated_at":"2024-11-10 11:32:07","file_path":"users/4/one more/file2.docx"}]}} 
+[2024-11-10 11:35:39] local.INFO: Attempting to copy file {"original":"public/users/4/one more/file1.docx","new":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5f52a_file1.docx"} 
+[2024-11-10 11:35:39] local.INFO: Source file exists {"file":"public/users/4/one more/file1.docx"} 
+[2024-11-10 11:35:39] local.INFO: File copied successfully {"newFilePath":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5f52a_file1.docx"} 
+[2024-11-10 11:35:39] local.INFO: Attempting to copy file {"original":"public/users/4/one more/file2.docx","new":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5ff9b_file2.docx"} 
+[2024-11-10 11:35:39] local.INFO: Source file exists {"file":"public/users/4/one more/file2.docx"} 
+[2024-11-10 11:35:39] local.INFO: File copied successfully {"newFilePath":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5ff9b_file2.docx"} 

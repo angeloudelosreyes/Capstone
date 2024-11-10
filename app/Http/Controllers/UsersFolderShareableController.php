@@ -50,71 +50,127 @@ class UsersFolderShareableController extends Controller
     }
 
     public function createSharedFolder(Request $request)
-    {
-        Log::info('Folder sharing request received', ['request' => $request->all()]);
+{
+    Log::info('Folder sharing request received', ['request' => $request->all()]);
 
-        // Validate the request to ensure all necessary fields are provided
-        try {
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'email' => 'required|email',
-                'users_folder_id' => 'required|string|nullable', // Folder ID is required for sharing a folder
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation failed', ['errors' => $e->errors()]);
-            return back()->withErrors($e->errors());
-        }
-
-        // Find the recipient by email
-        $recipient = DB::table('users')->where('email', $request->email)->first();
-
-        if (!$recipient) {
-            Log::warning('Recipient not found', ['email' => $request->email]);
-            return back()->with([
-                'message' => 'Recipient not found.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        try {
-            $uniqueId = uniqid();
-            // Define the storage path for the shared folder based on the recipient ID
-            $storagePath = "public/users/{$recipient->id}/shared_folders/$uniqueId._.{$request->title}";
-
-            // Create the storage directory if it doesn't exist
-            if (!Storage::exists($storagePath)) {
-                Storage::makeDirectory($storagePath);
-                Log::info("Storage directory created at: {$storagePath}");
-            }
-
-            // Store the shared folder in the database with a reference to the user's ID
-            $folderShareable = UsersFolderShareable::create([
-                'title' => uniqid().'_'.$request->input('title'),
-                'users_id' => $recipient->id,
-                'can_edit' => $request->input('can_edit', false),
-                'can_delete' => $request->input('can_delete', false),
-            ]);
-
-            Log::info('Shared folder created successfully', ['folder' => $folderShareable]);
-
-            return back()->with([
-                'message' => 'Shareable folder created and shared successfully.',
-                'type' => 'success',
-                'title' => 'System Notification'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error creating shared folder', ['error' => $e->getMessage()]);
-            return back()->with([
-                'message' => 'Error creating shared folder.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
+    // Validate the request
+    try {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'email' => 'required|email',
+            'users_folder_id' => 'required|string|nullable', // Ensure this is present
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error('Validation failed', ['errors' => $e->errors()]);
+        return back()->withErrors($e->errors());
     }
 
+    // Find the recipient by email
+    $recipient = DB::table('users')->where('email', $request->email)->first();
 
+    if (!$recipient) {
+        Log::warning('Recipient not found', ['email' => $request->email]);
+        return back()->with([
+            'message' => 'Recipient not found.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
 
+    try {
+        $uniqueId = uniqid();
+        $storagePath = "public/users/{$recipient->id}/shared_folders/$uniqueId{$request->title}";
+
+        // Create the storage directory if it doesn't exist
+        if (!Storage::exists($storagePath)) {
+            Storage::makeDirectory($storagePath);
+            Log::info("Storage directory created at: {$storagePath}");
+        }
+
+        // Store the shared folder in the database
+        $folderShareable = UsersFolderShareable::create([
+            'title' => uniqid() . '_' . $request->input('title'),
+            'users_id' => $recipient->id,
+            'can_edit' => $request->input('can_edit', false),
+            'can_delete' => $request->input('can_delete', false),
+        ]);
+
+        Log::info('Shared folder created successfully', ['folder' => $folderShareable]);
+
+        // Decrypt the original folder ID
+        $originalFolderId = Crypt::decryptString($request->users_folder_id); // Decrypt the folder ID
+
+        // Log the decrypted folder ID for debugging
+        Log::info('Decrypted original folder ID being queried', ['originalFolderId' => $originalFolderId]);
+
+        // Retrieve the folder title and files from the original folder
+        $originalFolder = DB::table('users_folder')->where('id', $originalFolderId)->first();
+        $files = DB::table('users_folder_files')->where('users_folder_id', $originalFolderId)->get();
+
+        // Log the retrieved files
+        Log::info('Retrieved files from original folder', ['files' => $files]);
+
+        if ($files->isEmpty()) {
+            Log::warning('No files found for the specified folder ID', ['originalFolderId' => $originalFolderId]);
+            return back()->with([
+                'message' => 'No files found in the specified folder.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
+        // Proceed to copy files if there are any
+        foreach ($files as $file) {
+            // Define the original file path using the folder title dynamically
+            $originalFilePath = "public/users/{$file->users_id}/{$originalFolder->title}/{$file->files}";
+
+            // Define the new file path
+            $newFileName = uniqid() . '_' . basename($originalFilePath); // Generate a new file name
+            $newFilePath = "$storagePath/$newFileName"; // Adjust based on your structure
+        
+            // Log the paths
+            Log::info('Attempting to copy file', [
+                'original' => $originalFilePath,
+                'new' => $newFilePath,
+            ]);
+        
+            try {
+                // Check if the original file exists
+                if (Storage::exists($originalFilePath)) {
+                    Log::info('Source file exists', ['file' => $originalFilePath]);
+        
+                    // Attempt to copy the file
+                    if (Storage::copy($originalFilePath, $newFilePath)) {
+                        Log::info('File copied successfully', ['newFilePath' => $newFilePath]);
+                    } else {
+                        Log::error('Failed to copy file', ['original' => $originalFilePath, 'new' => $newFilePath]);
+                    }
+                } else {
+                    Log::error('Source file does not exist', ['file' => $originalFilePath]);
+                }
+            } catch (\Exception $e) {
+                Log::error('Error during file copy', [
+                    'error' => $e->getMessage(),
+                    'original' => $originalFilePath,
+                    'new' => $newFilePath,
+                ]);
+            }
+        }
+
+        return back()->with([
+            'message' => 'Shared folder created successfully with files.',
+            'type' => 'success',
+            'title' => 'System Notification'
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Error creating shared folder', ['error' => $e->getMessage()]);
+        return back()->with([
+            'message' => 'An error occurred while creating the shared folder.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+}
     // Method to add shareable files to a specific shared folder
     public function addShareableFile(Request $request, $folderShareableId)
     {
