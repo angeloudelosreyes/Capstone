@@ -94,8 +94,8 @@ class FolderController extends Controller
         }
 
         // Paginate subfolders and files separately
-        $subfolders = $folder->subfolders()->paginate(10, ['*'], 'subfolders'); // Paginate subfolders
-        $files = $folder->files()->paginate(10, ['*'], 'files'); // Paginate files
+        $subfolders = Subfolder::where('parent_folder_id', $decryptedId)->paginate(10, ['*'], 'subfolders');
+        $files = UsersFolderFile::where('users_folder_id', $decryptedId)->paginate(10, ['*'], 'files');
 
         return view('drive', [
             'title' => $folder->title,
@@ -104,6 +104,7 @@ class FolderController extends Controller
             'folderId' => $id
         ]);
     }
+
 
 
     /**
