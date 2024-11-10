@@ -203,7 +203,7 @@ class SharedController extends Controller
         // Prepare file reference data for the database
         $newFileData = [
             'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
-            'files' => basename($originalFile->file_path),
+            'files' => uniqid() .'_'.basename($originalFile->file_path),
             'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
             'users_id' => $recipient->id, // Save under recipient's ID
             'created_at' => now(),

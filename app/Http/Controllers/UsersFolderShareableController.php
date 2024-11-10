@@ -78,8 +78,9 @@ class UsersFolderShareableController extends Controller
         }
 
         try {
+            $uniqueId = uniqid();
             // Define the storage path for the shared folder based on the recipient ID
-            $storagePath = "public/users/{$recipient->id}/shared_folders/{$request->title}";
+            $storagePath = "public/users/{$recipient->id}/shared_folders/$uniqueId._.{$request->title}";
 
             // Create the storage directory if it doesn't exist
             if (!Storage::exists($storagePath)) {
@@ -89,7 +90,7 @@ class UsersFolderShareableController extends Controller
 
             // Store the shared folder in the database with a reference to the user's ID
             $folderShareable = UsersFolderShareable::create([
-                'title' => $request->input('title'),
+                'title' => uniqid().'_'.$request->input('title'),
                 'users_id' => $recipient->id,
                 'can_edit' => $request->input('can_edit', false),
                 'can_delete' => $request->input('can_delete', false),
