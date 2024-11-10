@@ -89,7 +89,7 @@ class UsersFolderShareableController extends Controller
 
         // Store the shared folder in the database
         $folderShareable = UsersFolderShareable::create([
-            'title' => uniqid() . '_' . $request->input('title'),
+            'title' => $uniqueId . $request->input('title'),
             'users_id' => $recipient->id,
             'can_edit' => $request->input('can_edit', false),
             'can_delete' => $request->input('can_delete', false),
@@ -215,64 +215,94 @@ class UsersFolderShareableController extends Controller
     }
 
 
-    // Show a specific shared folder
     public function show($id)
-    {
-        // Decrypt the provided encrypted ID
-        $decryptedId = Crypt::decryptString($id);
-        Log::info("Decrypted ID: {$decryptedId}");
+{
+    // Decrypt the provided encrypted ID
+    $decryptedId = Crypt::decryptString($id);
+    Log::info("Decrypted ID: {$decryptedId}");
 
-        // Try to find the folder in the users_folder_shareable table
-        $shareableFolder = DB::table('users_folder_shareable')->where('id', $decryptedId)->first();
+    // Get the current user's ID
+    $userId = Auth::id(); // Get the authenticated user's ID
 
-        // If the folder is not found in users_folder_shareable, look in users_folder
-        if (!$shareableFolder) {
-            Log::warning("No shareable folder found with ID: {$decryptedId} in users_folder_shareable.");
+    // Try to find the folder in the users_folder_shareable table
+    $shareableFolder = DB::table('users_folder_shareable')->where('id', $decryptedId)->first();
 
-            // Check in the users_folder table
-            $folderModel = UsersFolder::find($decryptedId);
+    // If the folder is not found in users_folder_shareable, look in users_folder
+    if (!$shareableFolder) {
+        Log::warning("No shareable folder found with ID: {$decryptedId} in users_folder_shareable.");
 
-            if (!$folderModel) {
-                // Return error if the folder is not found in both tables
-                return redirect()->back()->with([
-                    'message' => 'Folder not found.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
-                ]);
-            }
+        // Check in the users_folder table
+        $folderModel = UsersFolder::find($decryptedId);
 
-            // Fetch only files directly under this folder
-            $files = DB::table('users_folder_files')
-                ->where('users_folder_id', $decryptedId)
-                ->whereNull('subfolder_id') // Exclude files in subfolders
-                ->paginate(10);
-
-            // Render view with files data from users_folder
-            return view('sharefolder', [
-                'title' => $folderModel->title ?? 'Folder',
-                'shareableFolder' => $folderModel,
-                'files' => $files,
-                'folderId' => $id
-            ]);
-        } else {
-            Log::info("Found shareable folder with ID: {$shareableFolder->id} in users_folder_shareable.");
-
-            // Fetch only files directly under this shareable folder
-            $files = DB::table('users_folder_files')
-                ->where('users_folder_shareable_id', $decryptedId)
-                ->whereNull('subfolder_id') // Exclude files in subfolders
-                ->paginate(10);
-
-            // Render view with files data from users_folder_shareable
-            return view('sharefolder', [
-                'title' => $shareableFolder->title ?? 'Shareable Folder',
-                'shareableFolder' => $shareableFolder,
-                'files' => $files,
-                'folderId' => $id
+        if (!$folderModel) {
+            // Return error if the folder is not found in both tables
+            return redirect()->back()->with([
+                'message' => 'Folder not found.',
+                'type' => 'error',
+                'title' => 'System Notification'
             ]);
         }
-    }
 
+        // Fetch only files directly under this folder
+        $files = DB::table('users_folder_files')
+            ->where('users_folder_id', $decryptedId)
+            ->whereNull('subfolder_id') // Exclude files in subfolders
+            ->paginate(10);
+
+        // Construct the path dynamically using the current user's ID and folder title
+        $storagePath = "public/users/4/shared_folders/67309c0299570testfolder"; // Use folderModel->title
+        Log::info("Storage Path for User Folder: $storagePath");
+
+        // Check if the storage path exists
+        if (!Storage::exists($storagePath)) {
+            Log::error("Storage path does not exist: $storagePath");
+            return redirect()->back()->with([
+                'message' => 'Storage path not found.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+
+        // Fetch files from storage folder
+        $storageFiles = Storage::files($storagePath);
+        Log::info("Fetched files from storage path: " . json_encode($storageFiles));
+
+        // Render view with files data from users_folder
+        return view('sharefolder', [
+            'title' => $folderModel->title ?? 'Folder',
+            'shareableFolder' => $folderModel,
+            'files' => $files,
+            'storageFiles' => $storageFiles, // Pass storage files to the view
+            'folderId' => $id
+        ]);
+    } else {
+        Log::info("Found shareable folder with ID: {$shareableFolder->id} in users_folder_shareable.");
+
+        // Fetch only files directly under this shareable folder
+        $files = DB::table('users_folder_files')
+            ->where('users_folder_shareable_id', $decryptedId)
+            ->whereNull('subfolder_id') // Exclude files in subfolders
+            ->paginate(10);
+
+        // Construct the path dynamically using the current user's ID and shareable folder title
+        $storagePath = "public/users/{$userId}/shared_folders/" . trim($shareableFolder->title); // Use shareableFolder->title
+        Log::info("Storage Path for Shareable Folder: $storagePath");
+
+
+        // Fetch files from storage folder
+        $storageFiles = Storage::files($storagePath);
+        Log::info("Fetched files from storage path: " . json_encode($storageFiles));
+
+        // Render view with files data from users_folder_shareable
+        return view('sharefolder', [
+            'title' => $shareableFolder->title ?? 'Shareable Folder',
+            'shareableFolder' => $shareableFolder,
+            'files' => $files,
+            'storageFiles' => $storageFiles, // Pass storage files to the view
+            'folderId' => $id
+        ]);
+    }
+}
 
 
     public function update(Request $request)

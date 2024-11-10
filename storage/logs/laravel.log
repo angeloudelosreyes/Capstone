@@ -5540,3 +5540,198 @@ Did you mean this?
 [2024-11-10 11:35:39] local.INFO: Attempting to copy file {"original":"public/users/4/one more/file2.docx","new":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5ff9b_file2.docx"} 
 [2024-11-10 11:35:39] local.INFO: Source file exists {"file":"public/users/4/one more/file2.docx"} 
 [2024-11-10 11:35:39] local.INFO: File copied successfully {"newFilePath":"public/users/1/shared_folders/67309a8abc0a2one more/67309a8b5ff9b_file2.docx"} 
+[2024-11-10 11:39:25] local.INFO: Create function called.  
+[2024-11-10 11:39:25] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-10 11:39:25] local.INFO: Attempting to create file: testfile.docx for user ID: 1  
+[2024-11-10 11:39:25] local.INFO: File will not be encrypted.  
+[2024-11-10 11:39:25] local.INFO: Resolved directory path: users/1/yup  
+[2024-11-10 11:39:25] local.INFO: Resolved file path: users/1/yup/testfile.docx  
+[2024-11-10 11:39:25] local.INFO: Temporary file created and deleted.  
+[2024-11-10 11:39:25] local.INFO: File created and stored at: users/1/yup/testfile.docx  
+[2024-11-10 11:39:25] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 11:39:25] local.INFO: Updating folder path for folder ID: 1 to path: users/1/yup  
+[2024-11-10 11:39:25] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-10 11:39:25] local.INFO: File record inserted into database: testfile.docx  
+[2024-11-10 11:39:36] local.INFO: Folder sharing request received {"request":{"_token":"BosIcBDtklT7UJ5552GghKoSIbWi0wXI0Y6sO748","my_name_gDY0T5SyU2AeGOnY":null,"valid_from":"eyJpdiI6IkQ2VmRmUm1Femo3N3B3Nncwb0lla1E9PSIsInZhbHVlIjoieHVFdGsyL3ZVVnBLZTVKV2ZlUU5ZQT09IiwibWFjIjoiZmE2NTEyYThiNGNiMGM0NWVlNWJjNDNmMzEyYzRmZjY1MzJmYmY4MmZlZDg2NzExMjZhYmI3N2FjZjNmYmZjOSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IlErK1pqc2g0aFNhU0pOY2VwM3V0M0E9PSIsInZhbHVlIjoiWWRlMjFjTCtjWXdRZGRqK2pvWUJPQT09IiwibWFjIjoiZTVmZWEyOWM3ZmI4ODU0NmZjODQyZmI0MmRjMmJiYTVlNTdlOTcyZjRkMWE1YWVhMzgwZDg3MzYwZWEyNWY5MSIsInRhZyI6IiJ9","title":"yup","category":"Individual","email":"bruh@gmail.com"}} 
+[2024-11-10 11:39:36] local.INFO: Storage directory created at: public/users/4/shared_folders/67309b7886c24yup  
+[2024-11-10 11:39:36] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309b7888d28_yup","users_id":4,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:39:36.000000Z","created_at":"2024-11-10T11:39:36.000000Z","id":1}}} 
+[2024-11-10 11:39:36] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"1"} 
+[2024-11-10 11:39:36] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":1,"users_id":1,"users_folder_id":1,"users_folder_shareable_id":null,"subfolder_id":null,"files":"testfile.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 11:39:25","updated_at":"2024-11-10 11:39:25","file_path":"users/1/yup/testfile.docx"}]}} 
+[2024-11-10 11:39:36] local.INFO: Attempting to copy file {"original":"public/users/1/yup/testfile.docx","new":"public/users/4/shared_folders/67309b7886c24yup/67309b789bf92_testfile.docx"} 
+[2024-11-10 11:39:36] local.INFO: Source file exists {"file":"public/users/1/yup/testfile.docx"} 
+[2024-11-10 11:39:36] local.INFO: File copied successfully {"newFilePath":"public/users/4/shared_folders/67309b7886c24yup/67309b789bf92_testfile.docx"} 
+[2024-11-10 11:39:47] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:39:47] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:39:48] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:39:48] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:40:59] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:40:59] local.WARNING: No shareable folder found with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:41:25] local.INFO: Create function called.  
+[2024-11-10 11:41:25] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-10 11:41:25] local.INFO: Attempting to create file: file1.docx for user ID: 1  
+[2024-11-10 11:41:25] local.INFO: File will not be encrypted.  
+[2024-11-10 11:41:25] local.INFO: Resolved directory path: users/1/testfolder  
+[2024-11-10 11:41:25] local.INFO: Resolved file path: users/1/testfolder/file1.docx  
+[2024-11-10 11:41:25] local.INFO: Temporary file created and deleted.  
+[2024-11-10 11:41:25] local.INFO: File created and stored at: users/1/testfolder/file1.docx  
+[2024-11-10 11:41:25] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 11:41:25] local.INFO: Updating folder path for folder ID: 1 to path: users/1/testfolder  
+[2024-11-10 11:41:25] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-10 11:41:25] local.INFO: File record inserted into database: file1.docx  
+[2024-11-10 11:41:54] local.INFO: Folder sharing request received {"request":{"_token":"DzuAAsRaXWRvfoCZj0shrRTrVmDUzWbsDCG1jfNg","my_name_4R9ECr1QV3WyjzY6":null,"valid_from":"eyJpdiI6IlZKL3laQmsyN3Yra0puU1F4azE3aFE9PSIsInZhbHVlIjoicyt5T1plWVY4MWRRa094RmpFMUNkdz09IiwibWFjIjoiOTljY2I0ZmVmOTllMjE0ZjkxNjE0ZTI4NzJkZGU0N2M3OGZiNjQ4MTM0M2Q0ZDZhMTY3ZTllNDNkNWY1M2NjNSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IkdwaElDeEVGOUZqSEJrN1RxVU9CRmc9PSIsInZhbHVlIjoiTXR0dTlFeEUzOXNMblFKY1ZxRXhMdz09IiwibWFjIjoiNTQyNzU4ZGZiZDM5ZWQxOTlkNDVkNjg4NjEzNmUwZmJiM2ViZTA0NTlhOWQ1YTcyOTQ1MGFjODQ0MDY2MmY3OSIsInRhZyI6IiJ9","title":"testfolder","category":"Individual","email":"bruh@gmail.com"}} 
+[2024-11-10 11:41:54] local.INFO: Storage directory created at: public/users/4/shared_folders/67309c0299570testfolder  
+[2024-11-10 11:41:54] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"67309c029bb62_testfolder","users_id":4,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T11:41:54.000000Z","created_at":"2024-11-10T11:41:54.000000Z","id":1}}} 
+[2024-11-10 11:41:54] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"1"} 
+[2024-11-10 11:41:54] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":1,"users_id":1,"users_folder_id":1,"users_folder_shareable_id":null,"subfolder_id":null,"files":"file1.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 11:41:25","updated_at":"2024-11-10 11:41:25","file_path":"users/1/testfolder/file1.docx"}]}} 
+[2024-11-10 11:41:54] local.INFO: Attempting to copy file {"original":"public/users/1/testfolder/file1.docx","new":"public/users/4/shared_folders/67309c0299570testfolder/67309c02bd33c_file1.docx"} 
+[2024-11-10 11:41:54] local.INFO: Source file exists {"file":"public/users/1/testfolder/file1.docx"} 
+[2024-11-10 11:41:54] local.INFO: File copied successfully {"newFilePath":"public/users/4/shared_folders/67309c0299570testfolder/67309c02bd33c_file1.docx"} 
+[2024-11-10 11:42:07] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:42:07] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:42:07] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:42:07] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:52:22] local.INFO: Decrypted ID: 1  
+[2024-11-10 11:52:22] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 11:52:22] local.INFO: Retrieved files from users_folder_shareable {"files":{"Illuminate\\Pagination\\LengthAwarePaginator":{"current_page":1,"data":[],"first_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","from":null,"last_page":1,"last_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9","per_page":10,"prev_page_url":null,"to":null,"total":0}}} 
+[2024-11-10 12:06:36] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:06:36] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:06:36] local.INFO: Retrieved files from users_folder_shareable {"files":{"Illuminate\\Pagination\\LengthAwarePaginator":{"current_page":1,"data":[],"first_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","from":null,"last_page":1,"last_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6Iis5QnhqbDMxeXl2NzQ0M1pFbGt4VXc9PSIsInZhbHVlIjoiU256aWZ3SFFVaUVoTWlvM25xQnhYdz09IiwibWFjIjoiYzIwYWUxYjkwNGFkNTA5YjdkZmYwMDhlZDY3MTc5ODZiNGU3NTUwNjZlNDU2Mzg5NTFjZTNkYTRhYzIyNzAwOCIsInRhZyI6IiJ9","per_page":10,"prev_page_url":null,"to":null,"total":0}}} 
+[2024-11-10 12:06:39] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:06:39] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:06:39] local.INFO: Retrieved files from users_folder_shareable {"files":{"Illuminate\\Pagination\\LengthAwarePaginator":{"current_page":1,"data":[],"first_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImFrV1NxVmhiRGVRMUFyM2JRZ2kvVVE9PSIsInZhbHVlIjoid3NSYnNMeDRUMGt2TG9Zd1FpeXNidz09IiwibWFjIjoiYWY5ODBjYWIwNTA2ZDJjNjI0MGQzZGQ0M2VjNDIwMDc1NzRiZTA1Mzk2NTg2NTU0MTYyODkxM2U3Mjk0Nzk0YyIsInRhZyI6IiJ9?page=1","from":null,"last_page":1,"last_page_url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImFrV1NxVmhiRGVRMUFyM2JRZ2kvVVE9PSIsInZhbHVlIjoid3NSYnNMeDRUMGt2TG9Zd1FpeXNidz09IiwibWFjIjoiYWY5ODBjYWIwNTA2ZDJjNjI0MGQzZGQ0M2VjNDIwMDc1NzRiZTA1Mzk2NTg2NTU0MTYyODkxM2U3Mjk0Nzk0YyIsInRhZyI6IiJ9?page=1","links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImFrV1NxVmhiRGVRMUFyM2JRZ2kvVVE9PSIsInZhbHVlIjoid3NSYnNMeDRUMGt2TG9Zd1FpeXNidz09IiwibWFjIjoiYWY5ODBjYWIwNTA2ZDJjNjI0MGQzZGQ0M2VjNDIwMDc1NzRiZTA1Mzk2NTg2NTU0MTYyODkxM2U3Mjk0Nzk0YyIsInRhZyI6IiJ9?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"next_page_url":null,"path":"http://127.0.0.1:8000/folder/shareable/show/eyJpdiI6ImFrV1NxVmhiRGVRMUFyM2JRZ2kvVVE9PSIsInZhbHVlIjoid3NSYnNMeDRUMGt2TG9Zd1FpeXNidz09IiwibWFjIjoiYWY5ODBjYWIwNTA2ZDJjNjI0MGQzZGQ0M2VjNDIwMDc1NzRiZTA1Mzk2NTg2NTU0MTYyODkxM2U3Mjk0Nzk0YyIsInRhZyI6IiJ9","per_page":10,"prev_page_url":null,"to":null,"total":0}}} 
+[2024-11-10 12:18:00] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:18:00] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:18:02] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:18:02] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:35:37] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:35:37] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:43:10] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:43:10] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:44:00] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:44:00] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:44:04] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:44:04] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:45:03] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:45:03] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:45:04] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:45:04] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:45:54] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:45:54] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:46:37] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:46:37] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:47:02] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:47:02] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:47:06] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:47:06] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:48:26] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:48:26] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:48:34] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:48:34] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:50:13] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:50:13] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:50:15] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:50:15] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:51:44] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:51:45] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:51:55] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:51:55] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:52:37] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:52:37] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:52:38] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:52:38] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:54:08] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:54:08] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 12:54:50] local.INFO: Decrypted ID: 1  
+[2024-11-10 12:54:50] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:03:52] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:03:52] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:03:52] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:03:52] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:03:54] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:03:54] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:03:54] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:03:54] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:03:57] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:03:57] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:03:57] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:03:57] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:10:49] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:10:49] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:10:49] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:10:49] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:11:22] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:11:22] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:11:22] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:11:22] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:11:25] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:11:25] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:11:25] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:11:25] local.ERROR: Storage path does not exist: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:12:33] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:12:33] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:12:33] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:12:33] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:12:34] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:12:34] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:12:34] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:12:34] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:14:23] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:14:23] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:14:23] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:14:23] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:15:28] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:15:28] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:15:28] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c0299570testfolder  
+[2024-11-10 13:15:28] local.INFO: Fetched files from storage path: ["public\/users\/4\/shared_folders\/67309c0299570testfolder\/67309c02bd33c_file1.docx"]  
+[2024-11-10 13:15:49] local.INFO: Decrypted ID: 1  
+[2024-11-10 13:15:49] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-10 13:15:49] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/67309c029bb62_testfolder  
+[2024-11-10 13:15:49] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:21:34] local.INFO: Create function called.  
+[2024-11-10 13:21:34] local.INFO: Folder ID belongs to a main folder. Folder ID: 2  
+[2024-11-10 13:21:34] local.INFO: Attempting to create file: AH.docx for user ID: 4  
+[2024-11-10 13:21:34] local.INFO: File will not be encrypted.  
+[2024-11-10 13:21:34] local.INFO: Resolved directory path: users/4/eto na  
+[2024-11-10 13:21:34] local.INFO: Resolved file path: users/4/eto na/AH.docx  
+[2024-11-10 13:21:34] local.INFO: Temporary file created and deleted.  
+[2024-11-10 13:21:34] local.INFO: File created and stored at: users/4/eto na/AH.docx  
+[2024-11-10 13:21:34] local.INFO: File size determined: 7278 bytes  
+[2024-11-10 13:21:34] local.INFO: Updating folder path for folder ID: 2 to path: users/4/eto na  
+[2024-11-10 13:21:34] local.INFO: Updated folder path for folder ID: 2, Rows affected: 1  
+[2024-11-10 13:21:34] local.INFO: File record inserted into database: AH.docx  
+[2024-11-10 13:21:55] local.INFO: Folder sharing request received {"request":{"_token":"lnEgDM062HxTirFzpHJXWusc9jptgbsqcqvj6Jow","my_name_5YNVuuCV4GXXdzLi":null,"valid_from":"eyJpdiI6IjFMZ3d3ZmV2UFdYejF6d05ORU9zMGc9PSIsInZhbHVlIjoiR2RSb25vSnlqVCtJR0J2KzM0VW9OZz09IiwibWFjIjoiY2NlNjAxZDc1NjliMzZlMzMzZjc3NGNiODM3ZmUxN2NiYmRjYjAwMGFhM2Q2MDU1ZjcwMWM5NTM2MzVhNWI4MiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6ImZqdUlwcDVoY1hqUFkxaXl1ZjA0M1E9PSIsInZhbHVlIjoiZk5VRGpBRUEvRzdWbVViTlovQ0szQT09IiwibWFjIjoiYTY2ZjRlY2M0NDAzN2JiNTk2OTJiMjdhNTA4YmZlMTg4MWViOGU2MWRkMjM1ZWJjYjA2NDgxYjBkMDNjMWRlZSIsInRhZyI6IiJ9","title":"eto na","category":"Individual","email":"geloudelosreyes@gmail.com"}} 
+[2024-11-10 13:21:55] local.INFO: Storage directory created at: public/users/1/shared_folders/6730b373bdff9eto na  
+[2024-11-10 13:21:55] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"6730b373c02d1eto na","users_id":1,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T13:21:55.000000Z","created_at":"2024-11-10T13:21:55.000000Z","id":2}}} 
+[2024-11-10 13:21:55] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"2"} 
+[2024-11-10 13:21:55] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":2,"users_id":4,"users_folder_id":2,"users_folder_shareable_id":null,"subfolder_id":null,"files":"AH.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 13:21:34","updated_at":"2024-11-10 13:21:34","file_path":"users/4/eto na/AH.docx"}]}} 
+[2024-11-10 13:21:55] local.INFO: Attempting to copy file {"original":"public/users/4/eto na/AH.docx","new":"public/users/1/shared_folders/6730b373bdff9eto na/6730b373dc801_AH.docx"} 
+[2024-11-10 13:21:55] local.INFO: Source file exists {"file":"public/users/4/eto na/AH.docx"} 
+[2024-11-10 13:21:55] local.INFO: File copied successfully {"newFilePath":"public/users/1/shared_folders/6730b373bdff9eto na/6730b373dc801_AH.docx"} 
+[2024-11-10 13:22:10] local.INFO: Decrypted ID: 2  
+[2024-11-10 13:22:10] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 13:22:10] local.INFO: Storage Path for Shareable Folder: public/users/1/shared_folders/6730b373c02d1eto na  
+[2024-11-10 13:22:10] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:22:10] local.INFO: Decrypted ID: 2  
+[2024-11-10 13:22:10] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 13:22:10] local.INFO: Storage Path for Shareable Folder: public/users/1/shared_folders/6730b373c02d1eto na  
+[2024-11-10 13:22:10] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:22:13] local.INFO: Decrypted ID: 2  
+[2024-11-10 13:22:13] local.INFO: Found shareable folder with ID: 2 in users_folder_shareable.  
+[2024-11-10 13:22:13] local.INFO: Storage Path for Shareable Folder: public/users/1/shared_folders/6730b373c02d1eto na  
+[2024-11-10 13:22:13] local.INFO: Fetched files from storage path: []  
+[2024-11-10 13:26:05] local.INFO: Folder sharing request received {"request":{"_token":"ESFvOwfurdDdZGF34bJ1lrYnG50nzjZVV1VoEwUD","my_name_rIU2UGwEcbJfqnC2":null,"valid_from":"eyJpdiI6IjlCQ2xOcnJ3Y3BGMGJoTUpYUjk3cEE9PSIsInZhbHVlIjoiWVF6aHRnL2VYQ3JBS0tDTVk2eWdLQT09IiwibWFjIjoiOTBhZTU5OTRmMGI3NjY5YjkyOTYzM2Q0Nzk3OWEwNjAxZDVlMWI0YzE2MDdkZDg4ZTZiOTg5YTBlOWRhY2ZhYiIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6InNqRWpxcVdycnp3cFoxdkdlNFh2RUE9PSIsInZhbHVlIjoieDU5ZHNCL2J4MDFrc01WY1JIUGMwdz09IiwibWFjIjoiODg1Zjc3YmRkNDQ2MGNiMzBjNzY5YmYwYWRiNGU5NDMyMWY0YzI1M2Q5ZjljYjIwYjcyM2M0NzU1YTViZWMxOCIsInRhZyI6IiJ9","title":"testfolder","category":"Individual","email":"bruh@gmail.com"}} 
+[2024-11-10 13:26:05] local.INFO: Storage directory created at: public/users/4/shared_folders/6730b46d31492testfolder  
+[2024-11-10 13:26:05] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"6730b46d31492testfolder","users_id":4,"can_edit":false,"can_delete":false,"updated_at":"2024-11-10T13:26:05.000000Z","created_at":"2024-11-10T13:26:05.000000Z","id":3}}} 
+[2024-11-10 13:26:05] local.INFO: Decrypted original folder ID being queried {"originalFolderId":"1"} 
+[2024-11-10 13:26:05] local.INFO: Retrieved files from original folder {"files":{"Illuminate\\Support\\Collection":[{"id":1,"users_id":1,"users_folder_id":1,"users_folder_shareable_id":null,"subfolder_id":null,"files":"file1.docx","size":7278,"extension":"docx","protected":"NO","password":null,"created_at":"2024-11-10 11:41:25","updated_at":"2024-11-10 11:41:25","file_path":"users/1/testfolder/file1.docx"}]}} 
+[2024-11-10 13:26:05] local.INFO: Attempting to copy file {"original":"public/users/1/testfolder/file1.docx","new":"public/users/4/shared_folders/6730b46d31492testfolder/6730b46d42cb2_file1.docx"} 
+[2024-11-10 13:26:05] local.INFO: Source file exists {"file":"public/users/1/testfolder/file1.docx"} 
+[2024-11-10 13:26:05] local.INFO: File copied successfully {"newFilePath":"public/users/4/shared_folders/6730b46d31492testfolder/6730b46d42cb2_file1.docx"} 
+[2024-11-10 13:26:21] local.INFO: Decrypted ID: 3  
+[2024-11-10 13:26:21] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-10 13:26:21] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/6730b46d31492testfolder  
+[2024-11-10 13:26:21] local.INFO: Fetched files from storage path: ["public\/users\/4\/shared_folders\/6730b46d31492testfolder\/6730b46d42cb2_file1.docx"]  
+[2024-11-10 13:26:21] local.INFO: Decrypted ID: 3  
+[2024-11-10 13:26:21] local.INFO: Found shareable folder with ID: 3 in users_folder_shareable.  
+[2024-11-10 13:26:21] local.INFO: Storage Path for Shareable Folder: public/users/4/shared_folders/6730b46d31492testfolder  
+[2024-11-10 13:26:21] local.INFO: Fetched files from storage path: ["public\/users\/4\/shared_folders\/6730b46d31492testfolder\/6730b46d42cb2_file1.docx"]  

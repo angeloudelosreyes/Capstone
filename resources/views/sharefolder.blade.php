@@ -1,6 +1,9 @@
 @extends('layouts.app')
+
 @section('container')
+
     @include('includes.create-sub-folder-modal')
+
     @include('includes.file-details-modal')
 
 
@@ -17,6 +20,7 @@
                 sessionStorage.removeItem('skipNotification');
             }
         </script>
+
         @if (isset($query) &&
                 count($query) == 0 &&
                 (isset($subfolders) && count($subfolders) == 0) &&
@@ -35,9 +39,6 @@
                 <button class="btn btn-secondary me-2" onclick="handleBack()">
                     <i class="ri-arrow-left-line"></i> Back
                 </button>
-                {{-- <a href="{{ url()->previous() }}" class="btn btn-secondary me-2"> <i class="ri-arrow-left-line"></i> Back
-                </a> --}}
-
             </div>
 
             <!-- Display Subfolders -->
@@ -80,7 +81,6 @@
                                                     onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
                                                         class="bx bx-cut me-2"></i> Move</a></li>
                                             <li>
-                                            <li>
                                                 <form
                                                     action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
                                                     method="POST" style="display: inline;"
@@ -101,7 +101,6 @@
                         </div>
                     </div>
                 @endforeach
-                {{-- {{ $subfolders->links() }} --}}
             @endif
 
             <!-- Display Files -->
@@ -124,7 +123,7 @@
                                         @endif
                                     </a>
                                     <!-- Dropdown Menu for File Options -->
-                                    <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
+                                    <div class="dropdown position-absolute" style="top: 5px; right:  5px;">
                                         <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ri-more-2-fill fs-16 align-bottom"></i>
@@ -152,7 +151,6 @@
                                                     onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
                                                         class="bx bx-cut me-2"></i> Move</a></li>
                                             <li>
-                                            <li>
                                                 <form
                                                     action="{{ route('shared.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
                                                     method="POST" style="display: inline;"
@@ -170,7 +168,6 @@
                                                     onclick="viewFileDetails('{{ Crypt::encryptString($file->id) }}')">
                                                     <i class="bx bx-info-circle me-2"></i> View Details
                                                 </a>
-
                                             </li>
                                         </ul>
                                     </div>
@@ -182,10 +179,37 @@
                 @endforeach
             @endif
 
+            <!-- Display Storage Files -->
+            @if (isset($storageFiles) && count($storageFiles) > 0)
+                <h5 class="mt-4">Files from Storage</h5>
+                @foreach ($storageFiles as $storageFile)
+                    <div class="col-md-2 col-6 folder-card">
+                        <div class="card bg-light shadow-none">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center position-relative">
+                                    <a href="{{ Storage::url($storageFile) }}" class="text-decoration-none"
+                                        target="_blank">
+                                        @if (pathinfo($storageFile, PATHINFO_EXTENSION) == 'pdf')
+                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                        @elseif (pathinfo($storageFile, PATHINFO_EXTENSION) == 'jpg' || pathinfo($storageFile, PATHINFO_EXTENSION) == 'png')
+                                            <img src="{{ Storage::url($storageFile) }}" class="img-fluid"
+                                                alt="File Image">
+                                        @else
+                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
+                                        @endif
+                                    </a>
+                                </div>
+                                <h6 class="fs-15 folder-name text-center mt-2">{{ basename($storageFile) }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
             <!-- Display Existing Folder Contents -->
             @if (isset($query) && count($query) > 0)
                 @foreach ($query as $data)
-                    <div class="col-md-2 col-6 folder-card">
+                    <div class="col-md <div class="col-6 folder-card">
                         <div class="card bg-light shadow-none" id="folder-{{ $data->id }}">
                             <div class="card-body">
                                 <div class="d-flex mb-1">
@@ -256,6 +280,7 @@
 
         @endif
     </div>
+
 @endsection
 
 <script>
