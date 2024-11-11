@@ -320,7 +320,7 @@ class SharedController extends Controller
                     $folderTitle = $this->getFolderTitle($query);
 
                     // Return the edit view with the compacted variables
-                    return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
+                    return view('edit-shareable', compact('query', 'content', 'extension', 'folderTitle'));
                 } else {
                     throw new \Exception("File record not found in users_folder_files for ID: $decryptedId");
                 }
@@ -419,11 +419,11 @@ class SharedController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
+     * Rename the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function rename(Request $request, $id)
     {
-        Log::info("Starting update function for shareable file ID: $id");
+        Log::info("Starting rename function for shareable file ID: $id");
 
         $request->validate([
             'new_name' => 'required|string|max:255',
@@ -466,19 +466,19 @@ class SharedController extends Controller
                         throw new \Exception("File not found in storage.");
                     }
 
-                    // Update the file reference in the database
+                    // rename the file reference in the database
                     DB::table('users_folder_files')->where('id', $decryptedId)->update([
                         'file_path' => str_replace('public/', '', $newFilePath),
                         'files' => $newFileName,
                         'updated_at' => now(),
                     ]);
-                    Log::info("File reference updated in users_folder_files for ID: $decryptedId");
+                    Log::info("File reference rename in users_folder_files for ID: $decryptedId");
 
                     DB::commit();
-                    Log::info("Transaction committed successfully for shareable file update with users_folder_files_id: $decryptedId");
+                    Log::info("Transaction committed successfully for shareable file rename with users_folder_files_id: $decryptedId");
 
                     return back()->with([
-                        'message' => 'File has been updated successfully.',
+                        'message' => 'File has been rename successfully.',
                         'type' => 'success',
                         'title' => 'System Notification'
                     ]);
@@ -499,6 +499,86 @@ class SharedController extends Controller
             ]);
         }
     }
+
+    public function update(Request $request, string $id)
+    {
+        Log::info('Starting update function for shared file ID: ' . $id);
+        try {
+            // Decrypt the file ID
+            $decryptedId = Crypt::decryptString($id);
+
+            // Validate the incoming request
+            $request->validate([
+                'content' => 'required|string',
+            ]);
+
+            // Query for the file details in the database
+            $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+
+            if (!$query) {
+                Log::error('File not found in database for ID: ' . $decryptedId);
+                return redirect()->back()->withErrors(['error' => 'File not found.']);
+            }
+
+            // Construct the shared folder file path
+            $filePath = "public/users/{$query->users_id}/shared_folders/{$query->files}";
+
+            // Check if the file has a .docx extension
+            if ($query->extension === 'docx') {
+                $phpWord = new \PhpOffice\PhpWord\PhpWord();
+                $section = $phpWord->addSection();
+
+                // Prepare the content for the document
+                $content = '<html><body>' . $request->input('content') . '</body></html>';
+
+                try {
+                    // Add HTML content to the section
+                    \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, true, false);
+
+                    // Save the new document to a temporary file
+                    $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+                    $writer->save($tempFile);
+
+                    // Read the content of the temporary file
+                    $fileContent = file_get_contents($tempFile);
+                    unlink($tempFile); // Clean up temporary file
+
+                    // Encrypt the file content
+                    $encryptedContent = $this->encryptionService->encrypt($fileContent);
+
+                    // Update the file in storage
+                    if (Storage::exists($filePath)) {
+                        Storage::put($filePath, $encryptedContent);
+                        Log::info('File updated successfully in storage at: ' . $filePath);
+                    } else {
+                        Log::error('File not found in storage for path: ' . $filePath);
+                        return redirect()->back()->withErrors(['error' => 'File not found in storage.']);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Error processing .docx file: ' . $e->getMessage());
+                    return redirect()->back()->withErrors(['error' => 'Error processing .docx file: ' . $e->getMessage()]);
+                }
+            } else {
+                Log::warning('File extension is not supported for updates: ' . $query->extension);
+                return redirect()->back()->withErrors(['error' => 'Only .docx files can be updated.']);
+            }
+
+            // Encrypt the ID to redirect back to the edit page
+            $encryptedId = Crypt::encryptString($query->id);
+
+            // Log the successful update and redirect
+            Log::info('File updated successfully. Redirecting to edit page for ID: ' . $encryptedId);
+
+            return redirect()->route('shared.edit', ['id' => $encryptedId])
+                ->with('message', 'File updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('An error occurred while updating the file: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'An error occurred while updating the file.']);
+        }
+    }
+
+
 
 
 

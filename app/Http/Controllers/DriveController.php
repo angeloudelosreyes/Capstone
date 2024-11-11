@@ -20,11 +20,11 @@ class DriveController extends Controller
 
     public function __construct(DoubleEncryptionService $encryptionService)
 
-     {
-     
-         $this->encryptionService = $encryptionService; // Inject the service
-     
-     }
+    {
+
+        $this->encryptionService = $encryptionService; // Inject the service
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -75,68 +75,68 @@ class DriveController extends Controller
     {
         // Decrypt the file ID
         $fileId = Crypt::decryptString($id);
-    
+
         // Query for the file details in the database
         $query = DB::table('users_folder_files')->where('id', $fileId)->first();
-    
+
         if (!$query) {
             return redirect()->back()->with('error', 'File not found.');
         }
-    
+
         // Build the user-specific path
         $userId = $query->users_id; // Get the user ID from the file record
         $filePath = ltrim($query->file_path, '/'); // Ensure no leading slash
-    
+
         // Log the file path
         Log::info('File path from database: ' . $filePath);
-    
+
         // Check if the file exists in the storage
         if (!Storage::disk('public')->exists($filePath)) {
             $fullStoragePath = storage_path('app/public/' . $filePath);
             Log::error('File not found at path: ' . $fullStoragePath);
             return redirect()->back()->with('error', 'File not found in the specified directory.');
         }
-    
+
         // Prepare file details
         $title = $query->files;
         $extension = $query->extension;
         $content = '';
-    
+
         // Check for password protection
         if ($query->protected === 'YES') {
             $request->validate([
                 'password' => 'required|string'
             ]);
-    
+
             // Verify the provided password against the hashed password in the database
             if (!password_verify($request->password, $query->password)) {
                 return redirect()->back()->with('error', 'Incorrect password.');
             }
         }
-    
+
         // Determine the file content based on its extension
         if ($extension == 'pdf') {
             $content = Storage::url($filePath); // Use the URL for PDF
         } elseif ($extension == 'docx') {
             // Load the encrypted file contents
             $encryptedContent = Storage::disk('public')->get($filePath);
-    
+
             // Decrypt the file contents using the injected DoubleEncryptionService
             $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
-    
+
             // Create a temporary file to load with PhpWord
             $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
             file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
-    
+
             try {
                 // Load the decrypted content with PhpWord
                 $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
                 $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-    
+
                 // Save the HTML output to a temporary file
                 $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
                 $writer->save($htmlTempFile);
-    
+
                 // Read the HTML content
                 $htmlContent = file_get_contents($htmlTempFile);
                 unlink($htmlTempFile); // Clean up temporary file
@@ -149,376 +149,376 @@ class DriveController extends Controller
         } else {
             return redirect()->back()->with('error', 'Unsupported file type.');
         }
-    
+
         return view('read', compact('title', 'query', 'content', 'extension'));
     }
     /**
      * Display the specified resource.
      */
     public function show(string $id)
-{
-    // Decrypt the file ID
-    $decryptedId = Crypt::decryptString($id);
-
-    // Query for the file details in the database
-    $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
-
-    if (!$query) {
-        return redirect()->back()->with('error', 'File not found.');
-    }
-
-    // Determine the folder ID to use for path building
-    $folderId = $query->users_folder_id;
-    if ($query->subfolder_id) {
-        // If there's a subfolder, use that ID
-        $folderId = $query->subfolder_id;
-    }
-
-    // Build the full path using the helper function
-    $basePath = "public/users/{$query->users_id}";
-    $fullPath = $this->buildFullPath($folderId, $basePath);
-
-    if (!$fullPath || !Storage::exists("$fullPath/{$query->files}")) {
-        return redirect()->back()->with('error', 'Folder or file does not exist.');
-    }
-
-    // Attempt to get the folder title from the main folder first
-    $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
-
-    // If the main folder is not found, try to get the name from the subfolder
-    if (!$folder) {
-        $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
-        if (!$folder) {
-            return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
-        }
-        $folderTitle = $folder->name; // Use the subfolder's name
-    } else {
-        $folderTitle = $folder->title; // Use the main folder's title
-    }
-
-    $title = $query->files;
-    $extension = $query->extension;
-    $content = '';
-
-    // Check file extension and handle accordingly
-    if ($extension == 'pdf') {
-        $filePath = "$fullPath/$title";
-        if (Storage::exists($filePath)) {
-            $content = $filePath; // Use the full path for PDF
-        } else {
-            return redirect()->back()->with('error', 'PDF file not found.');
-        }
-    } elseif ($extension == 'docx') {
-        $filePath = "$fullPath/$title"; // Use the full path for DOCX
-        if (Storage::exists($filePath)) {
-            try {
-                // Load the encrypted file contents
-                $encryptedContent = Storage::get($filePath);
-                
-                // Decrypt the file contents using your DoubleEncryptionService
-                $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
-                $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
-
-                // Create a temporary file to load with PhpWord
-                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
-
-                // Load the decrypted content with PhpWord
-                $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
-                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-
-                // Save the HTML output to a temporary file
-                $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
-                $writer->save($htmlTempFile);
-
-                // Read the HTML content
-                $htmlContent = file_get_contents($htmlTempFile);
-                unlink($htmlTempFile); // Clean up temporary file
-                unlink($tempFile); // Clean up temporary file
-                $content = $htmlContent;
-            } catch (\Exception $e) {
-                Log::error('Error loading .docx file: ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Error loading .docx file.');
-            }
-        } else {
-            return redirect()->back()->with ('error', 'File not found.');
-        }
-    } else {
-        return redirect()->back()->with('error', 'Unsupported file type.');
-    }
-
-    return view('read', compact('title', 'query', 'content', 'extension', 'folderTitle'));
-}
-
-public function download(Request $request, $id)
-{
-    // Validate the password input
-    $request->validate([
-        'password' => 'required|string'
-    ]);
-
-    $password = $request->input('password');
-    Log::info('Password entered by user: ' . $password);
-
-    // Query for the file and folder details in the database
-    try {
+    {
+        // Decrypt the file ID
         $decryptedId = Crypt::decryptString($id);
-        Log::info('Decrypted ID: ' . $decryptedId);
 
+        // Query for the file details in the database
         $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
-        Log::info('File query result: ' . json_encode($query));
+
+        if (!$query) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
 
         // Determine the folder ID to use for path building
         $folderId = $query->users_folder_id;
         if ($query->subfolder_id) {
+            // If there's a subfolder, use that ID
             $folderId = $query->subfolder_id;
         }
 
-        // Build the full path
+        // Build the full path using the helper function
         $basePath = "public/users/{$query->users_id}";
         $fullPath = $this->buildFullPath($folderId, $basePath);
 
-        if (!$fullPath) {
-            Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
-            return response()->json(['error' => 'Folder does not exist.'], 404);
+        if (!$fullPath || !Storage::exists("$fullPath/{$query->files}")) {
+            return redirect()->back()->with('error', 'Folder or file does not exist.');
         }
 
-        $title = $query->files; // Original file name
-        Log::info('Original file name: ' . $title);
+        // Attempt to get the folder title from the main folder first
+        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
 
-        // Construct the full file path
-        $filePath = "$fullPath/$title";
-        Log::info('File path: ' . $filePath);
-
-        // Check if the file exists in the storage
-        if (!Storage::exists($filePath)) {
-            Log::error('File not found in storage.');
-            return response()->json(['error' => 'File not found.'], 404);
-        }
-
-        Log::info('File exists in storage.');
-
-        // Read the file content
-        $fileContent = Storage::get($filePath);
-
-        // Check if the file is protected and handle accordingly
-        if ($query->protected === 'YES') {
-            // Fetch the hashed password from the database using the helper function
-            $correctPassword = $this->getPasswordForFile($decryptedId);
-
-            // Verify the provided password against the hashed password
-            if (password_verify($password, $correctPassword)) {
-                // Password is correct, decrypt the file content
-                $fileContent = $this->encryptionService->decrypt($fileContent);
-            } else {
-                Log::info('Password is incorrect. Download will not proceed.');
-                return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
+        // If the main folder is not found, try to get the name from the subfolder
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            if (!$folder) {
+                return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
             }
-        }
-
-        // Ensure the storage directory exists
-        $storagePath = storage_path('app/protected');
-        if (!File::exists($storagePath)) {
-            File::makeDirectory($storagePath, 0755, true);
-        }
-
-        // Create a ZIP file
-        $zip = new \ZipArchive();
-        $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
-        Log::info('ZIP file name: ' . $zipFileName);
-
-        if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-            Log::info('ZIP file opened successfully.');
-
-            // Add the decrypted content to the zip
-            $zip->addFromString($title, $fileContent);
-
-            // Encrypt the ZIP file with the provided password
-            $zip->setEncryptionName($title, \ZipArchive::EM_AES_256, $password);
-
-            $zip->close();
-            Log::info('ZIP file closed successfully.');
-
-            // Return the zip file for download with a custom filename
-            return response()->download($zipFileName)->deleteFileAfterSend(true);
+            $folderTitle = $folder->name; // Use the subfolder's name
         } else {
-            Log::error('Failed to open the ZIP file.');
-            return response()->json(['error' => 'Failed to create the zip file.'], 500);
+            $folderTitle = $folder->title; // Use the main folder's title
         }
-    } catch (\Exception $e) {
-        Log::error('Error occurred: ' . $e->getMessage());
-        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
-    }
-}
 
-private function getPasswordForFile($fileId)
-{
-    // Fetch the hashed password from your storage
-    return DB::table('users_folder_files')->where('id', $fileId)->value('password'); // Assuming 'password' is the column name
-}
+        $title = $query->files;
+        $extension = $query->extension;
+        $content = '';
+
+        // Check file extension and handle accordingly
+        if ($extension == 'pdf') {
+            $filePath = "$fullPath/$title";
+            if (Storage::exists($filePath)) {
+                $content = $filePath; // Use the full path for PDF
+            } else {
+                return redirect()->back()->with('error', 'PDF file not found.');
+            }
+        } elseif ($extension == 'docx') {
+            $filePath = "$fullPath/$title"; // Use the full path for DOCX
+            if (Storage::exists($filePath)) {
+                try {
+                    // Load the encrypted file contents
+                    $encryptedContent = Storage::get($filePath);
+
+                    // Decrypt the file contents using your DoubleEncryptionService
+                    $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
+                    $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
+
+                    // Create a temporary file to load with PhpWord
+                    $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                    file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+
+                    // Load the decrypted content with PhpWord
+                    $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
+                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                    // Save the HTML output to a temporary file
+                    $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
+                    $writer->save($htmlTempFile);
+
+                    // Read the HTML content
+                    $htmlContent = file_get_contents($htmlTempFile);
+                    unlink($htmlTempFile); // Clean up temporary file
+                    unlink($tempFile); // Clean up temporary file
+                    $content = $htmlContent;
+                } catch (\Exception $e) {
+                    Log::error('Error loading .docx file: ' . $e->getMessage());
+                    return redirect()->back()->with('error', 'Error loading .docx file.');
+                }
+            } else {
+                return redirect()->back()->with('error', 'File not found.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Unsupported file type.');
+        }
+
+        return view('read', compact('title', 'query', 'content', 'extension', 'folderTitle'));
+    }
+
+    public function download(Request $request, $id)
+    {
+        // Validate the password input
+        $request->validate([
+            'password' => 'required|string'
+        ]);
+
+        $password = $request->input('password');
+        Log::info('Password entered by user: ' . $password);
+
+        // Query for the file and folder details in the database
+        try {
+            $decryptedId = Crypt::decryptString($id);
+            Log::info('Decrypted ID: ' . $decryptedId);
+
+            $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
+            Log::info('File query result: ' . json_encode($query));
+
+            // Determine the folder ID to use for path building
+            $folderId = $query->users_folder_id;
+            if ($query->subfolder_id) {
+                $folderId = $query->subfolder_id;
+            }
+
+            // Build the full path
+            $basePath = "public/users/{$query->users_id}";
+            $fullPath = $this->buildFullPath($folderId, $basePath);
+
+            if (!$fullPath) {
+                Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
+                return response()->json(['error' => 'Folder does not exist.'], 404);
+            }
+
+            $title = $query->files; // Original file name
+            Log::info('Original file name: ' . $title);
+
+            // Construct the full file path
+            $filePath = "$fullPath/$title";
+            Log::info('File path: ' . $filePath);
+
+            // Check if the file exists in the storage
+            if (!Storage::exists($filePath)) {
+                Log::error('File not found in storage.');
+                return response()->json(['error' => 'File not found.'], 404);
+            }
+
+            Log::info('File exists in storage.');
+
+            // Read the file content
+            $fileContent = Storage::get($filePath);
+
+            // Check if the file is protected and handle accordingly
+            if ($query->protected === 'YES') {
+                // Fetch the hashed password from the database using the helper function
+                $correctPassword = $this->getPasswordForFile($decryptedId);
+
+                // Verify the provided password against the hashed password
+                if (password_verify($password, $correctPassword)) {
+                    // Password is correct, decrypt the file content
+                    $fileContent = $this->encryptionService->decrypt($fileContent);
+                } else {
+                    Log::info('Password is incorrect. Download will not proceed.');
+                    return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
+                }
+            }
+
+            // Ensure the storage directory exists
+            $storagePath = storage_path('app/protected');
+            if (!File::exists($storagePath)) {
+                File::makeDirectory($storagePath, 0755, true);
+            }
+
+            // Create a ZIP file
+            $zip = new \ZipArchive();
+            $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
+            Log::info('ZIP file name: ' . $zipFileName);
+
+            if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                Log::info('ZIP file opened successfully.');
+
+                // Add the decrypted content to the zip
+                $zip->addFromString($title, $fileContent);
+
+                // Encrypt the ZIP file with the provided password
+                $zip->setEncryptionName($title, \ZipArchive::EM_AES_256, $password);
+
+                $zip->close();
+                Log::info('ZIP file closed successfully.');
+
+                // Return the zip file for download with a custom filename
+                return response()->download($zipFileName)->deleteFileAfterSend(true);
+            } else {
+                Log::error('Failed to open the ZIP file.');
+                return response()->json(['error' => 'Failed to create the zip file.'], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error occurred: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+        }
+    }
+
+    private function getPasswordForFile($fileId)
+    {
+        // Fetch the hashed password from your storage
+        return DB::table('users_folder_files')->where('id', $fileId)->value('password'); // Assuming 'password' is the column name
+    }
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-{
-    // Decrypt the file ID
-    $decryptedId = Crypt::decryptString($id);
+    {
+        // Decrypt the file ID
+        $decryptedId = Crypt::decryptString($id);
 
-    // Query for the file details in the database
-    $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
+        // Query for the file details in the database
+        $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
 
-    if (!$query) {
-        return redirect()->back()->with('error', 'File not found.');
-    }
-
-    // Determine the folder ID to use for path building
-    $folderId = $query->users_folder_id;
-    if ($query->subfolder_id) {
-        // If there's a subfolder, use that ID
-        $folderId = $query->subfolder_id;
-    }
-
-    // Build the full path using the helper function
-    $basePath = "public/users/{$query->users_id}";
-    $fullPath = $this->buildFullPath($folderId, $basePath);
-
-    if (!$fullPath) {
-        return redirect()->back()->with('error', 'Folder does not exist.');
-    }
-
-    // Attempt to get the folder title from the main folder first
-    $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
-
-    // If the main folder is not found, try to get the name from the subfolder
-    if (!$folder) {
-        $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
-        if (!$folder) {
-            return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
-        }
-        $folderTitle = $folder->name; // Use the subfolder's name
-    } else {
-        $folderTitle = $folder->title; // Use the main folder's title
-    }
-
-    $title = $query->files;
-    $extension = $query->extension;
-    $content = '';
-
-    if ($extension == 'docx') {
-        $filePath = "$fullPath/$title"; // Use the full path here
-        if (Storage::exists($filePath)) {
-            try {
-                // Load the encrypted file contents
-                $encryptedContent = Storage::get($filePath);
-                
-                // Decrypt the file contents using your DoubleEncryptionService
-                $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
-                $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
-
-                // Write the decrypted content to a temporary file
-                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
-
-                // Load the decrypted content with PhpWord
-                $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
-                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-
-                // Save the HTML output to a temporary file
-                $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
-                $writer->save($htmlTempFile);
-
-                // Read the HTML content
-                $content = file_get_contents($htmlTempFile);
-                unlink($htmlTempFile); // Clean up temporary file
-                unlink($tempFile); // Clean up temporary file
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
-            }
-        } else {
+        if (!$query) {
             return redirect()->back()->with('error', 'File not found.');
         }
-    }
 
-    return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
-}
+        // Determine the folder ID to use for path building
+        $folderId = $query->users_folder_id;
+        if ($query->subfolder_id) {
+            // If there's a subfolder, use that ID
+            $folderId = $query->subfolder_id;
+        }
+
+        // Build the full path using the helper function
+        $basePath = "public/users/{$query->users_id}";
+        $fullPath = $this->buildFullPath($folderId, $basePath);
+
+        if (!$fullPath) {
+            return redirect()->back()->with('error', 'Folder does not exist.');
+        }
+
+        // Attempt to get the folder title from the main folder first
+        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
+
+        // If the main folder is not found, try to get the name from the subfolder
+        if (!$folder) {
+            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            if (!$folder) {
+                return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
+            }
+            $folderTitle = $folder->name; // Use the subfolder's name
+        } else {
+            $folderTitle = $folder->title; // Use the main folder's title
+        }
+
+        $title = $query->files;
+        $extension = $query->extension;
+        $content = '';
+
+        if ($extension == 'docx') {
+            $filePath = "$fullPath/$title"; // Use the full path here
+            if (Storage::exists($filePath)) {
+                try {
+                    // Load the encrypted file contents
+                    $encryptedContent = Storage::get($filePath);
+
+                    // Decrypt the file contents using your DoubleEncryptionService
+                    $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
+                    $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
+
+                    // Write the decrypted content to a temporary file
+                    $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                    file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+
+                    // Load the decrypted content with PhpWord
+                    $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
+                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                    // Save the HTML output to a temporary file
+                    $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
+                    $writer->save($htmlTempFile);
+
+                    // Read the HTML content
+                    $content = file_get_contents($htmlTempFile);
+                    unlink($htmlTempFile); // Clean up temporary file
+                    unlink($tempFile); // Clean up temporary file
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
+                }
+            } else {
+                return redirect()->back()->with('error', 'File not found.');
+            }
+        }
+
+        return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    // Decrypt the file ID
-    $decryptedId = Crypt::decryptString($id);
+    {
+        // Decrypt the file ID
+        $decryptedId = Crypt::decryptString($id);
 
-    // Validate the incoming request
-    $request->validate([
-        'content' => 'required|string',
-    ]);
+        // Validate the incoming request
+        $request->validate([
+            'content' => 'required|string',
+        ]);
 
-    // Query for the file details in the database
-    $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+        // Query for the file details in the database
+        $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
 
-    if (!$query) {
-        return redirect()->back()->with('error', 'File not found.');
-    }
-
-    // Get the folder title and other details
-    $folder = DB::table('users_folder')->where('id', $query->users_folder_id)->first();
-    $folderTitle = $folder ? $folder->title : 'Default Folder'; // Handle case where folder might not exist
-    $title = $query->files;
-    $extension = $query->extension;
-
-    // Construct the file path
-    $filePath = 'public/users/' . $query->users_id . '/' . $folderTitle . '/' . $title;
-
-    if ($extension == 'docx') {
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $section = $phpWord->addSection();
-
-        // Prepare the content for the document
-        $content = $request->input('content');
-        $content = '<html><body>' . $content . '</body></html>';
-
-        try {
-            // Add HTML content to the section
-            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, true, false);
-
-            // Save the new document to a temporary file
-            $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-            $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-            $writer->save($tempFile);
-
-            // Read the content of the temporary file
-            $fileContent = file_get_contents($tempFile);
-            unlink($tempFile); // Clean up temporary file
-
-            // Encrypt the file content using DoubleEncryptionService
-            $doubleEncryptionService = new DoubleEncryptionService();
-            $encryptedContent = $doubleEncryptionService->encrypt($fileContent);
-
-            // Check if the original file exists
-            if (Storage::exists($filePath)) {
-                // Update the file with the new encrypted content
-                Storage::put($filePath, $encryptedContent);
-            } else {
-                return redirect()->back()->with('error', 'File not found.');
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error processing .docx file: ' . $e->getMessage());
+        if (!$query) {
+            return redirect()->back()->with('error', 'File not found.');
         }
+
+        // Get the folder title and other details
+        $folder = DB::table('users_folder')->where('id', $query->users_folder_id)->first();
+        $folderTitle = $folder ? $folder->title : 'Default Folder'; // Handle case where folder might not exist
+        $title = $query->files;
+        $extension = $query->extension;
+
+        // Construct the file path
+        $filePath = 'public/users/' . $query->users_id . '/' . $folderTitle . '/' . $title;
+
+        if ($extension == 'docx') {
+            $phpWord = new \PhpOffice\PhpWord\PhpWord();
+            $section = $phpWord->addSection();
+
+            // Prepare the content for the document
+            $content = $request->input('content');
+            $content = '<html><body>' . $content . '</body></html>';
+
+            try {
+                // Add HTML content to the section
+                \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, true, false);
+
+                // Save the new document to a temporary file
+                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+                $writer->save($tempFile);
+
+                // Read the content of the temporary file
+                $fileContent = file_get_contents($tempFile);
+                unlink($tempFile); // Clean up temporary file
+
+                // Encrypt the file content using DoubleEncryptionService
+                $doubleEncryptionService = new DoubleEncryptionService();
+                $encryptedContent = $doubleEncryptionService->encrypt($fileContent);
+
+                // Check if the original file exists
+                if (Storage::exists($filePath)) {
+                    // Update the file with the new encrypted content
+                    Storage::put($filePath, $encryptedContent);
+                } else {
+                    return redirect()->back()->with('error', 'File not found.');
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Error processing .docx file: ' . $e->getMessage());
+            }
+        }
+
+        // Encrypt the ID to redirect back to the edit page
+        $encryptedId = Crypt::encryptString($query->id);
+
+        // Log the successful update and redirect
+        Log::info('File updated successfully. Redirecting to edit page for ID: ' . $encryptedId);
+
+        return redirect()->route('drive.edit', ['id' => $encryptedId])
+            ->with('message', 'File updated successfully.');
     }
 
-    // Encrypt the ID to redirect back to the edit page
-    $encryptedId = Crypt::encryptString($query->id);
-    
-    // Log the successful update and redirect
-    \Log::info('File updated successfully. Redirecting to edit page for ID: ' . $encryptedId);
-    
-    return redirect()->route('drive.edit', ['id' => $encryptedId])
-        ->with('message', 'File updated successfully.');
-}
-
-public function destroy(string $id)
+    public function destroy(string $id)
     {
         // Decrypt the ID to get the file record
         $fileId = Crypt::decryptString($id);

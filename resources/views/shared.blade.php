@@ -295,7 +295,7 @@
                         Swal.showValidationMessage('File name cannot be empty');
                         return;
                     }
-                    return fetch(`{{ route('shared.update', '') }}/${fileId}`, {
+                    return fetch(`{{ route('shared.rename', '') }}/${fileId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
