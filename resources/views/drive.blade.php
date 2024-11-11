@@ -407,33 +407,31 @@
 
         document.getElementById('createFileButton').addEventListener('click', function() {
             const folderId = this.getAttribute(
-                'data-folder-id'); // Get the dynamic folderId from the button's data attribute
+            'data-folder-id'); // Get the dynamic folderId from the button's data attribute
 
             Swal.fire({
                 title: '<strong>Create New File</strong>',
                 icon: 'folder-plus',
                 html: `
-        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="fileName" style="flex-basis: 30%; text-align: left;">File Name:</label>
-                <input type="text" id="fileName" class="swal2-input" placeholder="Enter the file name" style="flex-basis: 70%;">
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px;">
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <label for="fileName" style="flex-basis: 30%; text-align: left;">File Name:</label>
+                    <input type="text" id="fileName" class="swal2-input" placeholder="Enter the file name" style="flex-basis: 70%;">
+                </div>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <label for="fileType" style="flex-basis: 30%; text-align: left;">File Type:</label>
+                    <select id="fileType" class="swal2-input" style="flex-basis: 70%;">
+                        <option value="docx">Word File (.docx)</option>
+                    </select>
+                </div>
+                <!-- Hidden Protected Checkbox -->
+                <input type="checkbox" id="isProtected" checked hidden>
+                <div style="display: flex; align-items: center; width: 100%;" id="passwordField">
+                    <label for="password" style="flex-basis: 30%; text-align: left;">Password:</label>
+                    <input type="password" id="password" class="swal2-input" placeholder="Enter the password" style="flex-basis: 70%;" required>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="fileType" style="flex-basis: 30%; text-align: left;">File Type:</label>
-                <select id="fileType" class="swal2-input" style="flex-basis: 70%;">
-                    <option value="docx">Word File (.docx)</option>
-                </select>
-            </div>
-            <div style="display: flex; align-items: center; width: 100%;">
-                <label for="isProtected" style="flex-basis: 30%; text-align: left;">Protected:</label>
-                <input type="checkbox" id="isProtected" class="swal2-checkbox" style="flex-basis: 70%;">
-            </div>
-            <div style="display: flex; align-items: center; width: 100%;" id="passwordField" hidden>
-                <label for="password" style="flex-basis: 30%; text-align: left;">Password:</label>
-                <input type="password" id="password" class="swal2-input" placeholder="Enter the password" style="flex-basis: 70%;">
-            </div>
-        </div>
-        <input type="hidden" id="folderId" value="${folderId}"> <!-- Use the dynamic folderId here -->
+            <input type="hidden" id="folderId" value="${folderId}"> <!-- Use the dynamic folderId here -->
         `,
                 showCancelButton: true,
                 confirmButtonText: 'Create',
@@ -447,27 +445,26 @@
                 preConfirm: () => {
                     const fileName = document.getElementById('fileName').value;
                     const fileType = document.getElementById('fileType').value;
-                    const folderId = document.getElementById('folderId')
-                        .value; // Use the dynamic folderId
-                    const isProtected = document.getElementById('isProtected').checked;
+                    const folderId = document.getElementById('folderId').value;
                     const password = document.getElementById('password').value;
-                    const requestBody = {
-                        fileName: fileName,
-                        fileType: fileType,
-                        folder_id: folderId,
-                        isProtected: isProtected,
-                        password: isProtected ? password : null
-                    };
 
                     if (!fileName.trim()) {
                         Swal.showValidationMessage('Please enter a file name.');
                         return;
                     }
 
-                    if (isProtected && !password.trim()) {
+                    if (!password.trim()) {
                         Swal.showValidationMessage('Please enter a password.');
                         return;
                     }
+
+                    const requestBody = {
+                        fileName: fileName,
+                        fileType: fileType,
+                        folder_id: folderId,
+                        isProtected: true, // Ensure protected is always true
+                        password: password
+                    };
 
                     return fetch('{{ route('files.create') }}', {
                             method: 'POST',
@@ -499,16 +496,8 @@
                     });
                 }
             });
-
-            document.getElementById('isProtected').addEventListener('change', function() {
-                const passwordField = document.getElementById('passwordField');
-                if (this.checked) {
-                    passwordField.hidden = false;
-                } else {
-                    passwordField.hidden = true;
-                }
-            });
         });
+
 
 
         function downloadFile(fileId) {

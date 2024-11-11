@@ -53,7 +53,6 @@ class UsersFolderShareableController extends Controller
     {
         Log::info('Folder sharing request received', ['request' => $request->all()]);
 
-        // Validate the request
         try {
             $request->validate([
                 'title' => 'required|string|max:255',
@@ -65,7 +64,6 @@ class UsersFolderShareableController extends Controller
             return back()->withErrors($e->errors());
         }
 
-        // Find the recipient by email
         $recipient = DB::table('users')->where('email', $request->email)->first();
         if (!$recipient) {
             Log::warning('Recipient not found', ['email' => $request->email]);
@@ -78,6 +76,7 @@ class UsersFolderShareableController extends Controller
 
         try {
             $uniqueId = uniqid();
+
             $storagePath = "public/users/{$recipient->id}/shared_folders/{$uniqueId}_{$request->title}";
 
             if (!Storage::exists($storagePath)) {
@@ -85,9 +84,8 @@ class UsersFolderShareableController extends Controller
                 Log::info("Storage directory created at: {$storagePath}");
             }
 
-            // Store the shared folder in the database and get its ID
             $folderShareable = UsersFolderShareable::create([
-                'title' => $uniqueId . $request->input('title'),
+                'title' => $uniqueId . '_' . $request->input('title'),
                 'users_id' => $recipient->id,
                 'can_edit' => $request->input('can_edit', false),
                 'can_delete' => $request->input('can_delete', false),
@@ -134,7 +132,9 @@ class UsersFolderShareableController extends Controller
                                 'files' => $newFileName,
                                 'extension' => pathinfo($file->file_path, PATHINFO_EXTENSION),
                                 'users_id' => $recipient->id,
-                                'users_folder_shareable_id' => $folderShareable->id, // Set the shareable folder ID here
+                                'users_folder_shareable_id' => $folderShareable->id,
+                                'password' => $file->password, // Include the password from the original file if available
+                                'protected' => true, // Set protected to true by default
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ];
@@ -177,6 +177,7 @@ class UsersFolderShareableController extends Controller
             ]);
         }
     }
+
 
 
     // Method to add shareable files to a specific shared folder
@@ -361,10 +362,46 @@ class UsersFolderShareableController extends Controller
             $userId = Auth::id();
             $storagePath = "public/users/{$userId}/shared_folders/{$folderShareable->title}";
 
-            // Delete the directory and all files within it from storage
+            // Check if the directory exists and log if not found
+            if (!Storage::exists($storagePath)) {
+                Log::warning("Storage directory not found at: {$storagePath}");
+            }
+
+            // Retrieve all files associated with this folder
+            $files = DB::table('users_folder_files')->where('users_folder_shareable_id', $folderShareableId)->get();
+
+            // Delete each file and its associated database records
+            foreach ($files as $file) {
+                // Check the specific file path
+                $filePath = $storagePath . '/' . $file->files;
+
+                // Check if the file exists and log if not found
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
+                    Log::info("Deleted file from storage: " . $filePath);
+                } else {
+                    Log::warning("File not found in storage for deletion: " . $filePath);
+                }
+
+                // Delete from the users_shareable_files table
+                DB::table('users_shareable_files')->where('users_folder_files_id', $file->id)->delete();
+                Log::info("Deleted shareable file record for file ID: " . $file->id);
+
+                // Delete each file entry in the users_folder_files table
+                DB::table('users_folder_files')->where('id', $file->id)->delete();
+                Log::info("Deleted file record from users_folder_files for file ID: " . $file->id);
+            }
+
+            // Attempt to delete the entire directory
             if (Storage::exists($storagePath)) {
-                Storage::deleteDirectory($storagePath);
-                Log::info("Storage directory deleted at: {$storagePath}");
+                $deleted = Storage::deleteDirectory($storagePath);
+                if ($deleted) {
+                    Log::info("Storage directory deleted at: {$storagePath}");
+                } else {
+                    Log::error("Failed to delete storage directory at: {$storagePath}. Check permissions.");
+                }
+            } else {
+                Log::warning("Directory already missing or inaccessible at: {$storagePath}");
             }
 
             // Delete the shareable folder entry from the database

@@ -123,7 +123,7 @@
                                         @endif
                                     </a>
                                     <!-- Dropdown Menu for File Options -->
-                                    <div class="dropdown position-absolute" style="top: 5px; right:  5px;">
+                                    <div class="dropdown position-absolute" style="top: 5px; right: 5px;">
                                         <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ri-more-2-fill fs-16 align-bottom"></i>
@@ -178,7 +178,6 @@
                     </div>
                 @endforeach
             @endif
-
 
 
             <!-- Display Existing Folder Contents -->
@@ -255,8 +254,61 @@
 
         @endif
     </div>
+    <!-- Password Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Enter Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" id="filePassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitPassword">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
+<script>
+    function openFile(fileId, isProtected, hasPassword) {
+        if (isProtected === 'YES' && hasPassword) {
+            $('#passwordModal').modal('show');
+            $('#submitPassword').off('click').on('click', function() {
+                const password = $('#filePassword').val();
+                if (!password) {
+                    alert('Password is required');
+                    return;
+                }
+                window.location.href =
+                    `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
+            });
+        } else {
+            window.location.href = `{{ url('drive/sharedShow') }}/${fileId}`;
+        }
+    }
+
+    document.querySelectorAll('.open-file-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            const isProtected = this.getAttribute('data-protected');
+            const hasPassword = this.getAttribute('data-password') !== '';
+            openFile(fileId, isProtected, hasPassword);
+        });
+    });
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ session('error') }}'
+        });
+    @endif
+</script>
 
 <script>
     function confirmDelete(subfolderId) {
