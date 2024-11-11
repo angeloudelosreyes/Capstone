@@ -15,9 +15,20 @@ use App\Models\UsersFolder;
 use App\Models\UsersShareableFile;
 use Illuminate\Support\Facades\Log;
 use ZipArchive;
+use App\Services\DoubleEncryptionService;
 
 class SharedController extends Controller
 {
+
+    protected $encryptionService;
+
+    public function __construct(DoubleEncryptionService $encryptionService)
+
+     {
+     
+         $this->encryptionService = $encryptionService; // Inject the service
+     
+     }
     /**
      * Display a listing of the resource.
      */
@@ -159,81 +170,82 @@ class SharedController extends Controller
     }
 
     private function shareFile(Request $request, $recipient)
-    {
-        $originalFileId = Crypt::decryptString($request->users_folder_files_id);
-        $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
+{
+    $uniqueId = uniqid();
+    $originalFileId = Crypt::decryptString($request->users_folder_files_id);
+    $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
 
-        Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
+    Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
 
-        if (!$originalFile) {
-            Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
-            return back()->with([
-                'message' => 'Original file not found.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        // Define sanitized title and storage path
-        $title = trim($request->input('title'), '/');
-        $storagePath = "public/users/{$recipient->id}/shared_folders/{$title}";
-
-        // Check and create directory if it doesn't exist
-        if (!Storage::exists($storagePath)) {
-            Storage::makeDirectory($storagePath);
-            Log::info("Storage directory created at: {$storagePath}");
-        }
-
-        // Define the new file path within storage
-        $newFilePath = "{$storagePath}" . basename($originalFile->file_path);
-
-        try {
-            // Copy file using absolute paths with the 'public' disk
-            Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
-            Log::info('File copied successfully', ['original' => $originalFile->file_path, 'new' => $newFilePath]);
-        } catch (\Exception $e) {
-            Log::error('Error copying file', ['error' => $e->getMessage()]);
-            return back()->with([
-                'message' => 'Error occurred while copying the file.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        // Prepare file reference data for the database
-        $newFileData = [
-            'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
-            'files' => uniqid() .'_'.basename($originalFile->file_path),
-            'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
-            'users_id' => $recipient->id, // Save under recipient's ID
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
-
-        // Insert file reference and get new file ID
-        $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
-        Log::info('New file reference created', ['newFileId' => $newFileId]);
-
-        // Notify recipient
-        Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
-        Log::info('Notification sent to recipient', ['email' => $recipient->email]);
-
-        // Store shareable file reference in the database
-        DB::table('users_shareable_files')->insert([
-            'users_id' => auth()->user()->id,
-            'recipient_id' => $recipient->id,
-            'users_folder_files_id' => $newFileId // Store the new file ID
-        ]);
-        Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
-
+    if (!$originalFile) {
+        Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
         return back()->with([
-            'message' => 'Your selected file has been shared.',
-            'type' => 'success',
+            'message' => 'Original file not found.',
+            'type' => 'error',
             'title' => 'System Notification'
         ]);
     }
 
+    // Define sanitized title and storage path
+    $title = trim($request->input('title'), '/');
+    $storagePath = "public/users/{$recipient->id}/shared_folders/{$title}";
 
+    // Check and create directory if it doesn't exist
+    if (!Storage::exists($storagePath)) {
+        Storage::makeDirectory($storagePath);
+        Log::info("Storage directory created at: {$storagePath}");
+    }
+
+    // Define the new file path within storage
+    $newFilePath = "{$storagePath}" .$uniqueId. basename($originalFile->file_path);
+
+    try {
+        // Copy file using absolute paths with the 'public' disk
+        Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
+        Log::info('File copied successfully', ['original' => $originalFile->file_path, 'new' => $newFilePath]);
+    } catch (\Exception $e) {
+        Log::error('Error copying file', ['error' => $e->getMessage()]);
+        return back()->with([
+            'message' => 'Error occurred while copying the file.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+
+    // Prepare file reference data for the database
+    $newFileData = [
+        'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
+        'files' => $uniqueId . basename($originalFile->file_path),
+        'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
+        'users_id' => $recipient->id, // Save under recipient's ID
+        'protected' => $originalFile->protected, // Add the protected field
+        'password' => $originalFile->password, // Add the hashed password field
+        'created_at' => now(),
+        'updated_at' => now(),
+    ];
+
+    // Insert file reference and get new file ID
+    $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
+    Log::info('New file reference created', ['newFileId' => $newFileId]);
+
+    // Notify recipient
+    Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
+    Log::info('Notification sent to recipient', ['email' => $recipient->email]);
+
+    // Store shareable file reference in the database
+    DB::table('users_shareable_files')->insert([
+        'users_id' => auth()->user()->id,
+        'recipient_id' => $recipient->id,
+        'users_folder_files_id' => $newFileId // Store the new file ID
+    ]);
+    Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
+
+    return back()->with([
+        'message' => 'Your selected file has been shared.',
+        'type' => 'success',
+        'title' => 'System Notification'
+    ]);
+}
     /**
      * Display the specified resource.
      */
