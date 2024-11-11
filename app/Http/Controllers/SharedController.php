@@ -258,67 +258,84 @@ class SharedController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        Log::info("Starting edit function for shareable file ID: $id");
+{
+    Log::info("Starting edit function for shareable file ID: $id");
 
-        try {
-            // Decrypt the ID
-            $decryptedId = Crypt::decryptString($id);
+    try {
+        // Decrypt the ID
+        $decryptedId = Crypt::decryptString($id);
 
-            // Find the record in users_shareable_files based on users_folder_files_id
-            $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
+        // Find the record in users_shareable_files based on users_folder_files_id
+        $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
 
-            if ($shareableFile) {
-                Log::info("Shareable file found with users_folder_files_id: $decryptedId");
+        if ($shareableFile) {
+            Log::info("Shareable file found with users_folder_files_id: $decryptedId");
 
-                // Get the file record from users_folder_files table
-                $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
-                if ($query) {
-                    $filePath = "public/{$query->file_path}";
-                    $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+            // Get the file record from users_folder_files table
+            $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+            if ($query) {
+                $filePath = "public/{$query->file_path}";
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
-                    // Initialize the content to display
-                    $content = '';
+                // Initialize the content to display
+                $content = '';
 
-                    // If the file is a .docx file, read its content
-                    if ($extension === 'docx') {
-                        if (Storage::exists($filePath)) {
-                            try {
-                                $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app/' . $filePath));
-                                $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                                $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-                                $writer->save($tempFile);
-                                $content = file_get_contents($tempFile);
-                                unlink($tempFile);
-                            } catch (\Exception $e) {
-                                return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
-                            }
-                        } else {
-                            Log::warning("File does not exist in storage at path: $filePath");
-                            return redirect()->back()->with('error', 'File not found in storage.');
+                // If the file is a .docx file, read its content
+                if ($extension === 'docx') {
+                    if (Storage::exists($filePath)) {
+                        try {
+                            // Load the encrypted file contents
+                            $encryptedContent = Storage::get($filePath);
+                            
+                            // Decrypt the file contents using your DoubleEncryptionService
+                            $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
+                            $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
+
+                            // Write the decrypted content to a temporary file
+                            $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+                            file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+
+                            // Load the decrypted content with PhpWord
+                            $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
+                            $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                            // Save the HTML output to a temporary file
+                            $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
+                            $writer->save($htmlTempFile);
+
+                            // Read the HTML content
+                            $content = file_get_contents($htmlTempFile);
+                            unlink($htmlTempFile); // Clean up temporary file
+                            unlink($tempFile); // Clean up temporary file
+                        } catch (\Exception $e) {
+                            return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
                         }
+                    } else {
+                        Log::warning("File does not exist in storage at path: $filePath");
+                        return redirect()->back()->with('error', 'File not found in storage.');
                     }
-
-                    // Get folder title for display
-                    $folderTitle = $this->getFolderTitle($query);
-
-                    // Return the edit view with the compacted variables
-                    return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
-                } else {
-                    throw new \Exception("File record not found in users_folder_files for ID: $decryptedId");
                 }
+
+                // Get folder title for display
+                $folderTitle = $this->getFolderTitle($query);
+
+                // Return the edit view with the compacted variables
+                return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
             } else {
-                throw new \Exception("No shareable file found with users_folder_files_id: $decryptedId");
+                throw new \Exception("File record not found in users_folder_files for ID: $decryptedId");
             }
-        } catch (\Exception $e) {
-            Log::error("Error loading shareable file for editing: " . $e->getMessage());
-            return redirect()->back()->with([
-                'message' => 'Error loading shareable file.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
+        } else {
+            throw new \Exception("No shareable file found with users_folder_files_id: $decryptedId");
         }
+    } catch (\Exception $e) {
+        Log::error("Error loading shareable file for editing: " . $e->getMessage());
+        return redirect()->back()->with([
+            'message' => 'Error loading shareable file.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
     }
+}
 
     private function getFolderTitle($query)
     {
