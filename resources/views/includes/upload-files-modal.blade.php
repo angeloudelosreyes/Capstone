@@ -1,4 +1,5 @@
-<form action="{{ route('files.store') }}" enctype="multipart/form-data" method="POST">
+<form action="{{ route('files.store') }}" enctype="multipart/form-data" method="POST"
+    onsubmit="return validateFileUpload()">
     @csrf
     @honeypot
     <input type="hidden" id="folder_id" name="folder_id">
@@ -17,7 +18,7 @@
                             <div>
                                 <label for="title" class="form-label">Upload Files (.pdf, .docx)</label>
                                 <input type="file" multiple class="form-control" accept=".pdf,.docx,.txt"
-                                    name="files[]">
+                                    name="files[]" id="fileInput">
                             </div>
                         </div>
                         <!-- Hidden and checked Encrypt checkbox -->
@@ -40,3 +41,16 @@
         </div>
     </div>
 </form>
+
+<script>
+    function validateFileUpload() {
+        const fileInput = document.getElementById('fileInput');
+
+        // Check if any files are selected
+        if (fileInput.files.length === 0) {
+            alert('Please select at least one file to upload.');
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+    }
+</script>

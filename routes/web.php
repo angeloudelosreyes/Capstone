@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', 'store')->name('shared.store');
         Route::delete('/{id}', 'destroy')->name('shared.destroy');
         Route::post('/{id}', 'rename')->name('shared.rename');
-        Route::get('/{id}/edit', 'edit')->name('shared.edit');
+        Route::get('/edit/{id}', 'edit')->name('shared.edit');
         Route::post('/{id}/download', 'download')->name('shared.download');
         Route::post('/move/{fileId}/{destinationFolderId}', 'move')->name('shared.move');
         Route::get('/folders', 'getSharedFolders')->name('shared.getSharedFolders');

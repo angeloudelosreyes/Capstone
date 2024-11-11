@@ -81,9 +81,13 @@
                                         <li><a class="dropdown-item download-button" href="javascript:void(0)"
                                                 data-file-id="{{ Crypt::encryptString($data->id) }}"><i
                                                     class="bx bx-download me-2"></i> Download</a></li>
-                                        <li><a class="dropdown-item"
-                                                href="{{ route('shared.edit', ['id' => Crypt::encryptString($data->id)]) }}"><i
-                                                    class="bx bx-edit me-2"></i> Edit</a></li>
+                                        <a class="dropdown-item edit-file-button" href="javascript:void(0)"
+                                            data-file-id="{{ Crypt::encryptString($data->id) }}"
+                                            data-protected="{{ $data->protected }}" data-password="{{ $data->password }}">
+                                            <i class="bx bx-edit me-2"></i> Edit
+                                        </a>
+
+
                                         <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="renameFile2('{{ Crypt::encryptString($data->id) }}', '{{ $data->files }}')"><i
                                                     class="bx bx-rename me-2"></i> Rename</a></li>
@@ -172,8 +176,10 @@
 @section('custom_js')
     <script>
         function promptForPassword(fileId, isProtected, hasPassword, action) {
+            console.log("promptForPassword called with action:", action);
+
             if (isProtected === 'YES' && hasPassword) {
-                // Show the password modal
+                console.log("Showing password modal for protected file with action:", action);
                 $('#passwordModal').modal('show');
 
                 // Configure the submit button to handle the password for either open or edit action
@@ -189,10 +195,12 @@
                         `{{ url('shared/edit') }}/${fileId}?password=${encodeURIComponent(password)}` :
                         `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
 
+                    console.log("Navigating to:", targetUrl);
                     window.location.href = targetUrl;
                 });
             } else {
                 // Directly proceed to the target URL based on the action if no password is required
+                console.log("Directly navigating to target URL without password modal for action:", action);
                 let targetUrl = (action === 'edit') ?
                     `{{ url('shared/edit') }}/${fileId}` :
                     `{{ url('drive/sharedShow') }}/${fileId}`;

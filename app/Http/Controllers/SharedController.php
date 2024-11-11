@@ -257,7 +257,7 @@ class SharedController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
         Log::info("Starting edit function for shareable file ID: $id");
 
@@ -274,6 +274,27 @@ class SharedController extends Controller
                 // Get the file record from users_folder_files table
                 $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
                 if ($query) {
+                    // Check if the file is protected and requires a password
+                    if ($query->protected === 'YES') {
+                        // Check if password is provided in the request
+                        if (!$request->has('password')) {
+                            return redirect()->back()->with([
+                                'message' => 'Password required.',
+                                'type' => 'error',
+                                'title' => 'Password Required'
+                            ]);
+                        }
+
+                        // Verify the provided password against the stored password
+                        if (!password_verify($request->password, $query->password)) {
+                            return redirect()->back()->with([
+                                'message' => 'Incorrect password.',
+                                'type' => 'error',
+                                'title' => 'Password Required'
+                            ]);
+                        }
+                    }
+
                     $filePath = "public/{$query->file_path}";
                     $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
@@ -287,8 +308,8 @@ class SharedController extends Controller
                                 // Load the encrypted file contents
                                 $encryptedContent = Storage::get($filePath);
 
-                                // Decrypt the file contents using your DoubleEncryptionService
-                                $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
+                                // Decrypt the file contents using DoubleEncryptionService
+                                $doubleEncryptionService = new DoubleEncryptionService();
                                 $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
 
                                 // Write the decrypted content to a temporary file
@@ -308,6 +329,7 @@ class SharedController extends Controller
                                 unlink($htmlTempFile); // Clean up temporary file
                                 unlink($tempFile); // Clean up temporary file
                             } catch (\Exception $e) {
+                                Log::error("Error loading .docx file: " . $e->getMessage());
                                 return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
                             }
                         } else {
@@ -336,6 +358,7 @@ class SharedController extends Controller
             ]);
         }
     }
+
 
     private function getFolderTitle($query)
     {
@@ -577,7 +600,6 @@ class SharedController extends Controller
             return redirect()->back()->withErrors(['error' => 'An error occurred while updating the file.']);
         }
     }
-
 
 
 
