@@ -110,17 +110,21 @@
                         <div class="card bg-light shadow-none">
                             <div class="card-body">
                                 <div class="d-flex justify-content-center position-relative">
-                                    <a href="{{ route('drive.show', ['id' => Crypt::encryptString($file->id)]) }}"
-                                        class="text-decoration-none">
-                                        @if ($file->extension == 'pdf')
-                                            <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
-                                        @elseif ($file->extension == 'xlsx')
-                                            <i class="ri-file-excel-fill align-bottom text-success display-5"></i>
-                                        @elseif ($file->extension == 'docx')
-                                            <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
-                                        @else
-                                            <i class="ri-file-2-fill align-bottom text-default display-5"></i>
-                                        @endif
+                                    <a href="javascript:void(0)" class="text-decoration-none"
+                                        data-file-id="{{ Crypt::encryptString($file->id) }}"
+                                        data-protected="{{ $file->protected }}" data-password="{{ $file->password }}"
+                                        onclick="openFile('{{ Crypt::encryptString($file->id) }}', '{{ $file->protected }}', '{{ $file->password }}')">
+                                        <div class="mb-2">
+                                            @if ($file->extension == 'pdf')
+                                                <i class="ri-file-pdf-line align-bottom text-danger display-5"></i>
+                                            @elseif ($file->extension == 'xlsx')
+                                                <i class="ri-file-excel-fill align-bottom text-success display-5"></i>
+                                            @elseif ($file->extension == 'docx')
+                                                <i class="ri-file-word-fill align-bottom text-primary display-5"></i>
+                                            @else
+                                                <i class="ri-file-2-fill align-bottom text-default display-5"></i>
+                                            @endif
+                                        </div>
                                     </a>
                                     <!-- Dropdown Menu for File Options -->
                                     <div class="dropdown position-absolute" style="top: 5px; right: 5px;">

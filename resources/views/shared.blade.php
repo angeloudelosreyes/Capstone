@@ -119,8 +119,10 @@
                             </div>
 
                             <div class="text-center">
-                                <a href="{{ route('drive.sharedShow', ['id' => Crypt::encryptString($data->id)]) }}"
-                                    class="text-decoration-none">
+                                <a href="javascript:void(0)" class="text-decoration-none"
+                                    data-file-id="{{ Crypt::encryptString($data->id) }}"
+                                    data-protected="{{ $data->protected }}" data-password="{{ $data->password }}"
+                                    onclick="promptForPassword('{{ Crypt::encryptString($data->id) }}', '{{ $data->protected }}', '{{ $data->password }}', 'open')">
                                     <div class="mb-2">
                                         @php
                                             $extension = strtolower(pathinfo($data->files, PATHINFO_EXTENSION));
@@ -139,6 +141,7 @@
                                         class="fs-15 folder-name">{{ $data->files }}</h6>
                                 </a>
                             </div>
+
 
                         </div>
                     </div>
@@ -168,29 +171,52 @@
 @endsection
 @section('custom_js')
     <script>
-        function openFile(fileId, isProtected, hasPassword) {
+        function promptForPassword(fileId, isProtected, hasPassword, action) {
             if (isProtected === 'YES' && hasPassword) {
+                // Show the password modal
                 $('#passwordModal').modal('show');
+
+                // Configure the submit button to handle the password for either open or edit action
                 $('#submitPassword').off('click').on('click', function() {
                     const password = $('#filePassword').val();
                     if (!password) {
                         alert('Password is required');
                         return;
                     }
-                    window.location.href =
+
+                    // Determine the target URL based on the action (either open or edit)
+                    let targetUrl = (action === 'edit') ?
+                        `{{ url('shared/edit') }}/${fileId}?password=${encodeURIComponent(password)}` :
                         `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
+
+                    window.location.href = targetUrl;
                 });
             } else {
-                window.location.href = `{{ url('drive/sharedShow') }}/${fileId}`;
+                // Directly proceed to the target URL based on the action if no password is required
+                let targetUrl = (action === 'edit') ?
+                    `{{ url('shared/edit') }}/${fileId}` :
+                    `{{ url('drive/sharedShow') }}/${fileId}`;
+
+                window.location.href = targetUrl;
             }
         }
 
+        // Handle click events for both open and edit buttons
         document.querySelectorAll('.open-file-button').forEach(button => {
             button.addEventListener('click', function() {
                 const fileId = this.getAttribute('data-file-id');
                 const isProtected = this.getAttribute('data-protected');
                 const hasPassword = this.getAttribute('data-password') !== '';
-                openFile(fileId, isProtected, hasPassword);
+                promptForPassword(fileId, isProtected, hasPassword, 'open');
+            });
+        });
+
+        document.querySelectorAll('.edit-file-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const fileId = this.getAttribute('data-file-id');
+                const isProtected = this.getAttribute('data-protected');
+                const hasPassword = this.getAttribute('data-password') !== '';
+                promptForPassword(fileId, isProtected, hasPassword, 'edit');
             });
         });
 
