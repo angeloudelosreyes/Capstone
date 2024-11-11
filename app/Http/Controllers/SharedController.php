@@ -265,6 +265,9 @@ class SharedController extends Controller
             // Decrypt the ID
             $decryptedId = Crypt::decryptString($id);
 
+            // Check if this request was redirected from an update
+            $redirectedFromUpdate = session()->pull('redirectedFromUpdate', false);
+
             // Find the record in users_shareable_files based on users_folder_files_id
             $shareableFile = DB::table('users_shareable_files')->where('users_folder_files_id', $decryptedId)->first();
 
@@ -275,7 +278,7 @@ class SharedController extends Controller
                 $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
                 if ($query) {
                     // Check if the file is protected and requires a password
-                    if ($query->protected === 'YES') {
+                    if ($query->protected === 'YES' && !$redirectedFromUpdate) {
                         // Check if password is provided in the request
                         if (!$request->has('password')) {
                             return redirect()->back()->with([
@@ -309,12 +312,11 @@ class SharedController extends Controller
                                 $encryptedContent = Storage::get($filePath);
 
                                 // Decrypt the file contents using DoubleEncryptionService
-                                $doubleEncryptionService = new DoubleEncryptionService();
-                                $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
+                                $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
 
                                 // Write the decrypted content to a temporary file
                                 $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                                file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+                                file_put_contents($tempFile, $decryptedContent);
 
                                 // Load the decrypted content with PhpWord
                                 $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
@@ -358,6 +360,7 @@ class SharedController extends Controller
             ]);
         }
     }
+
 
 
     private function getFolderTitle($query)
@@ -594,7 +597,8 @@ class SharedController extends Controller
             Log::info('File updated successfully. Redirecting to edit page for ID: ' . $encryptedId);
 
             return redirect()->route('shared.edit', ['id' => $encryptedId])
-                ->with('message', 'File updated successfully.');
+                ->with('message', 'File updated successfully.')
+                ->with('redirectedFromUpdate', true);
         } catch (\Exception $e) {
             Log::error('An error occurred while updating the file: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'An error occurred while updating the file.']);
