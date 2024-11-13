@@ -75,17 +75,20 @@ class UsersFolderShareableController extends Controller
         }
 
         try {
-            $uniqueId = uniqid();
+            // Generate an incremented folder name if necessary
+            $folderName = $this->generateFolderName($recipient->id, $request->title);
 
-            $storagePath = "public/users/{$recipient->id}/shared_folders/{$uniqueId}_{$request->title}";
+            // Define the storage path with the generated folder name
+            $storagePath = "public/users/{$recipient->id}/shared_folders/{$folderName}";
 
             if (!Storage::exists($storagePath)) {
                 Storage::makeDirectory($storagePath);
                 Log::info("Storage directory created at: {$storagePath}");
             }
 
+            // Create the shareable folder entry in the database
             $folderShareable = UsersFolderShareable::create([
-                'title' => $uniqueId . '_' . $request->input('title'),
+                'title' => $folderName,
                 'users_id' => $recipient->id,
                 'can_edit' => $request->input('can_edit', false),
                 'can_delete' => $request->input('can_delete', false),
@@ -112,7 +115,9 @@ class UsersFolderShareableController extends Controller
 
             foreach ($files as $file) {
                 $originalFilePath = "public/users/{$file->users_id}/{$originalFolder->title}/{$file->files}";
-                $newFileName = uniqid() . '_' . basename($originalFilePath);
+
+                // Generate incremented file name
+                $newFileName = $this->generateFileName($folderShareable->id, $file->files);
                 $newFilePath = "{$storagePath}/{$newFileName}";
 
                 Log::info('Attempting to copy file', [
@@ -176,6 +181,43 @@ class UsersFolderShareableController extends Controller
                 'title' => 'System Notification'
             ]);
         }
+    }
+    private function generateFolderName($userId, $baseName)
+    {
+        $name = $baseName;
+        $counter = 1;
+
+        // Check if the folder name already exists in the database
+        while (DB::table('users_folder_shareable')
+            ->where('users_id', $userId)
+            ->where('title', $name)
+            ->exists()
+        ) {
+            $name = "{$baseName}({$counter})";
+            $counter++;
+        }
+
+        return $name;
+    }
+
+    private function generateFileName($folderId, $fileName)
+    {
+        $pathInfo = pathinfo($fileName);
+        $name = $pathInfo['filename'];
+        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+        $counter = 1;
+
+        // Check if the file name already exists in the database for this folder
+        while (DB::table('users_folder_files')
+            ->where('users_folder_id', $folderId)
+            ->where('files', $name . $extension)
+            ->exists()
+        ) {
+            $name = $pathInfo['filename'] . "($counter)";
+            $counter++;
+        }
+
+        return $name . $extension;
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -73,7 +74,9 @@ class AccountController extends Controller
                 'email'      => $request->email,
                 'address'    => $request->address,
                 'age'        => $request->age,
-                'password'   => Hash::make('12345678')
+                'password'   => Hash::make('12345678'),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
             //Hash::make() eto yong built in function ni laravel na kong saan e yong ilalagay mo na string ay i ha Hash nya.  
 

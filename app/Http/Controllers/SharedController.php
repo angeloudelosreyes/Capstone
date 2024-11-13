@@ -171,7 +171,6 @@ class SharedController extends Controller
 
     private function shareFile(Request $request, $recipient)
     {
-        $uniqueId = uniqid();
         $originalFileId = Crypt::decryptString($request->users_folder_files_id);
         $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
 
@@ -188,7 +187,8 @@ class SharedController extends Controller
 
         // Define sanitized title and storage path
         $title = trim($request->input('title'), '/');
-        $storagePath = "public/users/{$recipient->id}/shared_folders/{$title}";
+        $storagePath = rtrim("public/users/{$recipient->id}/shared_folders/{$title}", '/'); // Remove trailing slash if any
+
 
         // Check and create directory if it doesn't exist
         if (!Storage::exists($storagePath)) {
@@ -196,9 +196,9 @@ class SharedController extends Controller
             Log::info("Storage directory created at: {$storagePath}");
         }
 
-        // Define the new file path within storage
-        $newFilePath = "{$storagePath}" . $uniqueId . basename($originalFile->file_path);
-
+        // Generate unique file name based on existing files
+        $newFileName = $this->generateUniqueFileName($recipient->id, basename($originalFile->file_path));
+        $newFilePath = "{$storagePath}/{$newFileName}";
         try {
             // Copy file using absolute paths with the 'public' disk
             Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
@@ -215,7 +215,7 @@ class SharedController extends Controller
         // Prepare file reference data for the database
         $newFileData = [
             'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
-            'files' => $uniqueId . basename($originalFile->file_path),
+            'files' => $newFileName,
             'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
             'users_id' => $recipient->id, // Save under recipient's ID
             'protected' => $originalFile->protected, // Add the protected field
@@ -246,6 +246,27 @@ class SharedController extends Controller
             'title' => 'System Notification'
         ]);
     }
+
+    private function generateUniqueFileName($recipientId, $baseName)
+    {
+        $pathInfo = pathinfo($baseName);
+        $name = $pathInfo['filename'];
+        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+        $counter = 1;
+
+        // Check if the file name already exists in the database for this folder
+        while (DB::table('users_folder_files')
+            ->where('users_id', $recipientId)
+            ->where('files', $name . $extension)
+            ->exists()
+        ) {
+            $name = $pathInfo['filename'] . "($counter)";
+            $counter++;
+        }
+
+        return $name . $extension;
+    }
+
     /**
      * Display the specified resource.
      */
