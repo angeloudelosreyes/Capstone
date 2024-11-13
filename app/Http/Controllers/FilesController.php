@@ -317,31 +317,26 @@ class FilesController extends Controller
         $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
         $password = $isEncrypted ? $request->password : null;
 
-        Log::info('User ID: ' . $userId);
+        Log::info('User  ID: ' . $userId);
         Log::info('Folder ID: ' . $folderId);
         Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
 
-        // Determine if the folder ID belongs to a main folder or a subfolder
-        $isMainFolder = DB::table('users_folder')->where('id', $folderId)->exists();
-        $isSubfolder = DB::table('subfolders')->where('id', $folderId)->exists();
-
-        if (!$isMainFolder && !$isSubfolder) {
-            Log::error("Folder ID $folderId not found in either users_folder or subfolders.");
-            return back()->with([
-                'message' => 'Folder not found. Please check if the folder or subfolder exists.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
+        // Log password information
+        if ($isEncrypted) {
+            Log::info("Password provided for encryption: " . $password);
+            Log::info("Password length: " . strlen($password));
+        } else {
+            Log::info("Files will not be encrypted.");
         }
 
-        // Set the correct base path and directory
+        // Base path for the user's files
         $basePath = 'users/' . $userId;
         $directory = $this->buildFullPath($folderId, $basePath);
 
         if (!$directory) {
-            Log::error("Failed to build path for Folder ID: $folderId.");
+            Log::error("Folder ID $folderId not found or is invalid.");
             return back()->with([
-                'message' => 'Folder path could not be determined.',
+                'message' => 'Folder not found. Please check if the folder or subfolder exists.',
                 'type' => 'error',
                 'title' => 'System Notification'
             ]);
@@ -356,9 +351,9 @@ class FilesController extends Controller
 
                 // Check for duplicate file name
                 $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
-                if ($isMainFolder) {
+                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
                     $duplicateFileQuery->where('users_folder_id', $folderId);
-                } elseif ($isSubfolder) {
+                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
                     $duplicateFileQuery->where('subfolder_id', $folderId);
                 }
                 $duplicateFile = $duplicateFileQuery->exists();
@@ -385,6 +380,7 @@ class FilesController extends Controller
 
                     // Encrypt the file contents if protection is enabled
                     if ($isEncrypted) {
+                        // Use the encryption service to encrypt the file contents
                         $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
                         Log::info("File contents encrypted.");
                     } else {
@@ -403,13 +399,12 @@ class FilesController extends Controller
                 // Insert the file record into the database
                 DB::table('users_folder_files')->insert([
                     'users_id' => $userId,
-                    'users_folder_id' => $isMainFolder ? $folderId : null,
-                    'subfolder_id' => $isSubfolder ? $folderId : null,
+                    'users_folder_id' => $folderId,
                     'files' => $name,
                     'extension' => $extension,
                     'protected' => $isEncrypted ? 'YES' : 'NO',
                     'password' => $isEncrypted ? $this->encryptionService->hashPassword($password) : null,
-                    'file_path' => str_replace('public/', '', $path),
+                    'file_path' => $path,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -424,7 +419,6 @@ class FilesController extends Controller
             'title' => 'System Notification'
         ]);
     }
-
     /**
      * Helper function to recursively build the full path from a subfolder to the root.
      */
