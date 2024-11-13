@@ -229,7 +229,7 @@ class SharedController extends Controller
         Log::info('New file reference created', ['newFileId' => $newFileId]);
 
         // Notify recipient
-        Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
+        Mail::to($recipient->email)->send(new Notification($recipient->email, 'file'));
         Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
         // Store shareable file reference in the database

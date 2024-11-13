@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\File;
 use App\Services\DoubleEncryptionService;
-
+use stdClass;
 
 class DriveController extends Controller
 {
@@ -30,17 +30,43 @@ class DriveController extends Controller
      */
     public function getFolders()
     {
+        // Fetch folders belonging to the authenticated user
         $folders = DB::table('users_folder')
             ->where('users_id', auth()->user()->id)
             ->select('id', 'title')
             ->get()
             ->map(function ($folder) {
+                // Encrypt the folder ID
                 $folder->encrypted_id = Crypt::encryptString($folder->id);
                 return $folder;
             });
 
-        return response()->json(['folders' => $folders]);
+        $subfolders = DB::table('subfolders')
+            ->where('user_id', auth()->user()->id)
+            ->select('id', 'name')
+            ->get()
+            ->map(function ($subfolder) {
+                // Encrypt the subfolder ID
+                $subfolder->encrypted_id = Crypt::encryptString($subfolder->id);
+                return $subfolder;
+            });
+
+        // Log the count of subfolders
+        Log::info('Number of folders:', ['count' => $folders->count()]);
+        Log::info('Number of subfolders:', ['count' => $subfolders->count()]);
+
+
+        $combinedList = [
+            'subfolders' => $subfolders,
+            'folders' => $folders,
+        ];
+
+        // Return folders and subfolders as separate lists in the response
+        return response()->json([
+            'folders' => $combinedList,
+        ]);
     }
+
 
 
     public function index()
@@ -673,81 +699,58 @@ class DriveController extends Controller
 
         // Retrieve the file from the users_folder_files table
         $file = DB::table('users_folder_files')->where('id', $decryptedFileId)->first();
-
-        // If the file is not found, check in the subfolders
         if (!$file) {
-            $file = DB::table('subfolders')->where('id', $decryptedFileId)->first();
-            if ($file) {
-                // If found in subfolders, set the users_folder_id to the parent folder's ID
-                $file->users_folder_id = $file->parent_folder_id; // Assuming subfolder has a parent_folder_id
-            }
-        }
-
-        // Retrieve the destination folder from the users_folder table
-        $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
-
-        // If the destination folder is not found, check in the subfolders
-        if (!$destinationFolder) {
-            $destinationFolder = DB::table('subfolders')->where('id', $decryptedDestinationFolderId)->first();
-        }
-
-        // Check if both file and destination folder exist
-        if (!$file || !$destinationFolder) {
-            Log::error('File or destination folder not found.');
+            Log::error("File with ID $decryptedFileId not found in database.");
             return redirect()->back()->with([
-                'message' => 'File or destination folder not found.',
+                'message' => 'File not found.',
                 'type' => 'error',
                 'title' => 'Error'
             ]);
         }
 
-        // Log the folder title to confirm its value
-        Log::info("Destination folder title: " . $destinationFolder->title);
+        // Retrieve the destination folder (main folder or subfolder)
+        $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
+        $isMainFolder = true;
+        if (!$destinationFolder) {
+            $destinationFolder = DB::table('subfolders')->where('id', $decryptedDestinationFolderId)->first();
+            $isMainFolder = false;
+        }
 
-        // Define user ID
+        if (!$destinationFolder) {
+            Log::error('Destination folder not found.');
+            return redirect()->back()->with([
+                'message' => 'Destination folder not found.',
+                'type' => 'error',
+                'title' => 'Error'
+            ]);
+        }
+
+        // Define user ID and construct paths within the public disk
         $userId = $file->users_id;
+        $sourcePath = "public/" . $file->file_path;  // Prefix with "public/" once
+        Log::info("Constructed source path: " . $sourcePath);
 
-        // Build the source path using the helper function
-        $sourceBasePath = "public/users/$userId";
-        $sourceFolderPath = $this->buildFullPath($file->users_folder_id, $sourceBasePath);
-
-        // If the source folder path cannot be built, try using the subfolder_id
-        if (!$sourceFolderPath) {
-            Log::warning("Failed to build source folder path for ID: " . $file->users_folder_id . ". Trying subfolder_id.");
-            if ($file->subfolder_id) {
-                $sourceFolderPath = $this->buildFullPath($file->subfolder_id, $sourceBasePath);
-            }
-        }
-
-        if (!$sourceFolderPath) {
-            Log::error("Failed to build source folder path using subfolder_id for ID: " . $file->subfolder_id);
-            return redirect()->back()->with(['error' => 'Source folder path could not be determined.']);
-        }
-
-        $sourcePath = "$sourceFolderPath/{$file->files}";
-
-        // Build the destination path using the helper function
+        // Determine the destination path
         $destinationBasePath = "public/users/$userId";
-        $destinationFolderPath = $this->buildFullPath($decryptedDestinationFolderId, $destinationBasePath);
-        if (!$destinationFolderPath) {
-            Log::error("Failed to build destination folder path for ID: " . $decryptedDestinationFolderId);
-            return redirect()->back()->with(['error' => 'Destination folder path could not be determined.']);
+        if ($isMainFolder) {
+            $destinationFolderPath = "public/" . $destinationFolder->folder_path;
+        } else {
+            $destinationFolderPath = "public/" . $destinationFolder->subfolder_path;
         }
         $destinationPath = "$destinationFolderPath/{$file->files}";
-
-        // Log the constructed paths
-        Log::info("Constructed source path: " . $sourcePath);
         Log::info("Constructed destination path: " . $destinationPath);
 
-        // Check if the old file exists
+        // Check if the source file exists in storage
         if (Storage::exists($sourcePath)) {
-            // Move the file in storage
+            // Move the file within the public disk
             Storage::move($sourcePath, $destinationPath);
             Log::info("File moved in storage from $sourcePath to $destinationPath");
 
-            // Update the file's folder reference in the database
+            // Update the file's folder reference and file path in the database
             DB::table('users_folder_files')->where('id', $decryptedFileId)->update([
-                'users_folder_id' => $decryptedDestinationFolderId,
+                'users_folder_id' => $isMainFolder ? $decryptedDestinationFolderId : null,
+                'subfolder_id' => !$isMainFolder ? $decryptedDestinationFolderId : null,
+                'file_path' => str_replace('public/', '', $destinationPath) // Update the file_path without 'public/' prefix
             ]);
 
             Log::info("Database update status for file ID $decryptedFileId:", ['new_folder_id' => $decryptedDestinationFolderId]);
@@ -767,13 +770,18 @@ class DriveController extends Controller
         }
     }
 
-
-
     public function paste(Request $request, string $destinationFolderId)
     {
         // Decrypt the destination folder ID
         $decryptedDestinationFolderId = Crypt::decryptString($destinationFolderId);
         $destinationFolder = DB::table('users_folder')->where('id', $decryptedDestinationFolderId)->first();
+        $isMainFolder = true;
+
+        if (!$destinationFolder) {
+            // If not found in users_folder, check in subfolders
+            $destinationFolder = DB::table('subfolders')->where('id', $decryptedDestinationFolderId)->first();
+            $isMainFolder = false;
+        }
 
         if (!$destinationFolder) {
             Log::error("Destination folder not found: " . $decryptedDestinationFolderId);
@@ -792,54 +800,39 @@ class DriveController extends Controller
 
         Log::info("Pasting file: ", ['copiedFile' => $copiedFile]);
 
-        // Determine the folder ID to use for path building
-        $folderId = $copiedFile->users_folder_id;
-        if ($copiedFile->subfolder_id) {
-            // If there's a subfolder, use that ID
-            $folderId = $copiedFile->subfolder_id;
-        }
-
-        // Build the full path using the helper function
-        $basePath = "public/users/{$copiedFile->users_id}";
-        $sourceFolderPath = $this->buildFullPath($folderId, $basePath);
-        if (!$sourceFolderPath) {
-            Log::error("Failed to build source folder path for ID: " . $folderId);
-            return back()->with(['error' => 'Source folder path could not be determined.']);
-        }
-
-        // Construct the full source path
-        $sourcePath = "$sourceFolderPath/{$copiedFile->files}";
-
-        // Generate a new file name using the desired naming convention
-        $newFileName = uniqid() . '_' . basename($copiedFile->files);
+        // Define base path and adjust source path for public disk
+        $sourcePath = str_replace('public/', '', $copiedFile->file_path); // Remove 'public/' prefix
+        Log::info("Adjusted source path: " . $sourcePath);
+        // Generate a unique file name
+        $newFileName = $this->generateUniqueFileName($copiedFile->files, $decryptedDestinationFolderId, $isMainFolder);
 
         // Build the destination path
-        $destinationFolderPath = $this->buildFullPath($decryptedDestinationFolderId, $basePath);
-        if (!$destinationFolderPath) {
-            Log::error("Failed to build destination folder path for ID: " . $decryptedDestinationFolderId);
-            return back()->with(['error' => 'Destination folder path could not be determined.']);
+        $destinationBasePath = "users/{$copiedFile->users_id}"; // No 'public/' prefix
+        if ($isMainFolder) {
+            $destinationFolderPath = $destinationFolder->folder_path;
+        } else {
+            $destinationFolderPath = $destinationFolder->subfolder_path;
         }
-
-        // Construct the full destination path
         $destinationPath = "$destinationFolderPath/$newFileName";
 
-        Log::info("Source path: " . $sourcePath);
         Log::info("Destination path: " . $destinationPath);
 
         // Copy the file in storage
-        if (Storage::exists($sourcePath)) {
-            Storage::copy($sourcePath, $destinationPath);
+        if (Storage::disk('public')->exists($sourcePath)) {
+            Storage::disk('public')->copy($sourcePath, $destinationPath);
             Log::info("File copied from " . $sourcePath . " to " . $destinationPath);
 
-            // Insert a new record for the copied file
+            // Insert a new record for the copied file with the unique file name
             DB::table('users_folder_files')->insert([
                 'users_id' => $copiedFile->users_id,
-                'users_folder_id' => $decryptedDestinationFolderId,
+                'users_folder_id' => $isMainFolder ? $decryptedDestinationFolderId : null,
+                'subfolder_id' => !$isMainFolder ? $decryptedDestinationFolderId : null,
                 'files' => $newFileName,
                 'size' => $copiedFile->size,
                 'extension' => $copiedFile->extension,
                 'protected' => $copiedFile->protected,
-                'password' => $copiedFile->password
+                'password' => $copiedFile->password,
+                'file_path' => $destinationPath
             ]);
 
             Log::info("File pasted successfully.", ['newFileName' => $newFileName]);
@@ -851,29 +844,40 @@ class DriveController extends Controller
     }
 
     // Helper function to generate a unique file name if the file already exists
-    private function generateUniqueFileName($fileName, $folderId)
+    private function generateUniqueFileName($fileName, $folderId, $isMainFolder)
     {
         $fileParts = pathinfo($fileName);
-        $baseName = $fileParts['filename']; // Without extension
-        $extension = isset($fileParts['extension']) ? '.' . $fileParts['extension'] : ''; // With extension
+        $baseName = $fileParts['filename']; // Name without extension
+        $extension = isset($fileParts['extension']) ? '.' . $fileParts['extension'] : ''; // Extension with dot
 
-        // Initialize new name
+        // Initialize the new name as the original file name
         $newName = $fileName;
         $counter = 1;
 
-        // Check if a file with the new name already exists in the same folder
+        // Loop to generate a unique file name by checking for duplicates
         while (DB::table('users_folder_files')
-            ->where('users_folder_id', $folderId)
+            ->where(function ($query) use ($folderId, $isMainFolder) {
+                // Check in the appropriate folder type (main or subfolder)
+                if ($isMainFolder) {
+                    $query->where('users_folder_id', $folderId);
+                } else {
+                    $query->where('subfolder_id', $folderId);
+                }
+            })
             ->where('files', $newName)
             ->exists()
         ) {
-            // Generate a new name e.g. file(1).docx
+            // If a file with the new name already exists, append a counter to make it unique
             $newName = $baseName . "($counter)" . $extension;
             $counter++;
         }
 
+        // Return the unique file name
         return $newName;
     }
+
+
+
     private function buildFullPath($folderId, $basePath)
     {
         // Check if it's a main folder in users_folder

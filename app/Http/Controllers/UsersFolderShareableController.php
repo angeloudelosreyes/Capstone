@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Notification;
 use App\Models\UsersFolder;
 use App\Models\UsersFolderShareable;
 use App\Models\UsersShareableFile;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Mail;
 
 class UsersFolderShareableController extends Controller
 {
@@ -167,6 +168,9 @@ class UsersFolderShareableController extends Controller
                     ]);
                 }
             }
+            Mail::to($recipient->email)->send(new Notification($recipient->email, 'folder')); // For file
+            Log::info('Notification sent to recipient', ['email' => $recipient->email]);
+
 
             return back()->with([
                 'message' => 'Shared folder created successfully with files.',
