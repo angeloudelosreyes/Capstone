@@ -296,7 +296,6 @@ class FilesController extends Controller
     }
 
 
-
     public function store(Request $request)
     {
         Log::info('Store function called.');
@@ -317,7 +316,7 @@ class FilesController extends Controller
         $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
         $password = $isEncrypted ? $request->password : null;
 
-        Log::info('User  ID: ' . $userId);
+        Log::info('User ID: ' . $userId);
         Log::info('Folder ID: ' . $folderId);
         Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
 
@@ -373,25 +372,20 @@ class FilesController extends Controller
                 // Store the file directly to the desired path
                 $path = $directory . '/' . $name;
 
-                // Check if the file is a DOCX and handle accordingly
-                if ($extension === 'docx') {
+                // Handle DOCX and PDF files differently if encryption is enabled
+                if ($isEncrypted && in_array($extension, ['docx', 'pdf'])) {
                     // Read the file contents
                     $fileContents = file_get_contents($file);
 
-                    // Encrypt the file contents if protection is enabled
-                    if ($isEncrypted) {
-                        // Use the encryption service to encrypt the file contents
-                        $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
-                        Log::info("File contents encrypted.");
-                    } else {
-                        $encryptedContents = $fileContents;
-                    }
+                    // Encrypt the file contents using the encryption service
+                    $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
+                    Log::info("File contents encrypted for: " . $name);
 
-                    // Store the (possibly encrypted) file contents
+                    // Store the encrypted file contents
                     Storage::disk('public')->put($path, $encryptedContents);
-                    Log::info("DOCX file uploaded: " . $name);
+                    Log::info("Encrypted file uploaded: " . $name);
                 } else {
-                    // Store the file directly for other types
+                    // Store the file directly if it's not encrypted
                     $file->storeAs($directory, $name);
                     Log::info("File uploaded: " . $name);
                 }

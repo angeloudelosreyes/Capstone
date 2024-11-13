@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\File;
 use App\Services\DoubleEncryptionService;
+use Illuminate\Support\Facades\Response;
 use stdClass;
 
 class DriveController extends Controller
@@ -376,6 +377,43 @@ class DriveController extends Controller
             return response()->json(['error' => 'An error occurred while processing the request.'], 500);
         }
     }
+    public function display_pdf($title, $content)
+    {
+        try {
+            // Decrypt the content to get the actual file path
+            $decryptedPath = Crypt::decryptString($content);
+
+            // Log decrypted path for verification
+            Log::info('Decrypted PDF path:', ['path' => $decryptedPath]);
+
+            // Check if the file exists in storage
+            if (!Storage::disk('public')->exists($decryptedPath)) {
+                return response()->json(['error' => 'PDF file not found in storage.'], 404);
+            }
+
+            // Retrieve the encrypted file contents
+            $encryptedContent = Storage::disk('public')->get($decryptedPath);
+
+            // Use the DoubleEncryptionService to decrypt the content
+            $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
+
+            // Create a temporary decrypted file
+            $tempPdfPath = tempnam(sys_get_temp_dir(), 'decrypted_pdf') . '.pdf';
+            file_put_contents($tempPdfPath, $decryptedContent);
+
+            // Serve the decrypted PDF file
+            return response()->file($tempPdfPath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $title . '"',
+            ])->deleteFileAfterSend(true); // Delete the temp file after sending
+        } catch (\Exception $e) {
+            Log::error('Error displaying PDF:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'An error occurred while displaying the PDF: ' . $e->getMessage());
+        }
+    }
+
+
+
 
     private function getPasswordForFile($fileId)
     {
@@ -398,11 +436,7 @@ class DriveController extends Controller
         }
 
         // Determine the folder ID to use for path building
-        $folderId = $query->users_folder_id;
-        if ($query->subfolder_id) {
-            // If there's a subfolder, use that ID
-            $folderId = $query->subfolder_id;
-        }
+        $folderId = $query->users_folder_id ?: $query->subfolder_id;
 
         // Build the full path using the helper function
         $basePath = "public/users/{$query->users_id}";
@@ -412,57 +446,56 @@ class DriveController extends Controller
             return redirect()->back()->with('error', 'Folder does not exist.');
         }
 
-        // Attempt to get the folder title from the main folder first
-        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
-
-        // If the main folder is not found, try to get the name from the subfolder
-        if (!$folder) {
-            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
-            if (!$folder) {
-                return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
-            }
-            $folderTitle = $folder->name; // Use the subfolder's name
-        } else {
-            $folderTitle = $folder->title; // Use the main folder's title
-        }
+        // Get folder title for display
+        $folder = DB::table('users_folder')->where('id', $query->users_folder_id)->first() ?:
+            DB::table('subfolders')->where('id', $query->subfolder_id)->first();
+        $folderTitle = $folder ? ($folder->title ?? $folder->name) : 'Unknown Folder';
 
         $title = $query->files;
         $extension = $query->extension;
         $content = '';
 
-        if ($extension == 'docx') {
-            $filePath = "$fullPath/$title"; // Use the full path here
-            if (Storage::exists($filePath)) {
-                try {
-                    // Load the encrypted file contents
-                    $encryptedContent = Storage::get($filePath);
+        $filePath = "$fullPath/$title";
 
-                    // Decrypt the file contents using your DoubleEncryptionService
-                    $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
+        if (Storage::exists($filePath)) {
+            if ($extension == 'docx') {
+                try {
+                    $encryptedContent = Storage::get($filePath);
+                    $doubleEncryptionService = new DoubleEncryptionService();
                     $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
 
-                    // Write the decrypted content to a temporary file
                     $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                    file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+                    file_put_contents($tempFile, $decryptedContent);
 
-                    // Load the decrypted content with PhpWord
                     $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
                     $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
 
-                    // Save the HTML output to a temporary file
                     $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
                     $writer->save($htmlTempFile);
 
-                    // Read the HTML content
                     $content = file_get_contents($htmlTempFile);
-                    unlink($htmlTempFile); // Clean up temporary file
-                    unlink($tempFile); // Clean up temporary file
+                    unlink($htmlTempFile);
+                    unlink($tempFile);
                 } catch (\Exception $e) {
                     return redirect()->back()->with('error', 'Error loading .docx file: ' . $e->getMessage());
                 }
-            } else {
-                return redirect()->back()->with('error', 'File not found.');
+            } elseif ($extension == 'pdf') {
+                try {
+                    $encryptedContent = Storage::get($filePath);
+                    $doubleEncryptionService = new DoubleEncryptionService();
+                    $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
+
+                    $tempPdfPath = tempnam(sys_get_temp_dir(), 'pdf_file') . '.pdf';
+                    file_put_contents($tempPdfPath, $decryptedContent);
+
+                    $content = 'PDF preview is not supported in editable form. You can download and view the PDF directly.';
+                    unlink($tempPdfPath);
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'Error loading PDF file: ' . $e->getMessage());
+                }
             }
+        } else {
+            return redirect()->back()->with('error', 'File not found.');
         }
 
         return view('edit', compact('query', 'content', 'extension', 'folderTitle'));
@@ -473,76 +506,59 @@ class DriveController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Decrypt the file ID
         $decryptedId = Crypt::decryptString($id);
 
-        // Validate the incoming request
-        $request->validate([
-            'content' => 'required|string',
-        ]);
-
-        // Query for the file details in the database
         $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
-
         if (!$query) {
             return redirect()->back()->with('error', 'File not found.');
         }
 
-        // Get the folder title and other details
         $folder = DB::table('users_folder')->where('id', $query->users_folder_id)->first();
-        $folderTitle = $folder ? $folder->title : 'Default Folder'; // Handle case where folder might not exist
+        $folderTitle = $folder ? $folder->title : 'Default Folder';
         $title = $query->files;
         $extension = $query->extension;
 
-        // Construct the file path
         $filePath = 'public/users/' . $query->users_id . '/' . $folderTitle . '/' . $title;
 
-        if ($extension == 'docx') {
-            $phpWord = new \PhpOffice\PhpWord\PhpWord();
-            $section = $phpWord->addSection();
-
-            // Prepare the content for the document
-            $content = $request->input('content');
-            $content = '<html><body>' . $content . '</body></html>';
-
-            try {
-                // Add HTML content to the section
+        try {
+            if ($extension == 'docx') {
+                $phpWord = new \PhpOffice\PhpWord\PhpWord();
+                $section = $phpWord->addSection();
+                $content = '<html><body>' . $request->input('content') . '</body></html>';
                 \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, true, false);
 
-                // Save the new document to a temporary file
                 $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
                 $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
                 $writer->save($tempFile);
 
-                // Read the content of the temporary file
                 $fileContent = file_get_contents($tempFile);
-                unlink($tempFile); // Clean up temporary file
+                unlink($tempFile);
 
-                // Encrypt the file content using DoubleEncryptionService
                 $doubleEncryptionService = new DoubleEncryptionService();
                 $encryptedContent = $doubleEncryptionService->encrypt($fileContent);
 
-                // Check if the original file exists
-                if (Storage::exists($filePath)) {
-                    // Update the file with the new encrypted content
-                    Storage::put($filePath, $encryptedContent);
-                } else {
-                    return redirect()->back()->with('error', 'File not found.');
-                }
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Error processing .docx file: ' . $e->getMessage());
+                Storage::put($filePath, $encryptedContent);
+            } elseif ($extension == 'pdf' && $request->hasFile('pdf_file')) {
+                $newPdfFile = $request->file('pdf_file');
+                $fileContent = file_get_contents($newPdfFile->getRealPath());
+
+                $doubleEncryptionService = new DoubleEncryptionService();
+                $encryptedContent = $doubleEncryptionService->encrypt($fileContent);
+
+                Storage::put($filePath, $encryptedContent);
             }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error processing file: ' . $e->getMessage());
         }
 
-        // Encrypt the ID to redirect back to the edit page
         $encryptedId = Crypt::encryptString($query->id);
 
-        // Log the successful update and redirect
         Log::info('File updated successfully. Redirecting to edit page for ID: ' . $encryptedId);
 
         return redirect()->route('drive.edit', ['id' => $encryptedId])
             ->with('message', 'File updated successfully.');
     }
+
 
     public function destroy(string $id)
     {
