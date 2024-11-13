@@ -73,13 +73,10 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')"><i
-                                                        class="bx bx-pencil me-2"></i> Rename
+                                                    onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')">
+                                                    <i class="bx bx-pencil me-2"></i> Rename
                                                 </a>
                                             </li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="moveFile('{{ Crypt::encryptString($data->id) }}')"><i
-                                                        class="bx bx-cut me-2"></i> Move</a></li>
                                             <li>
                                                 <form
                                                     action="{{ route('subfolder.destroy', ['id' => Crypt::encryptString($subfolder->id)]) }}"
