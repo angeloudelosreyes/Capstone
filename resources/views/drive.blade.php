@@ -75,12 +75,12 @@
                                                     <i class="bx bx-link me-2"></i> Open Subfolder
                                                 </a>
                                             </li>
-                                            {{-- <li>
+                                            <li>
                                                 <a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="create_files('{{ Crypt::encryptString($subfolder->id) }}', '{{ $subfolder->name }}')">
                                                     <i class="bx bx-upload me-2"></i> Upload Files
                                                 </a>
-                                            </li> --}}
+                                            </li>
                                             <li>
                                                 <a class="dropdown-item" href="javascript:void(0)"
                                                     onclick="update_subfolder('{{ Crypt::encryptString($subfolder->id) }}','{{ $subfolder->name }}')"><i
