@@ -47,7 +47,7 @@ class FolderController extends Controller
         ]);
 
         // Define the directory path
-        $directory = 'public/users/' . auth()->user()->id . '/' . $request->title;
+        $directory = 'users/' . auth()->user()->id . '/' . $request->title;
 
         // Check if the directory already exists
         if (!Storage::exists($directory)) {

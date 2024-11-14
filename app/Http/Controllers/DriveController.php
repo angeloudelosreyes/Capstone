@@ -156,99 +156,131 @@ class DriveController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        // Decrypt the file ID
+{
+    try {
+        // Log the incoming ID to track the request
+        Log::info('Received file request for ID: ' . $id);
+
+        // Decrypt the file ID to retrieve it from the database
         $decryptedId = Crypt::decryptString($id);
+        Log::info('Decrypted file ID: ' . $decryptedId);
 
         // Query for the file details in the database
-        $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
-
+        $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
         if (!$query) {
+            Log::warning('File not found in database for ID: ' . $decryptedId);
             return redirect()->back()->with('error', 'File not found.');
         }
+
+        // Log the query result
+        Log::info('File found in database:', ['file' => $query]);
 
         // Determine the folder ID to use for path building
         $folderId = $query->users_folder_id;
         if ($query->subfolder_id) {
-            // If there's a subfolder, use that ID
-            $folderId = $query->subfolder_id;
+            $folderId = $query->subfolder_id; // Use the subfolder if available
         }
 
         // Build the full path using the helper function
-        $basePath = "public/users/{$query->users_id}";
+        $basePath = "users/{$query->users_id}";
         $fullPath = $this->buildFullPath($folderId, $basePath);
+        Log::info('Built full path for file: ' . $fullPath);
 
+        // Check if file exists
         if (!$fullPath || !Storage::exists("$fullPath/{$query->files}")) {
-            return redirect()->back()->with('error', 'Folder or file does not exist.');
+            Log::warning('File does not exist at path: ' . $fullPath . '/' . $query->files);
+            return redirect()->back()->with('error', 'File does not exist.');
         }
 
-        // Attempt to get the folder title from the main folder first
-        $folder = DB::table('users_folder')->where(['id' => $query->users_folder_id])->first();
-
-        // If the main folder is not found, try to get the name from the subfolder
+        // Attempt to get the folder title
+        $folder = DB::table('users_folder')->where('id', $query->users_folder_id)->first();
         if (!$folder) {
-            $folder = DB::table('subfolders')->where(['id' => $query->subfolder_id])->first();
+            $folder = DB::table('subfolders')->where('id', $query->subfolder_id)->first();
             if (!$folder) {
+                Log::warning('Folder or subfolder not found for file: ' . $query->files);
                 return redirect()->back()->with('error', 'Folder or subfolder does not exist.');
             }
-            $folderTitle = $folder->name; // Use the subfolder's name
+            $folderTitle = $folder->name; // Use the subfolder name
         } else {
             $folderTitle = $folder->title; // Use the main folder's title
         }
+
+        // Log folder title
+        Log::info('Folder title: ' . $folderTitle);
 
         $title = $query->files;
         $extension = $query->extension;
         $content = '';
 
-        // Check file extension and handle accordingly
+        // Check the file extension and handle accordingly
         if ($extension == 'pdf') {
             $filePath = "$fullPath/$title";
             if (Storage::exists($filePath)) {
-                $content = $filePath; // Use the full path for PDF
+                $content = $filePath; // Set PDF content to the file path
             } else {
+                Log::warning('PDF file not found at path: ' . $filePath);
                 return redirect()->back()->with('error', 'PDF file not found.');
             }
         } elseif ($extension == 'docx') {
-            $filePath = "$fullPath/$title"; // Use the full path for DOCX
-            if (Storage::exists($filePath)) {
-                try {
-                    // Load the encrypted file contents
-                    $encryptedContent = Storage::get($filePath);
-
-                    // Decrypt the file contents using your DoubleEncryptionService
-                    $doubleEncryptionService = new DoubleEncryptionService(); // Ensure you have this service available
-                    $decryptedContent = $doubleEncryptionService->decrypt($encryptedContent);
-
-                    // Create a temporary file to load with PhpWord
-                    $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
-                    file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
-
-                    // Load the decrypted content with PhpWord
-                    $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
-                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-
-                    // Save the HTML output to a temporary file
-                    $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
-                    $writer->save($htmlTempFile);
-
-                    // Read the HTML content
-                    $htmlContent = file_get_contents($htmlTempFile);
-                    unlink($htmlTempFile); // Clean up temporary file
-                    unlink($tempFile); // Clean up temporary file
-                    $content = $htmlContent;
-                } catch (\Exception $e) {
-                    Log::error('Error loading .docx file: ' . $e->getMessage());
-                    return redirect()->back()->with('error', 'Error loading .docx file.');
-                }
-            } else {
-                return redirect()->back()->with('error', 'File not found.');
-            }
+            // Handle DOCX files here (using PhpWord or similar)
+            $content = $this->handleDocx($fullPath, $title);
         } else {
+            Log::warning('Unsupported file type: ' . $extension);
             return redirect()->back()->with('error', 'Unsupported file type.');
         }
 
-        return view('read', compact('title', 'query', 'content', 'extension', 'folderTitle'));
+        // Log success before returning the view
+        Log::info('Returning view for file: ' . $title);
+        return view('read', compact('title', 'content', 'extension', 'folderTitle'));
+    } catch (\Exception $e) {
+        // Log the error details
+        Log::error('Error in show method:', ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+        return redirect()->back()->with('error', 'An error occurred while retrieving the file.');
     }
+}
+
+private function handleDocx($fullPath, $title)
+{
+    try {
+        Log::info('Handling DOCX file for: ' . $title);
+
+        $filePath = "$fullPath/$title";
+        if (Storage::exists($filePath)) {
+            $encryptedContent = Storage::get($filePath);
+            Log::info('DOCX file found, decrypting content for: ' . $title);
+
+            // Decrypt the file contents (assuming DoubleEncryptionService is correctly set up)
+            $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
+
+            // Use PhpWord to convert DOCX to HTML (you need the PhpOffice\PhpWord library)
+            $tempFile = tempnam(sys_get_temp_dir(), 'phpword');
+            file_put_contents($tempFile, $decryptedContent); // Write decrypted content to temp file
+            $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
+            $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+            // Save HTML output to a temporary file
+            $htmlTempFile = tempnam(sys_get_temp_dir(), 'phpword_html');
+            $writer->save($htmlTempFile);
+
+            // Read the HTML content
+            $htmlContent = file_get_contents($htmlTempFile);
+            unlink($htmlTempFile); // Clean up temporary file
+            unlink($tempFile); // Clean up temporary file
+
+            Log::info('DOCX content successfully converted to HTML for: ' . $title);
+
+            return $htmlContent;
+        } else {
+            Log::warning('DOCX file not found at path: ' . $filePath);
+            return redirect()->back()->with('error', 'DOCX file not found.');
+        }
+    } catch (\Exception $e) {
+        // Log DOCX handling error
+        Log::error('Error processing DOCX file: ' . $e->getMessage(), ['file' => $title, 'stack' => $e->getTraceAsString()]);
+        return redirect()->back()->with('error', 'Error loading DOCX file.');
+    }
+}
+
 
     public function download(Request $request, $id)
 {

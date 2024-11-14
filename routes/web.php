@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/show/{id}', 'show')->name('drive.show');
         Route::get('/download/{id}', 'download')->name('drive.download');
         Route::delete('/destroy/{id}', 'destroy')->name('drive.destroy');
-        Route::get('/display/{title}/{content}', 'display_pdf')->name('drive.pdf.display');
+        Route::get('/pdf/display/{title}/{content}', 'display_pdf')->name('drive.pdf.display');
         Route::get('/sharedShow/{id}', 'sharedShow')->name('drive.sharedShow');
         Route::get('/edit/{id}', 'edit')->name('drive.edit');
         Route::post('/update/{id}', 'update')->name('drive.update');
