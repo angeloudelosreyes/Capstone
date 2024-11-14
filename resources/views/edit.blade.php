@@ -27,11 +27,11 @@
                         <textarea class="form-control" id="content" name="content" rows="20">{!! $content !!}</textarea>
                     </div>
                 @elseif($extension == 'pdf')
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="pdf_file" class="form-label">Upload a New PDF to Replace</label>
                         <input type="file" class="form-control" id="pdf_file" name="pdf_file" accept="application/pdf">
                     </div>
-                    <p>Current PDF cannot be edited directly. Upload a new PDF file to replace it.</p>
+                    <p>Current PDF cannot be edited directly. Upload a new PDF file to replace it.</p> --}}
 
                     <!-- Display current PDF in an iframe for preview -->
                     <div class="mb-4" style="overflow:hidden; height:800px;">

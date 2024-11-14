@@ -27,3 +27,4 @@
         console.log("Read Blade is loaded.");
     </script>
 @endsection
+
