@@ -6901,3 +6901,39 @@ Did you mean this?
 #22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #23 {main}
 "} 
+[2024-11-14 23:36:57] local.INFO: Create function called.  
+[2024-11-14 23:36:57] local.INFO: Folder ID belongs to a main folder. Folder ID: 1  
+[2024-11-14 23:36:57] local.INFO: Attempting to create file: 123.docx for user ID: 2  
+[2024-11-14 23:36:57] local.INFO: Resolved directory path: users/2/test1  
+[2024-11-14 23:36:57] local.INFO: Resolved file path: users/2/test1/123.docx  
+[2024-11-14 23:36:59] local.INFO: Temporary file created and deleted.  
+[2024-11-14 23:36:59] local.INFO: File contents encrypted.  
+[2024-11-14 23:36:59] local.INFO: File created and stored at: users/2/test1/123.docx  
+[2024-11-14 23:36:59] local.INFO: File size determined: 23404 bytes  
+[2024-11-14 23:36:59] local.INFO: Updating folder path for folder ID: 1 to path: users/2/test1  
+[2024-11-14 23:36:59] local.INFO: Updated folder path for folder ID: 1, Rows affected: 1  
+[2024-11-14 23:36:59] local.INFO: File record inserted into database: 123.docx  
+[2024-11-14 23:37:11] local.INFO: Folder sharing request received {"request":{"_token":"zYixSkJwEpSt9RaRJbE08SpHE0fdfT7uW6vlzBNI","my_name_fEuy2ar0m1I6yBDx":null,"valid_from":"eyJpdiI6IjJPejFoTWJJVnRTWlpneTFPR1BMblE9PSIsInZhbHVlIjoiV01tbThNRi95QklSV3FTWTVCbGx1QT09IiwibWFjIjoiODk2NDJiZGM5MDY4MjhlMDZmOGRkYzM4N2QzODVkMDJmODg5ZGQxMjg3Y2RmYmUzY2VkZmY1YjE5MTEwNDEyYSIsInRhZyI6IiJ9","users_folder_files_id":null,"users_folder_id":"eyJpdiI6IlpaM0FTMjdGdnUzNUxQeFJjVzdpcXc9PSIsInZhbHVlIjoicFZOUWdrRnhUbHFJZFpPeFdoSVNEQT09IiwibWFjIjoiYjczYjFjNDU1NTk3NjNjYmExNzYwZmZjMTljOTZhYTBmNDkxNmM4NzUwMjgyMjk1YTZkYjcwOTdmZTFhMmZjMiIsInRhZyI6IiJ9","title":"test1","category":"Individual","email":"lafa.flores.up@phinmaed.com"}} 
+[2024-11-14 23:37:11] local.INFO: Storage directory created at: users/2/shared_folders/test1  
+[2024-11-14 23:37:11] local.INFO: Shared folder created successfully {"folder":{"App\\Models\\UsersFolderShareable":{"title":"test1","users_id":2,"can_edit":false,"can_delete":false,"updated_at":"2024-11-14T23:37:11.000000Z","created_at":"2024-11-14T23:37:11.000000Z","id":1}}} 
+[2024-11-14 23:37:11] local.INFO: Decrypted original folder ID {"originalFolderId":"1"} 
+[2024-11-14 23:37:11] local.INFO: File copied successfully {"newFilePath":"users/2/shared_folders/test1/123(1).docx"} 
+[2024-11-14 23:37:11] local.INFO: New file reference created {"newFileId":2} 
+[2024-11-14 23:37:15] local.INFO: Notification sent to recipient {"email":"lafa.flores.up@phinmaed.com"} 
+[2024-11-14 23:37:23] local.INFO: Decrypted ID: 1  
+[2024-11-14 23:37:23] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-14 23:37:44] local.INFO: Storage directory created at: public/users/2/shared_folders/test2  
+[2024-11-14 23:38:42] local.INFO: Decrypted ID: 1  
+[2024-11-14 23:38:42] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-14 23:39:50] local.INFO: Decrypted ID: 1  
+[2024-11-14 23:39:50] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
+[2024-11-14 23:39:52] local.INFO: Retrieved shared folders for the authenticated user [{"Illuminate\\Support\\Collection":[{"id":1,"title":"test1","encrypted_id":"eyJpdiI6InpNcFdvelVwb2NYMzZRQ2dSOW9EeXc9PSIsInZhbHVlIjoieTRKaCtPTFVHd21CVW5SR2lOWlN3UT09IiwibWFjIjoiZWNkOWJiYmE4OGExZWIzOWEwZTlhZWY0NzUwMzhmZjlmMDM5NjUwZjI1NmI4NTM2ODFlY2Y5MDJkYWZhMTA1ZCIsInRhZyI6IiJ9"},{"id":2,"title":"test2","encrypted_id":"eyJpdiI6IlJHRzlobmdmeXRWZjZPYU1pYlg3RWc9PSIsInZhbHVlIjoiUk9GS0dNQWp4ajNQVElzR3V4VTlNZz09IiwibWFjIjoiOGE4ZDdhOTc5MTE5ZWRhYmQ0NTZkMGVmOTAwNjhhOWQ5NWRhYjM2NTA5NmI4NGE0MDRhN2Q0ZjhjZjBmZDYyMCIsInRhZyI6IiJ9"}]}] 
+[2024-11-14 23:40:11] local.INFO: Received encrypted fileId: eyJpdiI6ImUxTGNoeDA4NE5ubDVyZkQycnRQbVE9PSIsInZhbHVlIjoiZlBDMGVNNGhjMGZqUzFMcWFBMDRaQT09IiwibWFjIjoiMzViYjJmMzc0Nzg5YzQxYTIzYzJhY2RlYmY5ZDRlNTM3YmJhODAwOGIzMjcwYTMzNjIxMDg5MTg5NWNkZjMyNSIsInRhZyI6IiJ9  
+[2024-11-14 23:40:11] local.INFO: Received encrypted destinationFolderId: eyJpdiI6IlJHRzlobmdmeXRWZjZPYU1pYlg3RWc9PSIsInZhbHVlIjoiUk9GS0dNQWp4ajNQVElzR3V4VTlNZz09IiwibWFjIjoiOGE4ZDdhOTc5MTE5ZWRhYmQ0NTZkMGVmOTAwNjhhOWQ5NWRhYjM2NTA5NmI4NGE0MDRhN2Q0ZjhjZjBmZDYyMCIsInRhZyI6IiJ9  
+[2024-11-14 23:40:11] local.INFO: Decrypted fileId: 2  
+[2024-11-14 23:40:11] local.INFO: Decrypted destinationFolderId: 2  
+[2024-11-14 23:40:11] local.INFO: File and destination folder found, proceeding with database update.  
+[2024-11-14 23:40:11] local.INFO: Database updated for file ID 2 with new shared folder ID 2  
+[2024-11-14 23:40:11] local.INFO: File moved in storage from public/users/2/shared_folders/test1/123(1).docx to public/users/2/shared_folders/test2/123(1).docx  
+[2024-11-14 23:40:12] local.INFO: Decrypted ID: 1  
+[2024-11-14 23:40:12] local.INFO: Found shareable folder with ID: 1 in users_folder_shareable.  
