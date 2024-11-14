@@ -33,6 +33,9 @@
                                                 onclick="create_files('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-upload me-2"></i> Upload Files</a></li>
                                         <li><a class="dropdown-item" href="javascript:void(0)"
+                                                onclick="upload_encrypted_files('{{ Crypt::encryptString($data->id) }}', '{{ $data->title }}')"><i
+                                                    class="bx bx-lock me-2"></i> Upload Encrypted Files</a></li>
+                                        <li><a class="dropdown-item" href="javascript:void(0)"
                                                 onclick="share_folder('{{ Crypt::encryptString($data->id) }}','{{ $data->title }}')"><i
                                                     class="bx bx-share me-2"></i> Share Folder</a></li>
                                         <li><a class="dropdown-item download-button" href="javascript:void(0)"
@@ -54,7 +57,6 @@
                                                 </button>
                                             </form>
                                         </li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -74,7 +76,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             @endforeach
             {{ $query->links() }}
         @endif
@@ -139,7 +140,6 @@
             $('#uploadEncryptedFilesModal').modal('show');
         }
 
-
         document.querySelectorAll('.upload-button').forEach(button => {
             button.addEventListener('click', function() {
                 const folderId = this.getAttribute('data-folder-id');
@@ -179,7 +179,6 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit the form if the user confirmed the deletion
                     document.getElementById('delete-form-' + subfolderId).submit();
                 }
             });
@@ -189,7 +188,7 @@
         $('.home').addClass('active')
     </script>
     <script>
-        document.getElementById('folderSearch').addEventListener('input', function() {
+        document.getElementById('folderSearch').addEvent.addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
             const folders = document.querySelectorAll('.folder-card');
 
@@ -214,15 +213,13 @@
                 confirmButtonText: 'Download',
                 showLoaderOnConfirm: true,
                 preConfirm: (password) => {
-                    // Check if password is provided
                     if (!password) {
                         Swal.showValidationMessage('Password is required');
                         return;
                     }
 
-                    // Fetch request to download folder
                     return fetch(`{{ url('folder/download') }}/${folderId}`, {
-                            method: 'POST', // Changed to GET if no password is needed
+                            method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                 'Content-Type': 'application/json'
@@ -245,7 +242,7 @@
                             const a = document.createElement('a');
                             a.style.display = 'none';
                             a.href = url;
-                            a.download = 'folder-download.zip'; // Use the folder name if needed
+                            a.download = 'folder-download.zip';
                             document.body.appendChild(a);
                             a.click();
                             window.URL.revokeObjectURL(url);

@@ -440,99 +440,117 @@ class FilesController extends Controller
 
 
     public function decryptStore(Request $request)
-    {
-        Log::info('decryptStore function called.');
+{
+    Log::info('decryptStore function called.');
 
-        $validator = Validator::make($request->all(), [
-            'files.*' => ['required']
-        ]);
+    $validator = Validator::make($request->all(), [
+        'files.*' => ['required']
+    ]);
 
-        if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()));
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $id = auth()->user()->id;
-        $folder_id = Crypt::decryptString($request->folder_id);
-        $title = $request->folder;
-
-        Log::info('User ID: ' . $id);
-        Log::info('Folder ID: ' . $folder_id);
-        Log::info('Folder Title: ' . $title);
-
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
-                $name = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                $path = $file->storeAs("public/users/$id/$title", $name);
-                $fileSize = $file->getSize();
-
-                Log::info('File uploaded: ' . $name);
-                Log::info('File path: ' . $path);
-                Log::info('File size: ' . $fileSize);
-
-                // Ensure the file path is correctly set
-                if (Storage::exists($path)) {
-                    Log::info('File exists in storage: ' . $path);
-
-                    // Decrypt the file content
-                    $encryptedContent = Storage::get($path);
-                    if ($encryptedContent === null) {
-                        Log::error('Failed to retrieve file content: ' . $path);
-                        return back()->with([
-                            'message' => 'Failed to retrieve file content.',
-                            'type' => 'error',
-                            'title' => 'System Notification'
-                        ]);
-                    }
-
-                    try {
-                        $decryptedContent = Crypt::decrypt($encryptedContent);
-                    } catch (\Exception $e) {
-                        Log::error('Decryption failed: ' . $e->getMessage());
-                        return back()->with([
-                            'message' => 'Decryption failed. The payload is invalid.',
-                            'type' => 'error',
-                            'title' => 'System Notification'
-                        ]);
-                    }
-
-                    // Store the decrypted content back to the file
-                    Storage::put($path, $decryptedContent);
-
-                    Log::info('File decrypted and stored: ' . $name);
-
-                    DB::table('users_folder_files')->insert([
-                        'users_id' => $id,
-                        'users_folder_id' => $folder_id,
-                        'files' => $name,
-                        'size' => $fileSize,
-                        'extension' => $extension
-                    ]);
-                } else {
-                    Log::error('File not found in storage: ' . $path);
-                    return back()->with([
-                        'message' => 'File not found in storage.',
-                        'type' => 'error',
-                        'title' => 'System Notification'
-                    ]);
-                }
-            }
-            return back()->with([
-                'message' => 'New file has been uploaded and decrypted.',
-                'type' => 'success',
-                'title' => 'System Notification'
-            ]);
-        } else {
-            Log::error('No files uploaded.');
-            return back()->with([
-                'message' => 'Upload failed.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
+    if ($validator->fails()) {
+        Log::error('Validation failed: ' . json_encode($validator->errors()));
+        return back()->withErrors($validator)->withInput();
     }
+
+    $userId = auth()->user()->id;
+    $folderId = Crypt::decryptString($request->folder_id);
+    Log::info('User  ID: ' . $userId);
+    Log::info('Folder ID: ' . $folderId);
+
+    // Determine if the file should be protected
+    $isProtected = $request->input('isProtected', false);
+    $password = $isProtected ? $request->input('password') : null;
+
+    if ($request->hasFile('files')) {
+        $files = $request->file('files');
+        foreach ($files as $file) {
+            $name = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+
+            // Build the directory path
+            $directoryBase = 'users/' . $userId;
+            $directory = $this->buildFullPath($folderId, $directoryBase);
+
+            if (!$directory) {
+                Log::error("Folder ID $folderId not found or is invalid.");
+                return back()->with([
+                    'message' => 'Folder not found. Please check if the folder or subfolder exists.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Ensure the directory exists
+            Storage::disk('public')->makeDirectory($directory);
+
+            // Read the encrypted content from the uploaded file
+            $encryptedContent = file_get_contents($file);
+            if ($encryptedContent === false) {
+                Log::error('Failed to read uploaded file: ' . $name);
+                return back()->with([
+                    'message' => 'Failed to read the uploaded file.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            try {
+                // Decrypt the file content using the encryption service
+                $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
+                Log::info('File decrypted successfully: ' . $name);
+            } catch (\Exception $e) {
+                Log::error('Decryption failed: ' . $e->getMessage());
+                return back()->with([
+                    'message' => 'Decryption failed. The payload is invalid.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Encrypt the decrypted content again
+            if ($isProtected) {
+                // Encrypt the file contents with the provided password
+                $encryptedContents = $this->encryptionService->encrypt($decryptedContent, $password);
+                Log::info("File contents re-encrypted with password: " . $name);
+            } else {
+                // Store the decrypted content as is if not protected
+                $encryptedContents = $decryptedContent;
+            }
+
+            // Store the (re-encrypted or decrypted) file contents
+            $path = $directory . '/' . $name; // You can modify the name if needed
+            Storage::disk('public')->put($path, $encryptedContents);
+            Log::info('File stored at: ' . $path);
+
+            // Insert the file record into the database
+            DB::table('users_folder_files')->insert([
+                'users_id' => $userId,
+                'users_folder_id' => $folderId,
+                'files' => $name,
+                'extension' => $extension,
+                'protected' => $isProtected ? 'YES' : 'NO', // Mark as protected if encryption is applied
+                'password' => $isProtected ? $this->encryptionService->hashPassword($password) : null, // Hash the password if needed
+                'file_path' => $path,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Log::info("File record inserted into database: " . $name);
+        }
+        return back()->with([
+            'message' => 'Files have been decrypted, re-encrypted, and stored successfully.',
+            'type' => 'success',
+            'title' => 'System Notification'
+        ]);
+    } else {
+        Log::error('No files uploaded.');
+        return back()->with([
+            'message' => 'Upload failed.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+}
     /**
      * Display the specified resource.
      */
