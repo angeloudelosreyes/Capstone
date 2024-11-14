@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('users_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('users_folder_id')->nullable()->constrained('users_folder')->onDelete('cascade');
             $table->foreignId('users_folder_shareable_id')->nullable()->constrained('users_folder_shareable')->onDelete('cascade'); // New nullable foreign key
+            $table->foreignId('users_subfolder_shareable_id')->nullable()->constrained('user_subfolder_shareable')->onDelete('cascade'); // New nullable foreign key
             $table->unsignedBigInteger('subfolder_id')->nullable();
 
             $table->foreign('subfolder_id')->references('id')->on('subfolders')->onDelete('cascade'); // Cascade on subfolder delete

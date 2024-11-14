@@ -350,6 +350,43 @@ class DriveController extends Controller
         return response()->json(['error' => 'An error occurred while processing the request.'], 500);
     }
 }
+    public function display_pdf($title, $content)
+    {
+        try {
+            // Decrypt the content to get the actual file path
+            $decryptedPath = Crypt::decryptString($content);
+
+            // Log decrypted path for verification
+            Log::info('Decrypted PDF path:', ['path' => $decryptedPath]);
+
+            // Check if the file exists in storage
+            if (!Storage::disk('public')->exists($decryptedPath)) {
+                return response()->json(['error' => 'PDF file not found in storage.'], 404);
+            }
+
+            // Retrieve the encrypted file contents
+            $encryptedContent = Storage::disk('public')->get($decryptedPath);
+
+            // Use the DoubleEncryptionService to decrypt the content
+            $decryptedContent = $this->encryptionService->decrypt($encryptedContent);
+
+            // Create a temporary decrypted file
+            $tempPdfPath = tempnam(sys_get_temp_dir(), 'decrypted_pdf') . '.pdf';
+            file_put_contents($tempPdfPath, $decryptedContent);
+
+            // Serve the decrypted PDF file
+            return response()->file($tempPdfPath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $title . '"',
+            ])->deleteFileAfterSend(true); // Delete the temp file after sending
+        } catch (\Exception $e) {
+            Log::error('Error displaying PDF:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'An error occurred while displaying the PDF: ' . $e->getMessage());
+        }
+    }
+
+
+
 
 private function getPasswordForFile($fileId)
 {

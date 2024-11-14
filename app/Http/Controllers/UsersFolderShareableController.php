@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Notification;
 use App\Models\UsersFolder;
 use App\Models\UsersFolderShareable;
 use App\Models\UsersShareableFile;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Mail;
 
 class UsersFolderShareableController extends Controller
 {
@@ -48,7 +49,6 @@ class UsersFolderShareableController extends Controller
             'title' => 'System Notification'
         ]);
     }
-
     public function createSharedFolder(Request $request)
     {
         Log::info('Folder sharing request received', ['request' => $request->all()]);
@@ -75,14 +75,12 @@ class UsersFolderShareableController extends Controller
         }
 
         try {
-            // Generate an incremented folder name if necessary
+            // Generate folder name and create directory
             $folderName = $this->generateFolderName($recipient->id, $request->title);
+            $storagePath = "users/{$recipient->id}/shared_folders/{$folderName}";
 
-            // Define the storage path with the generated folder name
-            $storagePath = "public/users/{$recipient->id}/shared_folders/{$folderName}";
-
-            if (!Storage::exists($storagePath)) {
-                Storage::makeDirectory($storagePath);
+            if (!Storage::disk('public')->exists($storagePath)) {
+                Storage::disk('public')->makeDirectory($storagePath);
                 Log::info("Storage directory created at: {$storagePath}");
             }
 
@@ -100,73 +98,12 @@ class UsersFolderShareableController extends Controller
             Log::info('Decrypted original folder ID', ['originalFolderId' => $originalFolderId]);
 
             $originalFolder = DB::table('users_folder')->where('id', $originalFolderId)->first();
-            $files = DB::table('users_folder_files')->where('users_folder_id', $originalFolderId)->get();
 
-            Log::info('Retrieved files from original folder', ['files' => $files]);
+            // Recursively copy all files and subfolders
+            $this->copyFolderContents($originalFolder, $storagePath, $folderShareable->id, $recipient->id);
 
-            if ($files->isEmpty()) {
-                Log::warning('No files found for the specified folder ID', ['originalFolderId' => $originalFolderId]);
-                return back()->with([
-                    'message' => 'No files found in the specified folder.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
-                ]);
-            }
-
-            foreach ($files as $file) {
-                $originalFilePath = "public/users/{$file->users_id}/{$originalFolder->title}/{$file->files}";
-
-                // Generate incremented file name
-                $newFileName = $this->generateFileName($folderShareable->id, $file->files);
-                $newFilePath = "{$storagePath}/{$newFileName}";
-
-                Log::info('Attempting to copy file', [
-                    'original' => $originalFilePath,
-                    'new' => $newFilePath,
-                ]);
-
-                try {
-                    if (Storage::exists($originalFilePath)) {
-                        Log::info('Source file exists', ['file' => $originalFilePath]);
-
-                        if (Storage::copy($originalFilePath, $newFilePath)) {
-                            Log::info('File copied successfully', ['newFilePath' => $newFilePath]);
-
-                            $newFileData = [
-                                'file_path' => str_replace("public/", "", $newFilePath),
-                                'files' => $newFileName,
-                                'extension' => pathinfo($file->file_path, PATHINFO_EXTENSION),
-                                'users_id' => $recipient->id,
-                                'users_folder_shareable_id' => $folderShareable->id,
-                                'password' => $file->password, // Include the password from the original file if available
-                                'protected' => true, // Set protected to true by default
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ];
-
-                            $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
-                            Log::info('New file reference created', ['newFileId' => $newFileId]);
-
-                            DB::table('users_shareable_files')->insert([
-                                'users_id' => auth()->user()->id,
-                                'recipient_id' => $recipient->id,
-                                'users_folder_files_id' => $newFileId,
-                            ]);
-                            Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
-                        } else {
-                            Log::error('Failed to copy file', ['original' => $originalFilePath, 'new' => $newFilePath]);
-                        }
-                    } else {
-                        Log::error('Source file does not exist', ['file' => $originalFilePath]);
-                    }
-                } catch (\Exception $e) {
-                    Log::error('Error during file copy', [
-                        'error' => $e->getMessage(),
-                        'original' => $originalFilePath,
-                        'new' => $newFilePath,
-                    ]);
-                }
-            }
+            Mail::to($recipient->email)->send(new Notification($recipient->email, 'folder'));
+            Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
             return back()->with([
                 'message' => 'Shared folder created successfully with files.',
@@ -182,6 +119,85 @@ class UsersFolderShareableController extends Controller
             ]);
         }
     }
+
+    private function copyFolderContents($originalFolder, $destinationPath, $folderShareableId, $recipientId)
+    {
+        $files = DB::table('users_folder_files')->where('users_folder_id', $originalFolder->id)->get();
+        $subfolders = DB::table('subfolders')->where('parent_folder_id', $originalFolder->id)->get();
+
+        // Use 'title' for the main folder name, with a fallback to 'default_folder_name'
+        $folderName = $originalFolder->title ?? 'default_folder_name';
+
+        // Copy each file
+        foreach ($files as $file) {
+            $originalFilePath = "users/{$file->users_id}/{$folderName}/{$file->files}";
+            $newFileName = $this->generateFileName($folderShareableId, $file->files);
+            $newFilePath = "{$destinationPath}/{$newFileName}";
+
+            if (Storage::disk('public')->exists($originalFilePath)) {
+                Storage::disk('public')->copy($originalFilePath, $newFilePath);
+                Log::info('File copied successfully', ['newFilePath' => $newFilePath]);
+
+                $newFileData = [
+                    'file_path' => $newFilePath,
+                    'files' => $newFileName,
+                    'extension' => pathinfo($file->file_path, PATHINFO_EXTENSION),
+                    'users_id' => $recipientId,
+                    'users_folder_shareable_id' => $folderShareableId,
+                    'password' => $file->password,
+                    'protected' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
+                Log::info('New file reference created', ['newFileId' => $newFileId]);
+
+                DB::table('users_shareable_files')->insert([
+                    'users_id' => auth()->user()->id,
+                    'recipient_id' => $recipientId,
+                    'users_folder_files_id' => $newFileId,
+                ]);
+            } else {
+                Log::error('Source file does not exist', ['file' => $originalFilePath]);
+            }
+        }
+
+        // Copy each subfolder
+        foreach ($subfolders as $subfolder) {
+            $newSubfolderPath = "{$destinationPath}/{$subfolder->name}";
+            Storage::disk('public')->makeDirectory($newSubfolderPath);
+
+            // Create a new subfolder entry in the `subfolders` table
+            $newSubfolderId = DB::table('subfolders')->insertGetId([
+                'name' => $subfolder->name,
+                'parent_folder_id' => $folderShareableId, // Link to the shared folder
+                'subfolder_path' => $newSubfolderPath,
+                'user_id' => $recipientId,
+                'users_subfolder_shareable_id' => $folderShareableId, // Link to the shareable folder ID
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Link this subfolder in `user_subfolder_shareable`
+            DB::table('user_subfolder_shareable')->insert([
+                'user_id' => auth()->user()->id,
+                'recipient_id' => $recipientId,
+                'subfolder_id' => $newSubfolderId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Recursively copy contents of each subfolder
+            $this->copyFolderContents($subfolder, $newSubfolderPath, $newSubfolderId, $recipientId);
+        }
+    }
+
+
+
+
+
+
     private function generateFolderName($userId, $baseName)
     {
         $name = $baseName;
@@ -278,7 +294,6 @@ class UsersFolderShareableController extends Controller
         // Try to find the folder in the users_folder_shareable table
         $shareableFolder = DB::table('users_folder_shareable')->where('id', $decryptedId)->first();
 
-        // If the folder is not found in users_folder_shareable, look in users_folder
         if (!$shareableFolder) {
             Log::warning("No shareable folder found with ID: {$decryptedId} in users_folder_shareable.");
 
@@ -300,27 +315,16 @@ class UsersFolderShareableController extends Controller
                 ->whereNull('subfolder_id') // Exclude files in subfolders
                 ->paginate(10);
 
-            // Construct the path dynamically using the current user's ID and folder title
-            $storagePath = "public/users/4/shared_folders/67309c0299570testfolder"; // Use folderModel->title
-            Log::info("Storage Path for User Folder: $storagePath");
+            // Fetch the subfolders related to this folder
+            $subfolders = DB::table('subfolders')
+                ->where('parent_folder_id', $decryptedId)
+                ->get();
 
-            // Check if the storage path exists
-            if (!Storage::exists($storagePath)) {
-                Log::error("Storage path does not exist: $storagePath");
-                return redirect()->back()->with([
-                    'message' => 'Storage path not found.',
-                    'type' => 'error',
-                    'title' => 'System Notification'
-                ]);
-            }
-
-            // Fetch files from storage folder
-
-            // Render view with files data from users_folder
             return view('sharefolder', [
                 'title' => $folderModel->title ?? 'Folder',
                 'shareableFolder' => $folderModel,
                 'files' => $files,
+                'subfolders' => $subfolders, // Pass subfolders to the view
                 'folderId' => $id
             ]);
         } else {
@@ -332,25 +336,21 @@ class UsersFolderShareableController extends Controller
                 ->whereNull('subfolder_id') // Exclude files in subfolders
                 ->paginate(10);
 
-            // Construct the path dynamically using the current user's ID and shareable folder title
-            $storagePath = "public/users/{$userId}/shared_folders/" . trim($shareableFolder->title); // Use shareableFolder->title
-            Log::info("Storage Path for Shareable Folder: $storagePath");
+            // Fetch the subfolders related to this shareable folder
+            $subfolders = DB::table('subfolders')
+                ->where('parent_folder_id', $decryptedId)
+                ->get();
 
-
-            // Fetch files from storage folder
-            $storageFiles = Storage::files($storagePath);
-            Log::info("Fetched files from storage path: " . json_encode($storageFiles));
-
-            // Render view with files data from users_folder_shareable
             return view('sharefolder', [
                 'title' => $shareableFolder->title ?? 'Shareable Folder',
                 'shareableFolder' => $shareableFolder,
                 'files' => $files,
-                'storageFiles' => $storageFiles, // Pass storage files to the view
+                'subfolders' => $subfolders, // Pass subfolders to the view
                 'folderId' => $id
             ]);
         }
     }
+
 
 
     public function update(Request $request)

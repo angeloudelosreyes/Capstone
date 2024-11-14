@@ -153,31 +153,24 @@ class FolderController extends Controller
         DB::beginTransaction();
 
         try {
-            // Decrypt the folder ID
             $folderId = Crypt::decryptString($encryptedId);
             Log::info("Decrypted folder ID: $folderId");
 
-            // Find the folder to be deleted
             $folder = UsersFolder::findOrFail($folderId);
             Log::info("Folder found: " . $folder->title);
 
-            // Get the folder path from the database
-            $folderPath = str_replace('public/', '', $folder->folder_path); // Ensure 'public/' is not included
+            $folderPath = str_replace('public/', '', $folder->folder_path);
             Log::info("Adjusted folder path for storage deletion: $folderPath");
 
-            // Delete all subfolders and their files
             $this->deleteSubfoldersAndFilesIteratively($folder->id);
             Log::info("Deleted all subfolders and files for folder ID: $folderId");
 
-            // Delete all files directly in the folder
             UsersFolderFile::where('users_folder_id', $folder->id)->delete();
             Log::info("Deleted all files in the main folder ID: $folderId");
 
-            // Delete the main folder record in the database
             $folder->delete();
             Log::info("Main folder deleted: $folderId");
 
-            // Delete the folder from storage
             if (Storage::disk('public')->exists($folderPath)) {
                 Storage::disk('public')->deleteDirectory($folderPath);
                 Log::info("Deleted folder directory from storage: $folderPath");
@@ -205,8 +198,6 @@ class FolderController extends Controller
         }
     }
 
-
-
     /**
      * Iteratively delete all subfolders and their files for a given parent folder ID.
      */
@@ -214,38 +205,34 @@ class FolderController extends Controller
     {
         Log::info("Deleting subfolders and files iteratively for parent folder ID: $parentFolderId");
 
-        // Queue for subfolders to delete
         $foldersToDelete = [$parentFolderId];
 
         while (!empty($foldersToDelete)) {
             $currentFolderId = array_pop($foldersToDelete);
             Log::info("Processing folder ID: $currentFolderId");
 
-            // Get all direct subfolders of the current folder
             $subfolders = Subfolder::where('parent_folder_id', $currentFolderId)->get();
 
             foreach ($subfolders as $subfolder) {
                 Log::info("Queueing subfolder ID for deletion: " . $subfolder->id);
 
-                // Queue sub-subfolders for deletion
                 $foldersToDelete[] = $subfolder->id;
 
-                // Delete files within this subfolder
                 UsersFolderFile::where('subfolder_id', $subfolder->id)->delete();
                 Log::info("Deleted files in subfolder ID: " . $subfolder->id);
 
-                // Delete subfolder directory from storage
-                if (Storage::disk('public')->exists($subfolder->folder_path)) {
+                if ($subfolder->folder_path && Storage::disk('public')->exists($subfolder->folder_path)) {
                     Storage::disk('public')->deleteDirectory($subfolder->folder_path);
                     Log::info("Deleted subfolder directory from storage: " . $subfolder->folder_path);
                 }
             }
 
-            // Delete the current subfolder itself
             Subfolder::where('id', $currentFolderId)->delete();
             Log::info("Deleted folder ID: " . $currentFolderId);
         }
     }
+
+
     public function download(Request $request, $encryptedId)
     {
         try {

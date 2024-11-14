@@ -12,7 +12,6 @@
                 $table->id();
                 $table->unsignedBigInteger('users_id'); // Added users_id to indicate the creator
                 $table->unsignedBigInteger('recipient_id')->nullable(); // Nullable recipient_id
-
                 $table->string('title'); // Added title field for the shareable folder
                 $table->boolean('can_edit')->default(false);
                 $table->boolean('can_delete')->default(false);

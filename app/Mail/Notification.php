@@ -11,14 +11,30 @@ class Notification extends Mailable
     use Queueable, SerializesModels;
 
     public $email;
+    public $type;
 
-    public function __construct($email)
+    /**
+     * Create a new message instance.
+     *
+     * @param string $email
+     * @param string $type
+     */
+    public function __construct($email, $type)
     {
-        $this->email        = $email;
+        $this->email = $email;
+        $this->type = $type; // 'file' or 'folder'
     }
 
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
-        return $this->view('email');
+        return $this->view('email')->with([
+            'email' => $this->email,
+            'type' => $this->type,
+        ]);
     }
 }

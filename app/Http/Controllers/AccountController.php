@@ -75,6 +75,7 @@ class AccountController extends Controller
                 'address'    => $request->address,
                 'age'        => $request->age,
                 'password'   => Hash::make('12345678'),
+                'email_verified_at' => Carbon::now()->toDateTimeString(),
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);

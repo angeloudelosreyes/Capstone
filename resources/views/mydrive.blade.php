@@ -166,30 +166,48 @@
             const destinationFolderSelect = document.getElementById('copyDestinationFolder');
             destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
 
-            // Fetch the available folders to populate the dropdown
+            // Fetch the available folders and subfolders to populate the dropdown
             fetch("{{ route('folders.list') }}")
                 .then(response => {
                     console.log("Fetching folders...");
                     return response.json();
                 })
                 .then(data => {
-                    console.log("Fetched folders:", data.folders);
-                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
-                    data.folders.forEach(folder => {
-                        const option = document.createElement('option');
-                        option.value = folder.encrypted_id; // Assuming folder.encrypted_id exists
-                        option.textContent = folder.title;
-                        destinationFolderSelect.appendChild(option);
-                    });
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder or subfolder</option>';
 
-                    // Show the modal only after folders are fetched
-                    $('#copyFileModal').modal('show'); // Show the modal
+                    // Check if the folders data structure matches and iterate through folders
+                    if (data.folders && data.folders.folders) {
+                        data.folders.folders.forEach(folder => {
+                            const option = document.createElement('option');
+                            option.value = folder.encrypted_id; // Assuming folder.encrypted_id exists
+                            option.textContent = folder.title;
+                            destinationFolderSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Folders data structure not as expected:', data);
+                    }
+
+                    // Check if the subfolders data structure matches and iterate through subfolders
+                    if (data.folders && data.folders.subfolders) {
+                        data.folders.subfolders.forEach(subfolder => {
+                            const option = document.createElement('option');
+                            option.value = subfolder.encrypted_id;
+                            option.textContent = `${subfolder.name} (Subfolder)`;
+                            destinationFolderSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Subfolders data structure not as expected:', data);
+                    }
+
+                    // Show the modal only after folders and subfolders are fetched
+                    $('#copyFileModal').modal('show');
                 })
                 .catch(error => {
                     console.error('Error fetching folders:', error);
                     Swal.fire('Error!', 'Could not fetch folders. Please try again later.', 'error');
                 });
         }
+
 
         function submitCopyFileForm() {
             const form = document.getElementById('copyFileForm');
@@ -217,17 +235,35 @@
             const destinationFolderSelect = document.getElementById('destinationFolder');
             destinationFolderSelect.innerHTML = '<option value="">Loading folders...</option>';
 
-            // Fetch the available folders
+            // Fetch the available folders and subfolders
             fetch("{{ route('folders.list') }}")
                 .then(response => response.json())
                 .then(data => {
-                    destinationFolderSelect.innerHTML = '<option value="">Select a folder</option>';
-                    data.folders.forEach(folder => {
-                        const option = document.createElement('option');
-                        option.value = folder.encrypted_id;
-                        option.textContent = folder.title;
-                        destinationFolderSelect.appendChild(option);
-                    });
+                    destinationFolderSelect.innerHTML = '<option value="">Select a folder or subfolder</option>';
+
+                    // Check if the folders data structure matches and iterate through folders
+                    if (data.folders && data.folders.folders) {
+                        data.folders.folders.forEach(folder => {
+                            const option = document.createElement('option');
+                            option.value = folder.encrypted_id;
+                            option.textContent = folder.title;
+                            destinationFolderSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Folders data structure not as expected:', data);
+                    }
+
+                    // Check if the subfolders data structure matches and iterate through subfolders
+                    if (data.folders && data.folders.subfolders) {
+                        data.folders.subfolders.forEach(subfolder => {
+                            const option = document.createElement('option');
+                            option.value = subfolder.encrypted_id;
+                            option.textContent = `${subfolder.name} (Subfolder)`;
+                            destinationFolderSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Subfolders data structure not as expected:', data);
+                    }
                 })
                 .catch(error => console.error('Error fetching folders:', error));
 

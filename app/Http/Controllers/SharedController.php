@@ -229,7 +229,7 @@ class SharedController extends Controller
         Log::info('New file reference created', ['newFileId' => $newFileId]);
 
         // Notify recipient
-        Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
+        Mail::to($recipient->email)->send(new Notification($recipient->email, 'file'));
         Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
         // Store shareable file reference in the database
@@ -359,6 +359,12 @@ class SharedController extends Controller
                             Log::warning("File does not exist in storage at path: $filePath");
                             return redirect()->back()->with('error', 'File not found in storage.');
                         }
+                    } elseif ($extension === 'pdf') {
+                        // Use Storage::url to generate a public URL for the PDF
+                        $content = route('drive.pdf.display', [
+                            'title' => $query->files,
+                            'content' => Crypt::encryptString($query->file_path)
+                        ]);
                     }
 
                     // Get folder title for display
@@ -381,6 +387,7 @@ class SharedController extends Controller
             ]);
         }
     }
+
 
 
 
