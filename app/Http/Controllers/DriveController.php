@@ -70,7 +70,7 @@ class DriveController extends Controller
     public function index()
     {
         $query = DB::table('users_folder_files')
-            ->where('users_id', auth()->duser()->id)
+            ->where('users_id', auth()->user()->id)
             ->whereNull('users_folder_shareable_id') // Exclude records with a non-null users_folder_shareable_id
             ->paginate(18);
 

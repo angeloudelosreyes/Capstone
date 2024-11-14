@@ -61,7 +61,7 @@ class SubfolderController extends Controller
             ]);
 
             // Base path for the user's folders
-            $basePath = 'users/' . $userId;
+            $basePath = 'public/users/' . $userId;
             $directory = '';
 
             // Determine if this is a root folder or a subfolder
