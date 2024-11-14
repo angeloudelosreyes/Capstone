@@ -130,43 +130,46 @@
                                                     data-password="{{ $file->password }}"><i class="bx bx-link me-2"></i>
                                                     Open
                                                     File</a></li>
-                                            <li><a class="dropdown-item download-button" href="javascript:void(0)"
-                                                    data-file-id="{{ Crypt::encryptString($file->id) }}"><i
-                                                        class="bx bx-download me-2"></i> Download</a></li>
-                                            <a class="dropdown-item edit-file-button" href="javascript:void(0)"
-                                                data-file-id="{{ Crypt::encryptString($file->id) }}"
-                                                data-protected="{{ $file->protected }}"
-                                                data-password="{{ $file->password }}">
-                                                <i class="bx bx-edit me-2"></i> Edit
-                                            </a>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="renameFile2('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
-                                                        class="bx bx-rename me-2"></i> Rename</a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
-                                                        class="bx bx-copy me-2"></i> Copy</a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
-                                                        class="bx bx-cut me-2"></i> Move</a></li>
-                                            <li>
-                                                <form
-                                                    action="{{ route('shared.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
-                                                    method="POST" style="display: inline;"
-                                                    id="delete-form-{{ $file->id }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="dropdown-item"
-                                                        onclick="confirmDelete('{{ $file->id }}')">
-                                                        <i class="bx bx-trash me-2"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="javascript:void(0)"
-                                                    onclick="viewFileDetails('{{ Crypt::encryptString($file->id) }}')">
-                                                    <i class="bx bx-info-circle me-2"></i> View Details
+                                                    <li><a class="dropdown-item download-button" href="javascript:void(0)"
+                                                        data-file-id="{{ Crypt::encryptString($file->id) }}"><i
+                                                            class="bx bx-download me-2"></i> Download</a></li>
+                                                <a class="dropdown-item edit-file-button" href="javascript:void(0)"
+                                                    data-file-id="{{ Crypt::encryptString($file->id) }}"
+                                                    data-protected="{{ $file->protected }}" data-password="{{ $file->password }}">
+                                                    <i class="bx bx-edit me-2"></i> Edit
                                                 </a>
-                                            </li>
+        
+        
+                                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                                        onclick="renameFile2('{{ Crypt::encryptString($file->id) }}', '{{ $file->files }}')"><i
+                                                            class="bx bx-rename me-2"></i> Rename</a></li>
+                                                {{-- <li><a class="dropdown-item" href="javascript:void(0)"
+                                                        onclick="copyFile('{{ Crypt::encryptString($file->id) }}')"><i
+                                                            class="bx bx-copy me-2"></i> Copy</a></li>
+                                                <li><a class="dropdown-item" href="javascript:void(0)"
+                                                        onclick="moveFile('{{ Crypt::encryptString($file->id) }}')"><i
+                                                            class="bx bx-cut me-2"></i> Move</a></li>
+                                                <li> --}}
+                                                <li>
+                                                    <form
+                                                        action="{{ route('shared.destroy', ['id' => Crypt::encryptString($file->id)]) }}"
+                                                        method="POST" style="display: inline;"
+                                                        id="delete-form-{{ $file->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="dropdown-item"
+                                                            onclick="confirmDelete('{{ $file->id }}')">
+                                                            <i class="bx bx-trash me-2"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="javascript:void(0)"
+                                                        onclick="viewFileDetails('{{ Crypt::encryptString($file->id) }}')">
+                                                        <i class="bx bx-info-circle me-2"></i> View Details
+                                                    </a>
+        
+                                                </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -178,7 +181,7 @@
             @endif
 
 
-            <!-- Display Existing Folder Contents -->
+            {{-- <!-- Display Existing Folder Contents -->
             @if (isset($query) && count($query) > 0)
                 @foreach ($query as $data)
                     <div class="col-md <div class="col-6 folder-card">
@@ -251,7 +254,7 @@
                     </div>
                 @endforeach
                 {{ $files->links() }}
-            @endif
+            @endif --}}
 
         @endif
     </div>
@@ -276,93 +279,57 @@
 
 @endsection
 @section('custom_js')
-    <script>
-        function promptForPassword(fileId, isProtected, hasPassword, action) {
-            console.log("promptForPassword called with action:", action);
-
-            if (isProtected === 'YES' && hasPassword) {
-                console.log("Showing password modal for protected file with action:", action);
-                $('#passwordModal').modal('show');
-
-                // Configure the submit button to handle the password for either open or edit action
-                $('#submitPassword').off('click').on('click', function() {
-                    const password = $('#filePassword').val();
-                    if (!password) {
-                        alert('Password is required');
-                        return;
-                    }
-
-                    // Determine the target URL based on the action (either open or edit)
-                    let targetUrl = (action === 'edit') ?
-                        `{{ url('shared/edit') }}/${fileId}?password=${encodeURIComponent(password)}` :
-                        `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
-
-                    console.log("Navigating to:", targetUrl);
-                    window.location.href = targetUrl;
-                });
-            } else {
-                // Directly proceed to the target URL based on the action if no password is required
-                console.log("Directly navigating to target URL without password modal for action:", action);
-                let targetUrl = (action === 'edit') ?
-                    `{{ url('shared/edit') }}/${fileId}` :
-                    `{{ url('drive/sharedShow') }}/${fileId}`;
-
-                window.location.href = targetUrl;
-            }
-        }
-
-        // Handle click events for both open and edit buttons
-        document.querySelectorAll('.open-file-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                const isProtected = this.getAttribute('data-protected');
-                const hasPassword = this.getAttribute('data-password') !== '';
-                promptForPassword(fileId, isProtected, hasPassword, 'open');
-            });
-        });
-
-        document.querySelectorAll('.edit-file-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const fileId = this.getAttribute('data-file-id');
-                const isProtected = this.getAttribute('data-protected');
-                const hasPassword = this.getAttribute('data-password') !== '';
-                promptForPassword(fileId, isProtected, hasPassword, 'edit');
-            });
-        });
-
-        @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '{{ session('error') }}'
-            });
-        @endif
-    </script>
-@endsection
 <script>
-    function openFile(fileId, isProtected, hasPassword) {
+    function promptForPassword(fileId, isProtected, hasPassword, action) {
+        console.log("promptForPassword called with action:", action);
+
         if (isProtected === 'YES' && hasPassword) {
+            console.log("Showing password modal for protected file with action:", action);
             $('#passwordModal').modal('show');
+
+            // Configure the submit button to handle the password for either open or edit action
             $('#submitPassword').off('click').on('click', function() {
                 const password = $('#filePassword').val();
                 if (!password) {
                     alert('Password is required');
                     return;
                 }
-                window.location.href =
+
+                // Determine the target URL based on the action (either open or edit)
+                let targetUrl = (action === 'edit') ?
+                    `{{ url('shared/edit') }}/${fileId}?password=${encodeURIComponent(password)}` :
                     `{{ url('drive/sharedShow') }}/${fileId}?password=${encodeURIComponent(password)}`;
+
+                console.log("Navigating to:", targetUrl);
+                window.location.href = targetUrl;
             });
         } else {
-            window.location.href = `{{ url('drive/sharedShow') }}/${fileId}`;
+            // Directly proceed to the target URL based on the action if no password is required
+            console.log("Directly navigating to target URL without password modal for action:", action);
+            let targetUrl = (action === 'edit') ?
+                `{{ url('shared/edit') }}/${fileId}` :
+                `{{ url('drive/sharedShow') }}/${fileId}`;
+
+            window.location.href = targetUrl;
         }
     }
 
+    // Handle click events for both open and edit buttons
     document.querySelectorAll('.open-file-button').forEach(button => {
         button.addEventListener('click', function() {
             const fileId = this.getAttribute('data-file-id');
             const isProtected = this.getAttribute('data-protected');
             const hasPassword = this.getAttribute('data-password') !== '';
-            openFile(fileId, isProtected, hasPassword);
+            promptForPassword(fileId, isProtected, hasPassword, 'open');
+        });
+    });
+
+    document.querySelectorAll('.edit-file-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            const isProtected = this.getAttribute('data-protected');
+            const hasPassword = this.getAttribute('data-password') !== '';
+            promptForPassword(fileId, isProtected, hasPassword, 'edit');
         });
     });
 
@@ -562,7 +529,7 @@
             });
         }
     </script>
-    <script>
+       <script>
         function downloadFile(fileId) {
             Swal.fire({
                 title: 'Enter Password',
@@ -719,7 +686,7 @@
             });
         }
     </script>
-    <script>
+     <script>
         function moveFile(fileId) {
             // Set the hidden input for fileId
             document.getElementById('fileIdToMove').value = fileId;
@@ -776,12 +743,7 @@
             }
         }
     </script>
-    <script>
-        function handleBack() {
-            window.history.back(); // This will take the user to the previous page in the browser history
-        }
-    </script>
-    <script>
+      <script>
         // Copy a file
         function copyFile(fileId) {
             console.log("Copying file with ID:", fileId);
@@ -833,5 +795,4 @@
                 Swal.fire('Error', 'Please select a destination folder.', 'error');
             }
         }
-    </script>
 @endsection
