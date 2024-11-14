@@ -6063,3 +6063,528 @@ Did you mean this?
 [2024-11-14 19:00:13] local.INFO: DOCX file found, decrypting content for: CERT-OF-ATTENDANCE-DEC. (1).docx  
 [2024-11-14 19:00:13] local.INFO: DOCX content successfully converted to HTML for: CERT-OF-ATTENDANCE-DEC. (1).docx  
 [2024-11-14 19:00:13] local.INFO: Returning view for file: CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:03:24] local.INFO: Received file request for ID: eyJpdiI6Inp2WWtRL1F2Y3JYRUg2WmVNc0JWS2c9PSIsInZhbHVlIjoid1BOTUlhQU5hRy9wekdtSndLdWhnQT09IiwibWFjIjoiYTE1NmI1MjQ1ZDI0YjViN2ExZDVhMzVmZWYxNzBkODczMzkwNDVhMTU0ZDYyNmEzMjAyZDk4N2M4YjMyYzQ2MiIsInRhZyI6IiJ9  
+[2024-11-14 19:03:24] local.INFO: Decrypted file ID: 3  
+[2024-11-14 19:03:24] local.INFO: File found in database: {"file":{"stdClass":{"id":3,"users_id":2,"users_folder_id":3,"users_folder_shareable_id":null,"users_subfolder_shareable_id":null,"subfolder_id":null,"files":"CERT-OF-ATTENDANCE-DEC. (1).docx","size":0,"extension":"docx","protected":"YES","password":"$2y$10$HnMarcP68RXLPzO/GkD9reqBOQLzrrJQY28Wqtv6t0gY9cc3u8igS","created_at":"2024-11-14 18:57:40","updated_at":"2024-11-14 18:57:40","file_path":"users/2/test5/CERT-OF-ATTENDANCE-DEC. (1).docx"}}} 
+[2024-11-14 19:03:24] local.INFO: Found main folder: test5  
+[2024-11-14 19:03:24] local.INFO: Built full path for file: users/2/test5  
+[2024-11-14 19:03:24] local.INFO: Folder title: test5  
+[2024-11-14 19:03:24] local.INFO: Handling DOCX file for: CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:03:24] local.INFO: DOCX file found, decrypting content for: CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:03:24] local.INFO: DOCX content successfully converted to HTML for: CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:03:24] local.INFO: Returning view for file: CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:03:24] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('0:00:13 2024] 1...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('0:00:13 2024] 1...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '0:00:13 2024] 1...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '0:00:13 2024] 1...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:04:04] local.INFO: Store function called.  
+[2024-11-14 19:04:04] local.INFO: User ID: 2  
+[2024-11-14 19:04:04] local.INFO: Folder ID: 3  
+[2024-11-14 19:04:04] local.INFO: Is Encrypted: YES  
+[2024-11-14 19:04:04] local.INFO: Password provided for encryption: 123  
+[2024-11-14 19:04:04] local.INFO: Password length: 3  
+[2024-11-14 19:04:04] local.INFO: Final directory path for file storage: {"directory":"users/2/test5"} 
+[2024-11-14 19:04:04] local.INFO: File contents encrypted for: Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:04:04] local.INFO: Encrypted file uploaded: Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:04:04] local.INFO: File record inserted into database: Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:04:05] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine(' Nov 15 00:03:4...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}(' Nov 15 00:03:4...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', ' Nov 15 00:03:4...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', ' Nov 15 00:03:4...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:04:15] local.INFO: Received file request for ID: eyJpdiI6IkhGYmMrVXhBcUpyZGNmT3VjUUhOT2c9PSIsInZhbHVlIjoiS0R4cVEvTmNJL0kzUEl0c2pPMGJCQT09IiwibWFjIjoiNjhmMDI3OTU5MDRjNzY4OGIzNWE3YWEzZTBlZDY4ZjdhN2UyMjAwMmZjZjBmYTFmODdkMzNmMmRmZTc2MTQ2NCIsInRhZyI6IiJ9  
+[2024-11-14 19:04:15] local.INFO: Decrypted file ID: 4  
+[2024-11-14 19:04:15] local.INFO: File found in database: {"file":{"stdClass":{"id":4,"users_id":2,"users_folder_id":3,"users_folder_shareable_id":null,"users_subfolder_shareable_id":null,"subfolder_id":null,"files":"Project-Proposal-OOP (1).pdf","size":0,"extension":"pdf","protected":"YES","password":"$2y$10$NxEpAh//7HLnbt7jpBYzCeLPKy8Uli3dKLtywleNCcFND9KTbc.2K","created_at":"2024-11-14 19:04:04","updated_at":"2024-11-14 19:04:04","file_path":"users/2/test5/Project-Proposal-OOP (1).pdf"}}} 
+[2024-11-14 19:04:15] local.INFO: Found main folder: test5  
+[2024-11-14 19:04:15] local.INFO: Built full path for file: users/2/test5  
+[2024-11-14 19:04:15] local.INFO: Folder title: test5  
+[2024-11-14 19:04:15] local.INFO: Returning view for file: Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:04:16] local.INFO: Decrypted PDF path: {"path":"users/2/test5/Project-Proposal-OOP (1).pdf"} 
+[2024-11-14 19:05:14] local.INFO: Found main folder: test5  
+[2024-11-14 19:05:15] local.INFO: Decrypted PDF path: {"path":"users/2/test5/Project-Proposal-OOP (1).pdf"} 
+[2024-11-14 19:05:23] local.INFO: Found main folder: test5  
+[2024-11-14 19:05:45] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('5:24 2024] 127....')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('5:24 2024] 127....', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '5:24 2024] 127....')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '5:24 2024] 127....')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:06:09] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:52473 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:52473 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:52473 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:52473 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:11:24] local.INFO: Number of folders: {"count":4} 
+[2024-11-14 19:11:24] local.INFO: Number of subfolders: {"count":0} 
+[2024-11-14 19:11:31] local.INFO: Received encrypted fileId: eyJpdiI6ImlEREpLK0p1VElNSVdWMjdMMTZ2VHc9PSIsInZhbHVlIjoicFJoam9oeWNSRmVmNFppVE12R3pmUT09IiwibWFjIjoiMzEzMGY3ZTVlYTAwNTcxZjExMTg2NGQ4YThiOTdkNGYzOTYxZTNmMDAxNWI5YWQ2YmI2MTExYTYzM2ViYWViMiIsInRhZyI6IiJ9  
+[2024-11-14 19:11:31] local.INFO: Received encrypted destinationFolderId: eyJpdiI6IkJRN1ErODRma0hxZWM4dTZzR2l1Q3c9PSIsInZhbHVlIjoiYkJPNlJ4MTdtenV1SnkraTVYd3VuQT09IiwibWFjIjoiZWExZTkyMWJjNzY0ZTcwZTFiNWQzNzlhYjk5NTdkZWI4MjZkNzViZThhYjVhY2UxODVjZmRmNGNhYjk1YjgyMiIsInRhZyI6IiJ9  
+[2024-11-14 19:11:31] local.INFO: Decrypted fileId: 4  
+[2024-11-14 19:11:31] local.INFO: Decrypted destinationFolderId: 4  
+[2024-11-14 19:11:31] local.INFO: Destination folder title: test6  
+[2024-11-14 19:11:31] local.INFO: Found main folder: test5  
+[2024-11-14 19:11:31] local.INFO: Found main folder: test6  
+[2024-11-14 19:11:31] local.INFO: Constructed source path: public/users/2/test5/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:11:31] local.INFO: Constructed destination path: public/users/2/test6/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:11:31] local.ERROR: File not found in storage: public/users/2/test5/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:13:22] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:52646 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:52646 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:52646 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:52646 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:13:42] local.INFO: Number of folders: {"count":4} 
+[2024-11-14 19:13:42] local.INFO: Number of subfolders: {"count":0} 
+[2024-11-14 19:13:46] local.INFO: Received encrypted fileId: eyJpdiI6IjVqbGY1eTlUZDkyRVNkVXJIZ1FFWGc9PSIsInZhbHVlIjoia0RCUTZmYXI1b0djUkVwbTQ3d2pUdz09IiwibWFjIjoiN2IxOWE4NTQzMmFmYmIyMmRhMjA4MzcxNjczN2UyOGQwY2U0MzYzZWE0NDA5YjhlYjc1NjZkODU5ZTUwNTExNSIsInRhZyI6IiJ9  
+[2024-11-14 19:13:46] local.INFO: Received encrypted destinationFolderId: eyJpdiI6InZpNXljMFVDSkdQdHhZcGkwendIRXc9PSIsInZhbHVlIjoibkx0YisyR0ZuMURSY3VmQnN4NndjZz09IiwibWFjIjoiMjFlOWQwMTc4Mzc4NTljMmI4MjA1YTcwNmU1YWM0ZTY5MjIyNjNmYjdlNjM5YTNiODY0M2FlNmRmMjRiM2I3MiIsInRhZyI6IiJ9  
+[2024-11-14 19:13:46] local.INFO: Decrypted fileId: 4  
+[2024-11-14 19:13:46] local.INFO: Decrypted destinationFolderId: 4  
+[2024-11-14 19:13:46] local.INFO: Constructed source path: users/2/test5/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:13:46] local.INFO: Constructed destination path: users/2/test6/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:13:46] local.INFO: File moved in storage from users/2/test5/Project-Proposal-OOP (1).pdf to users/2/test6/Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:13:46] local.INFO: Database update status for file ID 4: {"new_folder_id":"4"} 
+[2024-11-14 19:13:56] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:52745 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:52745 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:52745 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:52745 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:14:06] local.INFO: Received file request for ID: eyJpdiI6InRnVU9MTTROTG96NHBjcjZDTlNpRFE9PSIsInZhbHVlIjoiVUU2NElBUlRkSFdWK1ozOUJ2WjU0UT09IiwibWFjIjoiOGVkYzBiOTZmNDlkZjhmOTQwNTZhZTlmODI3NTdiYzE0Njc5Mjk4MzE2ODY4ZjA4NTA0NTI1NGY1NzIzZDA4MSIsInRhZyI6IiJ9  
+[2024-11-14 19:14:06] local.INFO: Decrypted file ID: 4  
+[2024-11-14 19:14:06] local.INFO: File found in database: {"file":{"stdClass":{"id":4,"users_id":2,"users_folder_id":4,"users_folder_shareable_id":null,"users_subfolder_shareable_id":null,"subfolder_id":null,"files":"Project-Proposal-OOP (1).pdf","size":0,"extension":"pdf","protected":"YES","password":"$2y$10$NxEpAh//7HLnbt7jpBYzCeLPKy8Uli3dKLtywleNCcFND9KTbc.2K","created_at":"2024-11-14 19:04:04","updated_at":"2024-11-15 00:13:46","file_path":"users/2/test6/Project-Proposal-OOP (1).pdf"}}} 
+[2024-11-14 19:14:06] local.INFO: Found main folder: test6  
+[2024-11-14 19:14:06] local.INFO: Built full path for file: users/2/test6  
+[2024-11-14 19:14:06] local.INFO: Folder title: test6  
+[2024-11-14 19:14:06] local.INFO: Returning view for file: Project-Proposal-OOP (1).pdf  
+[2024-11-14 19:14:06] local.INFO: Decrypted PDF path: {"path":"users/2/test6/Project-Proposal-OOP (1).pdf"} 
+[2024-11-14 19:14:22] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('.0.1:52819 Acce...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('.0.1:52819 Acce...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '.0.1:52819 Acce...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '.0.1:52819 Acce...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:14:44] local.INFO: Found main folder: test6  
+[2024-11-14 19:15:14] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('.1:52890 Accept...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('.1:52890 Accept...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '.1:52890 Accept...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '.1:52890 Accept...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:17:01] local.INFO: Received file request for ID: eyJpdiI6IkRnTHFtdTA0ZTFGTjJvS2wvTzFoVlE9PSIsInZhbHVlIjoieHlpOFBINm1mRWZMZmd5dXIra2xPUT09IiwibWFjIjoiNWE3YTMzMmY4NWVhMjc4MjRlMDA4YTliOGNhZjEwMmZjY2IyYTlkZDE2YzEwNDYyZjQxMzhjNTFhYTVlYzMxOSIsInRhZyI6IiJ9  
+[2024-11-14 19:17:01] local.INFO: Decrypted file ID: 3  
+[2024-11-14 19:17:01] local.INFO: File found in database: {"file":{"stdClass":{"id":3,"users_id":2,"users_folder_id":3,"users_folder_shareable_id":null,"users_subfolder_shareable_id":null,"subfolder_id":null,"files":"CERT-OF-ATTENDANCE-DEC. (1).docx","size":0,"extension":"docx","protected":"YES","password":"$2y$10$HnMarcP68RXLPzO/GkD9reqBOQLzrrJQY28Wqtv6t0gY9cc3u8igS","created_at":"2024-11-14 18:57:40","updated_at":"2024-11-14 18:57:40","file_path":"users/2/test5/CERT-OF-ATTENDANCE-DEC. (1).docx"}}} 
+[2024-11-14 19:17:01] local.INFO: Found main folder: test5  
+[2024-11-14 19:17:01] local.INFO: Built full path for file: users/2/test5  
+[2024-11-14 19:17:01] local.WARNING: File does not exist at path: users/2/test5/CERT-OF-ATTENDANCE-DEC. (1).docx  
+[2024-11-14 19:17:28] local.INFO: Found main folder: test5  
+[2024-11-14 19:17:28] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:52973 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:52973 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:52973 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:52973 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:19:50] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('Nov 15 00:19:29...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('Nov 15 00:19:29...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', 'Nov 15 00:19:29...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', 'Nov 15 00:19:29...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:20:20] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('0.1:53165 Accep...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('0.1:53165 Accep...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '0.1:53165 Accep...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '0.1:53165 Accep...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:20:56] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:53239 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:53239 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:53239 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:53239 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:24:21] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:53371 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:53371 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:53371 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:53371 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:26:01] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(288): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('27.0.0.1:53446 ...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('27.0.0.1:53446 ...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '27.0.0.1:53446 ...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '27.0.0.1:53446 ...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:26:30] local.INFO: Store function called.  
+[2024-11-14 19:26:30] local.INFO: User ID: 2  
+[2024-11-14 19:26:30] local.INFO: Folder ID: 4  
+[2024-11-14 19:26:30] local.INFO: Is Encrypted: YES  
+[2024-11-14 19:26:30] local.INFO: Password provided for encryption: 123  
+[2024-11-14 19:26:30] local.INFO: Password length: 3  
+[2024-11-14 19:26:30] local.INFO: Final directory path for file storage: {"directory":"users/2/dasda"} 
+[2024-11-14 19:26:30] local.INFO: File contents encrypted for: _Brev-Caguioa-Drug-Study-Diazepam.pdf  
+[2024-11-14 19:26:30] local.INFO: Encrypted file uploaded: _Brev-Caguioa-Drug-Study-Diazepam.pdf  
+[2024-11-14 19:26:30] local.INFO: File record inserted into database: _Brev-Caguioa-Drug-Study-Diazepam.pdf  
+[2024-11-14 19:26:37] local.INFO: Received file request for ID: eyJpdiI6ImtzSXR6K1YveXZVTE9FZHd2djNxanc9PSIsInZhbHVlIjoiTUFJQ3Rwa1lWOU00QllBWXVHbUExUT09IiwibWFjIjoiN2M5MjU4MGFmY2FiNGJhNTcwNDRjYmEyMTdlODE3NGE1Mjg4OTFiOWIxYjIxMTM1MTNhNDk5MDc5MDU3NzcyMiIsInRhZyI6IiJ9  
+[2024-11-14 19:26:37] local.INFO: Decrypted file ID: 1  
+[2024-11-14 19:26:37] local.INFO: File found in database: {"file":{"stdClass":{"id":1,"users_id":2,"users_folder_id":4,"users_folder_shareable_id":null,"users_subfolder_shareable_id":null,"subfolder_id":null,"files":"_Brev-Caguioa-Drug-Study-Diazepam.pdf","size":0,"extension":"pdf","protected":"YES","password":"$2y$10$RUJM93l2Rztk1Y.IjxxwW.JJB4/4SQE3MRZc5alhjIlwc135XMXFS","created_at":"2024-11-14 19:26:30","updated_at":"2024-11-14 19:26:30","file_path":"users/2/dasda/_Brev-Caguioa-Drug-Study-Diazepam.pdf"}}} 
+[2024-11-14 19:26:37] local.INFO: Found main folder: dasda  
+[2024-11-14 19:26:37] local.INFO: Built full path for file: public/users/2/dasda  
+[2024-11-14 19:26:37] local.INFO: Folder title: dasda  
+[2024-11-14 19:26:37] local.INFO: Returning view for file: _Brev-Caguioa-Drug-Study-Diazepam.pdf  
+[2024-11-14 19:26:38] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine('.1:53523 Accept...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('.1:53523 Accept...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', '.1:53523 Accept...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', '.1:53523 Accept...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:26:38] local.INFO: Decrypted PDF path: {"path":"public/users/2/dasda/_Brev-Caguioa-Drug-Study-Diazepam.pdf"} 
+[2024-11-14 19:28:03] local.INFO: Found main folder: dasda  
+[2024-11-14 19:28:03] local.ERROR: Undefined array key 1 {"exception":"[object] (ErrorException(code: 0): Undefined array key 1 at C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:328)
+[stacktrace]
+#0 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#1 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(328): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Undefined array...', 'C:\\\\Users\\\\ADMIN\\\\...', 328)
+#2 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(264): Illuminate\\Foundation\\Console\\ServeCommand->getDateFromLine(' Nov 15 00:27:2...')
+#3 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(240): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}(' Nov 15 00:27:2...', 0)
+#4 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(309): Illuminate\\Support\\Collection->each(Object(Closure))
+#5 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1275): Illuminate\\Foundation\\Console\\ServeCommand->Illuminate\\Foundation\\Console\\{closure}('err', ' Nov 15 00:27:2...')
+#6 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1388): Symfony\\Component\\Process\\Process->Symfony\\Component\\Process\\{closure}('err', ' Nov 15 00:27:2...')
+#7 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(1308): Symfony\\Component\\Process\\Process->readPipes(false, false)
+#8 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\process\\Process.php(839): Symfony\\Component\\Process\\Process->updateStatus(false)
+#9 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(95): Symfony\\Component\\Process\\Process->isRunning()
+#10 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#11 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#12 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#13 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#14 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#15 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call(Array)
+#16 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(181): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#18 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 C:\\Users\\ADMIN\\Documents\\GitHub\\RevisedSystem\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+"} 
+[2024-11-14 19:28:03] local.INFO: Decrypted PDF path: {"path":"users/2/dasda/_Brev-Caguioa-Drug-Study-Diazepam.pdf"} 
+[2024-11-14 19:28:23] local.INFO: Starting to create subfolder for user: {"userId":2} 
+[2024-11-14 19:28:23] local.INFO: Decrypted parent ID: {"parent_id":"4"} 
+[2024-11-14 19:28:23] local.INFO: Final directory path for subfolder storage: {"directory":"users/2/dasda/dasdasda"} 
+[2024-11-14 19:28:23] local.INFO: Directory successfully created: {"directory":"users/2/dasda/dasdasda"} 
