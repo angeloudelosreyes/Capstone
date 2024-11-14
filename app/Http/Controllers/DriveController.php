@@ -251,111 +251,111 @@ class DriveController extends Controller
     }
 
     public function download(Request $request, $id)
-    {
-        // Validate the password input
-        $request->validate([
-            'password' => 'required|string'
-        ]);
+{
+    // Validate the password input
+    $request->validate([
+        'password' => 'required|string'
+    ]);
 
-        $password = $request->input('password');
-        Log::info('Password entered by user: ' . $password);
+    $password = $request->input('password');
+    Log::info('Password entered by user: ' . $password);
 
-        // Query for the file and folder details in the database
-        try {
-            $decryptedId = Crypt::decryptString($id);
-            Log::info('Decrypted ID: ' . $decryptedId);
+    // Query for the file and folder details in the database
+    try {
+        $decryptedId = Crypt::decryptString($id);
+        Log::info('Decrypted ID: ' . $decryptedId);
 
-            $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
-            Log::info('File query result: ' . json_encode($query));
+        $query = DB::table('users_folder_files')->where(['id' => $decryptedId])->first();
+        Log::info('File query result: ' . json_encode($query));
 
-            // Determine the folder ID to use for path building
-            $folderId = $query->users_folder_id;
-            if ($query->subfolder_id) {
-                $folderId = $query->subfolder_id;
-            }
-
-            // Build the full path
-            $basePath = "public/users/{$query->users_id}";
-            $fullPath = $this->buildFullPath($folderId, $basePath);
-
-            if (!$fullPath) {
-                Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
-                return response()->json(['error' => 'Folder does not exist.'], 404);
-            }
-
-            $title = $query->files; // Original file name
-            Log::info('Original file name: ' . $title);
-
-            // Construct the full file path
-            $filePath = "$fullPath/$title";
-            Log::info('File path: ' . $filePath);
-
-            // Check if the file exists in the storage
-            if (!Storage::exists($filePath)) {
-                Log::error('File not found in storage.');
-                return response()->json(['error' => 'File not found.'], 404);
-            }
-
-            Log::info('File exists in storage.');
-
-            // Read the file content
-            $fileContent = Storage::get($filePath);
-
-            // Check if the file is protected and handle accordingly
-            if ($query->protected === 'YES') {
-                // Fetch the hashed password from the database using the helper function
-                $correctPassword = $this->getPasswordForFile($decryptedId);
-
-                // Verify the provided password against the hashed password
-                if (password_verify($password, $correctPassword)) {
-                    // Password is correct, decrypt the file content
-                    $fileContent = $this->encryptionService->decrypt($fileContent);
-                } else {
-                    Log::info('Password is incorrect. Download will not proceed.');
-                    return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
-                }
-            }
-
-            // Ensure the storage directory exists
-            $storagePath = storage_path('app/protected');
-            if (!File::exists($storagePath)) {
-                File::makeDirectory($storagePath, 0755, true);
-            }
-
-            // Create a ZIP file
-            $zip = new \ZipArchive();
-            $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
-            Log::info('ZIP file name: ' . $zipFileName);
-
-            if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-                Log::info('ZIP file opened successfully.');
-
-                // Add the decrypted content to the zip
-                $zip->addFromString($title, $fileContent);
-
-                // Encrypt the ZIP file with the provided password
-                $zip->setEncryptionName($title, \ZipArchive::EM_AES_256, $password);
-
-                $zip->close();
-                Log::info('ZIP file closed successfully.');
-
-                // Return the zip file for download with a custom filename
-                return response()->download($zipFileName)->deleteFileAfterSend(true);
-            } else {
-                Log::error('Failed to open the ZIP file.');
-                return response()->json(['error' => 'Failed to create the zip file.'], 500);
-            }
-        } catch (\Exception $e) {
-            Log::error('Error occurred: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+        // Determine the folder ID to use for path building
+        $folderId = $query->users_folder_id;
+        if ($query->subfolder_id) {
+            $folderId = $query->subfolder_id;
         }
-    }
 
-    private function getPasswordForFile($fileId)
-    {
-        // Fetch the hashed password from your storage
-        return DB::table('users_folder_files')->where('id', $fileId)->value('password'); // Assuming 'password' is the column name
+        // Build the full path
+        $basePath = "public/users/{$query->users_id}";
+        $fullPath = $this->buildFullPath($folderId, $basePath);
+
+        if (!$fullPath) {
+            Log::error("Invalid folder path for ID:", ['folder_id' => $folderId]);
+            return response()->json(['error' => 'Folder does not exist.'], 404);
+        }
+
+        $title = $query->files; // Original file name
+        Log::info('Original file name: ' . $title);
+
+        // Construct the full file path
+        $filePath = "$fullPath/$title";
+        Log::info('File path: ' . $filePath);
+
+        // Check if the file exists in the storage
+        if (!Storage::exists($filePath)) {
+            Log::error('File not found in storage.');
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+
+        Log::info('File exists in storage.');
+
+        // Read the file content
+        $fileContent = Storage::get($filePath);
+
+        // Check if the file is protected and handle accordingly
+        if ($query->protected === 'YES') {
+            // Fetch the hashed password from the database using the helper function
+            $correctPassword = $this->getPasswordForFile($decryptedId);
+
+            // Verify the provided password against the hashed password
+            if (!password_verify($password, $correctPassword)) {
+                Log::info('Password is incorrect. Download will not proceed.');
+                return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
+            }
+        }
+
+        // Ensure the storage directory exists
+        $storagePath = storage_path('app/protected');
+        if (!File::exists($storagePath)) {
+            File::makeDirectory($storagePath, 0755, true);
+        }
+
+        // Create a ZIP file
+        $zip = new \ZipArchive();
+        $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
+        Log::info('ZIP file name: ' . $zipFileName);
+
+        if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            Log::info('ZIP file opened successfully.');
+
+            // Encrypt the file content with the provided password
+            $encryptedContent = $this->encryptionService->encrypt($fileContent);
+
+            // Add the encrypted content to the zip
+            $zip->addFromString($title, $encryptedContent);
+
+            // Encrypt the ZIP file with the provided password
+            $zip->setEncryptionName($title, \ZipArchive::EM_AES_256, $password);
+
+            $zip->close();
+            Log::info('ZIP file closed successfully.');
+
+            // Return the zip file for download with a custom filename
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
+        } else {
+            Log::error('Failed to open the ZIP file.');
+            return response()->json(['error' => 'Failed to create the zip file.'], 500);
+        }
+    } catch (\Exception $e) {
+        Log::error('Error occurred: ' . $e->getMessage());
+        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
     }
+}
+
+private function getPasswordForFile($fileId)
+{
+    // Fetch the hashed password from your storage
+    return DB::table('users_folder_files')->where('id', $fileId)->value ('password'); // Assuming 'password' is the column name
+}
     /**
      * Show the form for editing the specified resource.
      */
