@@ -89,116 +89,116 @@ class SharedController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-
     {
-
         Log::info('File/Folder sharing request received', ['request' => $request->all()]);
-
-
+    
         try {
-
-            // Validate the request to ensure either a file or folder ID is provided
-
-            $request->validate([
-
+            // Validate the request
+            $rules = [
                 'category' => 'required|string',
-
-                'email' => 'required|email',
-
                 'users_folder_files_id' => 'required_without:users_folder_id|string|nullable', // Required if users_folder_id is not present
-
                 'users_folder_id' => 'required_without:users_folder_files_id|string|nullable', // Required if users_folder_files_id is not present
-
-            ]);
+            ];
+    
+            // Make the email field required only if the category is "Individual"
+            if ($request->category === 'Individual') {
+                $rules['email'] = 'required|email';
+            }
+    
+            $request->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
-
             Log::error('Validation failed', ['errors' => $e->errors()]);
-
             return back()->withErrors($e->errors());
         }
-
-
-        // Find the recipient by email
-
-        $recipient = DB::table('users')->where('email', $request->email)->first();
-
-        Log::info('Recipient found', ['recipient' => $recipient]);
-
-
-        if (!$recipient) {
-
-            Log::warning('Recipient not found', ['email' => $request->email]);
-
-            return back()->with([
-
-                'message' => 'Recipient not found.',
-
-                'type' => 'error',
-
-                'title' => 'System Notification'
-
-            ]);
+    
+        // Initialize recipients variable
+        $recipients = [];
+    
+        // Find the recipient by email if the category is "Individual"
+        if ($request->category === 'Individual') {
+            $recipient = DB::table('users')->where('email', $request->email)->first();
+            Log::info('Recipient found', ['recipient' => $recipient]);
+    
+            if (!$recipient) {
+                Log::warning('Recipient not found', ['email' => $request->email]);
+                return back()->with([
+                    'message' => 'Recipient not found.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+    
+            // Wrap the single recipient in an array
+            $recipients = [$recipient];
+        } else {
+            // If sharing with a department, get all users in the selected department
+            $recipients = DB::table('users')
+                ->where('department', $request->category)
+                ->get();
+            
+            // Check if there are any recipients found in the department
+            if ($recipients->isEmpty()) {
+                Log::warning('No recipients found in the department', ['department' => $request->category]);
+                return back()->with([
+                    'message' => 'No recipients found in the selected department.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
         }
-
-
+    
         // Check if sharing a file or a folder
-
         if ($request->users_folder_files_id) {
-
             // Sharing a file
-
-            return $this->shareFile($request, $recipient);
+            return $this->shareFile($request, $recipients);
         } elseif ($request->users_folder_id) {
-
             // Sharing a folder
-
-            return $this->shareFolder($request, $recipient);
+            return $this->shareFolder($request, $recipients);
         }
-
-
+    
         Log::warning('No valid sharing option selected');
-
+    
         return back()->with([
-
             'message' => 'No valid sharing option selected.',
-
             'type' => 'error',
-
             'title' => 'System Notification'
-
         ]);
     }
 
-    private function shareFile(Request $request, $recipient)
-    {
-        $originalFileId = Crypt::decryptString($request->users_folder_files_id);
-        $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
+private function shareFile(Request $request, $recipients)
+{
+    $originalFileId = Crypt::decryptString($request->users_folder_files_id);
+    $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
 
-        Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
+    Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
 
-        if (!$originalFile) {
-            Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
-            return back()->with([
-                'message' => 'Original file not found.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
+    if (!$originalFile) {
+        Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
+        return back()->with([
+            'message' => 'Original file not found.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
 
-        // Define sanitized title and storage path
-        $title = trim($request->input('title'), '/');
-        $storagePath = rtrim("public/users/{$recipient->id}/shared_folders/{$title}", '/'); // Remove trailing slash if any
+    // Define sanitized title for the storage path
+    $title = trim($request->input('title'), '/');
 
+    // Send emails and store shareable file references
+    foreach ($recipients as $recipient) {
+        // Create a unique storage path for each recipient
+        $recipientStoragePath = rtrim("public/users/{$recipient->id}/shared_folders/{$title}", '/');
 
         // Check and create directory if it doesn't exist
-        if (!Storage::exists($storagePath)) {
-            Storage::makeDirectory($storagePath);
-            Log::info("Storage directory created at: {$storagePath}");
+        if (!Storage::exists($recipientStoragePath)) {
+            Storage::makeDirectory($recipientStoragePath);
+            Log::info("Storage directory created at: {$recipientStoragePath}");
         }
 
-        // Generate unique file name based on existing files
+        // Generate unique file name based on existing files for the current recipient
         $newFileName = $this->generateUniqueFileName($recipient->id, basename($originalFile->file_path));
-        $newFilePath = "{$storagePath}/{$newFileName}";
+        $newFilePath = "{$recipientStoragePath}/{$newFileName}";
+
         try {
             // Copy file using absolute paths with the 'public' disk
             Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
@@ -216,8 +216,8 @@ class SharedController extends Controller
         $newFileData = [
             'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
             'files' => $newFileName,
+            'users_id' => $recipient->id,
             'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
-            'users_id' => $recipient->id, // Save under recipient's ID
             'protected' => $originalFile->protected, // Add the protected field
             'password' => $originalFile->password, // Add the hashed password field
             'created_at' => now(),
@@ -228,43 +228,60 @@ class SharedController extends Controller
         $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
         Log::info('New file reference created', ['newFileId' => $newFileId]);
 
-        // Notify recipient
-        Mail::to($recipient->email)->send(new Notification($recipient->email, 'file'));
+        // Send email with the new file link
+        // Uncomment the line below to send emails
+        // Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
         Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
-        // Store shareable file reference in the database
+        // Store the new shareable file reference in the database
         DB::table('users_shareable_files')->insert([
             'users_id' => auth()->user()->id,
             'recipient_id' => $recipient->id,
             'users_folder_files_id' => $newFileId // Store the new file ID
         ]);
         Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
-
-        return back()->with([
-            'message' => 'Your selected file has been shared.',
-            'type' => 'success',
-            'title' => 'System Notification'
-        ]);
     }
 
+    return back()->with([
+        'message' => 'Your selected file has been shared.',
+        'type' => 'success',
+        'title' => 'System Notification'
+    ]);
+}
     private function generateUniqueFileName($recipientId, $baseName)
+
     {
+
         $pathInfo = pathinfo($baseName);
+
         $name = $pathInfo['filename'];
+
         $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+
         $counter = 1;
 
+
         // Check if the file name already exists in the database for this folder
+
         while (DB::table('users_folder_files')
+
             ->where('users_id', $recipientId)
+
             ->where('files', $name . $extension)
+
             ->exists()
+
         ) {
+
             $name = $pathInfo['filename'] . "($counter)";
+
             $counter++;
+
         }
 
+
         return $name . $extension;
+
     }
 
     /**
