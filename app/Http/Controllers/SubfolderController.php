@@ -54,31 +54,43 @@ class SubfolderController extends Controller
 
             // Build the full directory path by calling buildFullPath with the parent folder ID
             $directoryPath = $parentId ? $this->buildFullPath($parentId, $basePath) : $basePath;
-            $directoryPath .= '/' . $request->title;
 
-            Log::info('Final directory path for private subfolder storage:', ['directory' => $directoryPath]);
+            // Initial folder name
+            $folderName = $request->title;
+            $fullPath = $directoryPath . '/' . $folderName;
 
-            // Check if the directory already exists
-            if (!Storage::disk('public')->exists($directoryPath)) {
-                // Create the directory in the local storage
-                Storage::disk('public')->makeDirectory($directoryPath);
-                Log::info('Directory successfully created:', ['directory' => $directoryPath]);
-
-                // Insert the subfolder into the `subfolders` table with subfolder_path
-                DB::table('subfolders')->insert([
-                    'user_id' => $userId,
-                    'parent_folder_id' => $parentId,
-                    'name' => $request->title,
-                    'subfolder_path' => $directoryPath,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                return back()->with('message', 'Subfolder created successfully.');
-            } else {
-                Log::warning('Subfolder already exists:', ['directory' => $directoryPath]);
-                return back()->withErrors('Subfolder already exists.');
+            // Check for duplicate folder name in both storage and database and add "(1)" if necessary
+            $counter = 1;
+            while (
+                Storage::disk('public')->exists($fullPath) ||
+                DB::table('subfolders')
+                ->where('user_id', $userId)
+                ->where('parent_folder_id', $parentId)
+                ->where('name', $folderName)
+                ->exists()
+            ) {
+                $folderName = $request->title . " ($counter)";
+                $fullPath = $directoryPath . '/' . $folderName;
+                $counter++;
             }
+
+            Log::info('Final directory path for private subfolder storage:', ['directory' => $fullPath]);
+
+            // Create the directory in the local storage
+            Storage::disk('public')->makeDirectory($fullPath);
+            Log::info('Directory successfully created:', ['directory' => $fullPath]);
+
+            // Insert the subfolder into the `subfolders` table with the full path
+            DB::table('subfolders')->insert([
+                'user_id' => $userId,
+                'parent_folder_id' => $parentId,
+                'name' => $folderName,
+                'subfolder_path' => $fullPath,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return back()->with('message', 'Subfolder created successfully.');
         } catch (\Exception $e) {
             Log::error('Error creating subfolder: ' . $e->getMessage());
             return back()->withErrors('Failed to create subfolder. Please try again.');
@@ -87,17 +99,28 @@ class SubfolderController extends Controller
 
 
 
+
     /**
      * Display the specified subfolder.
      */
     public function show($id)
     {
-        $decryptedId = Crypt::decryptString($id);
+        // Log the incoming ID and start of the method
+        Log::info("Show method called in SubfolderController with encrypted ID:", ['id' => $id]);
+
+        try {
+            // Decrypt the ID
+            $decryptedId = Crypt::decryptString($id);
+            Log::info("Decrypted subfolder ID successfully:", ['decryptedId' => $decryptedId]);
+        } catch (\Exception $e) {
+            Log::error("Failed to decrypt subfolder ID:", ['error' => $e->getMessage()]);
+            return back()->withErrors('Failed to decrypt subfolder ID.');
+        }
 
         // Fetch the specific subfolder by ID
         $subfolder = Subfolder::find($decryptedId);
-
         if (!$subfolder) {
+            Log::warning("Subfolder not found with ID:", ['decryptedId' => $decryptedId]);
             return back()->with([
                 'message' => 'Subfolder not found.',
                 'type' => 'error',
@@ -105,12 +128,19 @@ class SubfolderController extends Controller
             ]);
         }
 
-        // Fetch nested subfolders and files related to the subfolder
-        $nestedSubfolders = $subfolder->subfolders()->get(); // Fetch subfolders if any
+        Log::info("Subfolder found:", ['subfolder' => $subfolder->toArray()]);
+
+        // Fetch nested subfolders related to the subfolder
+        $nestedSubfolders = $subfolder->subfolders()->get();
+        Log::info("Fetched nested subfolders:", ['count' => $nestedSubfolders->count()]);
+
+        // Fetch files related to this subfolder
         $files = DB::table('users_folder_files')
             ->where('subfolder_id', $decryptedId)
-            ->get(); // Fetch files related to this subfolder
+            ->get();
+        Log::info("Fetched files related to subfolder:", ['fileCount' => $files->count()]);
 
+        // Return the view with data
         return view('drive', [
             'title' => $subfolder->name,
             'subfolders' => $nestedSubfolders,
@@ -118,6 +148,7 @@ class SubfolderController extends Controller
             'folderId' => $id
         ]);
     }
+
 
 
     public function showSubfolders($parentId)

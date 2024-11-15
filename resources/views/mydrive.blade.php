@@ -5,7 +5,6 @@
             <input type="text" id="fileSearch" class="form-control" placeholder="Search Files...">
         </div>
     </div>
-d
     <div class="row">
         <script>
             // Check if the skipNotification flag is set
