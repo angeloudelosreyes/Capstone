@@ -8,7 +8,6 @@
                 </a>
             </div>
             <h6 class="fs-15 folder-name text-center mt-2">{{ $subfolder->name }}</h6>
-            <!-- Display nested subfolders recursively -->
             @if ($subfolder->subfolders->isNotEmpty())
                 <div class="nested-subfolders">
                     @foreach ($subfolder->subfolders as $nestedSubfolder)

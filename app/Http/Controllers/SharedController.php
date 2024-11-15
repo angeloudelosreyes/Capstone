@@ -91,7 +91,7 @@ class SharedController extends Controller
     public function store(Request $request)
     {
         Log::info('File/Folder sharing request received', ['request' => $request->all()]);
-    
+
         try {
             // Validate the request
             $rules = [
@@ -99,26 +99,26 @@ class SharedController extends Controller
                 'users_folder_files_id' => 'required_without:users_folder_id|string|nullable', // Required if users_folder_id is not present
                 'users_folder_id' => 'required_without:users_folder_files_id|string|nullable', // Required if users_folder_files_id is not present
             ];
-    
+
             // Make the email field required only if the category is "Individual"
             if ($request->category === 'Individual') {
                 $rules['email'] = 'required|email';
             }
-    
+
             $request->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation failed', ['errors' => $e->errors()]);
             return back()->withErrors($e->errors());
         }
-    
+
         // Initialize recipients variable
         $recipients = [];
-    
+
         // Find the recipient by email if the category is "Individual"
         if ($request->category === 'Individual') {
             $recipient = DB::table('users')->where('email', $request->email)->first();
             Log::info('Recipient found', ['recipient' => $recipient]);
-    
+
             if (!$recipient) {
                 Log::warning('Recipient not found', ['email' => $request->email]);
                 return back()->with([
@@ -127,7 +127,7 @@ class SharedController extends Controller
                     'title' => 'System Notification'
                 ]);
             }
-    
+
             // Wrap the single recipient in an array
             $recipients = [$recipient];
         } else {
@@ -135,7 +135,7 @@ class SharedController extends Controller
             $recipients = DB::table('users')
                 ->where('department', $request->category)
                 ->get();
-            
+
             // Check if there are any recipients found in the department
             if ($recipients->isEmpty()) {
                 Log::warning('No recipients found in the department', ['department' => $request->category]);
@@ -146,7 +146,7 @@ class SharedController extends Controller
                 ]);
             }
         }
-    
+
         // Check if sharing a file or a folder
         if ($request->users_folder_files_id) {
             // Sharing a file
@@ -155,9 +155,9 @@ class SharedController extends Controller
             // Sharing a folder
             return $this->shareFolder($request, $recipients);
         }
-    
+
         Log::warning('No valid sharing option selected');
-    
+
         return back()->with([
             'message' => 'No valid sharing option selected.',
             'type' => 'error',
@@ -165,89 +165,84 @@ class SharedController extends Controller
         ]);
     }
 
-private function shareFile(Request $request, $recipients)
-{
-    $originalFileId = Crypt::decryptString($request->users_folder_files_id);
-    $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
+    private function shareFile(Request $request, $recipients)
+    {
+        $originalFileId = Crypt::decryptString($request->users_folder_files_id);
+        $originalFile = DB::table('users_folder_files')->where('id', $originalFileId)->first();
 
-    Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
+        Log::info('Original file retrieved', ['originalFileId' => $originalFileId, 'originalFile' => $originalFile]);
 
-    if (!$originalFile) {
-        Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
-        return back()->with([
-            'message' => 'Original file not found.',
-            'type' => 'error',
-            'title' => 'System Notification'
-        ]);
-    }
-
-    // Define sanitized title for the storage path
-    $title = trim($request->input('title'), '/');
-
-    // Send emails and store shareable file references
-    foreach ($recipients as $recipient) {
-        // Create a unique storage path for each recipient
-        $recipientStoragePath = rtrim("users/{$recipient->id}/shared_folders/{$title}", '/');
-
-        // Check and create directory if it doesn't exist
-        if (!Storage::exists($recipientStoragePath)) {
-            Storage::makeDirectory($recipientStoragePath);
-            Log::info("Storage directory created at: {$recipientStoragePath}");
-        }
-
-        // Generate unique file name based on existing files for the current recipient
-        $newFileName = $this->generateUniqueFileName($recipient->id, basename($originalFile->file_path));
-        $newFilePath = "{$recipientStoragePath}/{$newFileName}";
-
-        try {
-            // Copy file using absolute paths with the 'public' disk
-            Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
-            Log::info('File copied successfully', ['original' => $originalFile->file_path, 'new' => $newFilePath]);
-        } catch (\Exception $e) {
-            Log::error('Error copying file', ['error' => $e->getMessage()]);
+        if (!$originalFile) {
+            Log::warning('Original file not found', ['originalFileId' => $originalFileId]);
             return back()->with([
-                'message' => 'Error occurred while copying the file.',
+                'message' => 'Original file not found.',
                 'type' => 'error',
                 'title' => 'System Notification'
             ]);
         }
 
-        // Prepare file reference data for the database
-        $newFileData = [
-            'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
-            'files' => $newFileName,
-            'users_id' => $recipient->id,
-            'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
-            'protected' => $originalFile->protected, // Add the protected field
-            'password' => $originalFile->password, // Add the hashed password field
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
+        // Define sanitized title for the storage path
+        $title = trim($request->input('title'), '/');
 
-        // Insert file reference and get new file ID
-        $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
-        Log::info('New file reference created', ['newFileId' => $newFileId]);
+        // Send emails and store shareable file references
+        foreach ($recipients as $recipient) {
+            // Create a unique storage path for each recipient
+            $recipientStoragePath = rtrim("users/{$recipient->id}/shared_folders/{$title}", '/');
 
-        // Send email with the new file link
-        // Uncomment the line below to send emails
-        // Mail::to($recipient->email)->send(new Notification(Storage::url($newFilePath)));
-        Log::info('Notification sent to recipient', ['email' => $recipient->email]);
+            // Check and create directory if it doesn't exist
+            if (!Storage::exists($recipientStoragePath)) {
+                Storage::makeDirectory($recipientStoragePath);
+                Log::info("Storage directory created at: {$recipientStoragePath}");
+            }
 
-        // Store the new shareable file reference in the database
-        DB::table('users_shareable_files')->insert([
-            'users_id' => auth()->user()->id,
-            'recipient_id' => $recipient->id,
-            'users_folder_files_id' => $newFileId // Store the new file ID
+            // Generate unique file name based on existing files for the current recipient
+            $newFileName = $this->generateUniqueFileName($recipient->id, basename($originalFile->file_path));
+            $newFilePath = "{$recipientStoragePath}/{$newFileName}";
+
+            try {
+                // Copy file using absolute paths with the 'public' disk
+                Storage::disk('public')->copy($originalFile->file_path, str_replace('public/', '', $newFilePath));
+                Log::info('File copied successfully', ['original' => $originalFile->file_path, 'new' => $newFilePath]);
+            } catch (\Exception $e) {
+                Log::error('Error copying file', ['error' => $e->getMessage()]);
+                return back()->with([
+                    'message' => 'Error occurred while copying the file.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Prepare file reference data for the database
+            $newFileData = [
+                'file_path' => str_replace("public/", "", $newFilePath), // Remove 'public/' for accessible URL
+                'files' => $newFileName,
+                'users_id' => $recipient->id,
+                'extension' => pathinfo($originalFile->file_path, PATHINFO_EXTENSION),
+                'protected' => $originalFile->protected, // Add the protected field
+                'password' => $originalFile->password, // Add the hashed password field
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
+            Log::info('New file reference created', ['newFileId' => $newFileId]);
+
+            Log::info('Notification sent to recipient', ['email' => $recipient->email]);
+
+            DB::table('users_shareable_files')->insert([
+                'users_id' => auth()->user()->id,
+                'recipient_id' => $recipient->id,
+                'users_folder_files_id' => $newFileId // Store the new file ID
+            ]);
+            Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
+        }
+
+        return back()->with([
+            'message' => 'Your selected file has been shared.',
+            'type' => 'success',
+            'title' => 'System Notification'
         ]);
-        Log::info('Shareable file reference stored', ['newFileId' => $newFileId]);
     }
-
-    return back()->with([
-        'message' => 'Your selected file has been shared.',
-        'type' => 'success',
-        'title' => 'System Notification'
-    ]);
-}
     private function generateUniqueFileName($recipientId, $baseName)
 
     {
@@ -276,12 +271,10 @@ private function shareFile(Request $request, $recipients)
             $name = $pathInfo['filename'] . "($counter)";
 
             $counter++;
-
         }
 
 
         return $name . $extension;
-
     }
 
     /**
@@ -716,100 +709,100 @@ private function shareFile(Request $request, $recipients)
     }
 
     public function download(Request $request, $id)
-{
-    // Validate the password input
-    $request->validate([
-        'password' => 'required|string'
-    ]);
+    {
+        // Validate the password input
+        $request->validate([
+            'password' => 'required|string'
+        ]);
 
-    $password = $request->input('password');
-    Log::info('Password entered by user: ' . $password);
+        $password = $request->input('password');
+        Log::info('Password entered by user: ' . $password);
 
-    try {
-        // Decrypt the provided file ID
-        $decryptedId = Crypt::decryptString($id);
-        Log::info('Decrypted ID: ' . $decryptedId);
+        try {
+            // Decrypt the provided file ID
+            $decryptedId = Crypt::decryptString($id);
+            Log::info('Decrypted ID: ' . $decryptedId);
 
-        // Retrieve the file details
-        $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
-        if (!$query) {
-            Log::error('File not found in users_folder_files table.');
-            return response()->json(['error' => 'File not found.'], 404);
-        }
+            // Retrieve the file details
+            $query = DB::table('users_folder_files')->where('id', $decryptedId)->first();
+            if (!$query) {
+                Log::error('File not found in users_folder_files table.');
+                return response()->json(['error' => 'File not found.'], 404);
+            }
 
-        Log::info('File query result: ' . json_encode($query));
+            Log::info('File query result: ' . json_encode($query));
 
-        // Build the file path
-        $filePath = "public/{$query->file_path}";
+            // Build the file path
+            $filePath = "public/{$query->file_path}";
 
-        Log::info('File path: ' . $filePath);
+            Log::info('File path: ' . $filePath);
 
-        // Check if the file exists in storage
-        if (Storage::exists($filePath)) {
-            Log::info('File exists in storage.');
+            // Check if the file exists in storage
+            if (Storage::exists($filePath)) {
+                Log::info('File exists in storage.');
 
-            // Read the file content
-            $fileContent = Storage::get($filePath);
+                // Read the file content
+                $fileContent = Storage::get($filePath);
 
-            // Check if the file is protected and handle accordingly
-            if ($query->protected === 'YES') {
-                // Fetch the hashed password from the database using the helper function
-                $correctPassword = $this->getPasswordForFile($decryptedId);
+                // Check if the file is protected and handle accordingly
+                if ($query->protected === 'YES') {
+                    // Fetch the hashed password from the database using the helper function
+                    $correctPassword = $this->getPasswordForFile($decryptedId);
 
-                // Verify the provided password against the hashed password
-                if (!password_verify($password, $correctPassword)) {
-                    Log::info('Password is incorrect. Download will not proceed.');
-                    return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
+                    // Verify the provided password against the hashed password
+                    if (!password_verify($password, $correctPassword)) {
+                        Log::info('Password is incorrect. Download will not proceed.');
+                        return response()->json(['error' => 'Incorrect password. Access denied.'], 403);
+                    }
                 }
-            }
 
-            // Ensure the storage directory exists
-            $storagePath = storage_path('app/protected');
-            if (!File::exists($storagePath)) {
-                File::makeDirectory($storagePath, 0755, true);
-            }
+                // Ensure the storage directory exists
+                $storagePath = storage_path('app/protected');
+                if (!File::exists($storagePath)) {
+                    File::makeDirectory($storagePath, 0755, true);
+                }
 
-            // Create a ZIP file
-            $zip = new \ZipArchive();
-            $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
-            Log::info('ZIP file name: ' . $zipFileName);
+                // Create a ZIP file
+                $zip = new \ZipArchive();
+                $zipFileName = $storagePath . '/protected-file.zip'; // Save the zip file in the storage folder
+                Log::info('ZIP file name: ' . $zipFileName);
 
-            if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-                Log::info('ZIP file opened successfully.');
+                if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                    Log::info('ZIP file opened successfully.');
 
-                // Encrypt the file content with the provided password
-                $encryptedContent = $this->encryptionService->encrypt($fileContent);
+                    // Encrypt the file content with the provided password
+                    $encryptedContent = $this->encryptionService->encrypt($fileContent);
 
-                // Add the encrypted content to the zip
-                $zip->addFromString($query->files, $encryptedContent);
+                    // Add the encrypted content to the zip
+                    $zip->addFromString($query->files, $encryptedContent);
 
-                // Encrypt the ZIP file with the provided password
-                $zip->setEncryptionName($query->files, \ZipArchive::EM_AES_256, $password);
+                    // Encrypt the ZIP file with the provided password
+                    $zip->setEncryptionName($query->files, \ZipArchive::EM_AES_256, $password);
 
-                $zip->close();
-                Log::info('ZIP file closed successfully.');
+                    $zip->close();
+                    Log::info('ZIP file closed successfully.');
 
-                // Return the zip file for download with a custom filename
-                return response()->download($zipFileName)->deleteFileAfterSend(true);
+                    // Return the zip file for download with a custom filename
+                    return response()->download($zipFileName)->deleteFileAfterSend(true);
+                } else {
+                    Log::error('Failed to open the ZIP file.');
+                    return response()->json(['error' => 'Failed to create the zip file.'], 500);
+                }
             } else {
-                Log::error('Failed to open the ZIP file.');
-                return response()->json(['error' => 'Failed to create the zip file.'], 500);
+                Log::error('File not found in storage.');
+                return response()->json(['error' => 'File not found.'], 404);
             }
-        } else {
-            Log::error('File not found in storage.');
-            return response()->json(['error' => 'File not found.'], 404);
+        } catch (\Exception $e) {
+            Log::error('Error occurred: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while processing the request.'], 500);
         }
-    } catch (\Exception $e) {
-        Log::error('Error occurred: ' . $e->getMessage());
-        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
     }
-}
 
-private function getPasswordForFile($fileId)
-{
-    // Fetch the hashed password from your storage
-    return DB::table('users_folder_files')->where('id', $fileId)->value('password'); // Assuming 'password' is the column name
-}
+    private function getPasswordForFile($fileId)
+    {
+        // Fetch the hashed password from your storage
+        return DB::table('users_folder_files')->where('id', $fileId)->value('password'); // Assuming 'password' is the column name
+    }
 
 
 

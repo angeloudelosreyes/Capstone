@@ -373,7 +373,6 @@ class FilesController extends Controller
                     ]);
                 }
 
-                // Ensure the directory exists
                 Storage::disk('public')->makeDirectory($directory);
 
                 // Store the file directly to the desired path
@@ -388,7 +387,6 @@ class FilesController extends Controller
                     $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
                     Log::info("File contents encrypted for: " . $name);
 
-                    // Store the encrypted file contents
                     Storage::disk('public')->put($path, $encryptedContents);
                     Log::info("Encrypted file uploaded: " . $name);
                 } else {
@@ -397,7 +395,6 @@ class FilesController extends Controller
                     Log::info("File uploaded: " . $name);
                 }
 
-                // Insert the file record into the database
                 DB::table('users_folder_files')->insert([
                     'users_id' => $userId,
                     'users_folder_id' => $folderId,
