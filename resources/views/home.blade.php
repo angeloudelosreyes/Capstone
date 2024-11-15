@@ -14,12 +14,10 @@
             <h5 class="mb-4 text-uppercase fw-bolder">Folders</h5>
 
             @foreach ($query as $data)
-                <div class="col-md-2 col-6 folder-card">
-                    <div class="card bg-light shadow-none" id="folder-1">
-                        <div class="card-body">
-                            <div class="d-flex mb-1">
-                                <div class="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                </div>
+                <div class="col-md-2 col-6 folder-card"> <!-- Changed to col-md-2 for 6 columns on medium screens -->
+                    <div class="card bg-light shadow-none">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-between mb-1">
                                 <div class="dropdown">
                                     <button class="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,20 +60,19 @@
                             </div>
 
                             <a href="{{ route('folder.show', ['id' => Crypt::encryptString($data->id)]) }}"
-                                class="text-decoration-none text-center">
-                                <div class="text-center">
-                                    <div class="mb-2">
-                                        <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                    </div>
+                                class="text-decoration-none">
+                                <div class="mb-2">
+                                    <i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                     <h6 class="fs-15 folder-name">{{ $data->title }}</h6>
                                 </div>
                             </a>
 
-                            <div class="mt-4 text-center text-muted">
-                                <span class="text-uppercase fw-bold "><b>{{ $files[$data->id] }}</b> Files</span>
+                            <div class="mt-4 text-muted">
+                                <span class="text-uppercase fw-bold"><b>{{ $files[$data->id] }}</b> Files</span>
                             </div>
                         </div>
                     </div>
+                </div>
             @endforeach
             {{ $query->links() }}
         @endif
@@ -188,7 +185,7 @@
         $('.home').addClass('active')
     </script>
     <script>
-        document.getElementById('folderSearch').addEvent.addEventListener('input', function() {
+        document.getElementById('folderSearch').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
             const folders = document.querySelectorAll('.folder-card');
 
