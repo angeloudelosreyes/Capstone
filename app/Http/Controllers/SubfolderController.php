@@ -37,22 +37,11 @@ class SubfolderController extends Controller
         }
 
         try {
-            Log::info('Starting to create subfolder for user:', ['userId' => $userId]);
+            Log::info('Starting to create private subfolder for user:', ['userId' => $userId]);
 
-            // Decrypt `parent_id` if it's provided
+            // Decrypt `parent_id` if provided
             $parentId = $request->parent_id ? Crypt::decryptString($request->parent_id) : null;
             Log::info('Decrypted parent ID:', ['parent_id' => $parentId]);
-
-            // Check if parent ID exists in the `subfolders` or `users_folder` table
-            if ($parentId) {
-                $isParentInSubfolders = DB::table('subfolders')->where('id', $parentId)->exists();
-                $isParentInUsersFolder = DB::table('users_folder')->where('id', $parentId)->exists();
-
-                if (!$isParentInSubfolders && !$isParentInUsersFolder) {
-                    Log::error("Parent folder ID does not exist in users_folder or subfolders:", ['parent_id' => $parentId]);
-                    return back()->withErrors('Selected parent folder does not exist.');
-                }
-            }
 
             // Validate the request
             $request->validate([
@@ -61,58 +50,40 @@ class SubfolderController extends Controller
             ]);
 
             // Base path for the user's folders
-            $basePath = 'public/users/' . $userId;
-            $directory = '';
+            $basePath = 'users/' . $userId;
 
-            // Determine if this is a root folder or a subfolder
-            $isRootFolder = empty($parentId);
+            // Build the full directory path by calling buildFullPath with the parent folder ID
+            $directoryPath = $parentId ? $this->buildFullPath($parentId, $basePath) : $basePath;
+            $directoryPath .= '/' . $request->title;
 
-            // Construct the directory path based on whether it's a root or subfolder
-            if ($isRootFolder) {
-                $directory = $basePath . '/' . $request->title; // Use title for root folder
-            } else {
-                // Fetch the parent folder details
-                if ($isParentInUsersFolder) {
-                    $parentFolder = DB::table('users_folder')->where('id', $parentId)->first();
-                    $directory = $basePath . '/' . $parentFolder->title . '/' . $request->title; // Include parent folder title
-                } else {
-                    // It's a subfolder, fetch the parent subfolder and grandparent folder details
-                    $subfolder = DB::table('subfolders')->where('id', $parentId)->first();
-                    $parentFolder = DB::table('users_folder')->where('id', $subfolder->parent_folder_id)->first();
-                    $directory = $basePath . '/' . $parentFolder->title . '/' . $subfolder->name . '/' . $request->title; // Include subfolder name
-                }
-            }
-
-            Log::info('Final directory path for subfolder storage:', ['directory' => $directory]);
+            Log::info('Final directory path for private subfolder storage:', ['directory' => $directoryPath]);
 
             // Check if the directory already exists
-            if (!Storage::disk('public')->exists($directory)) {
-                // Create the directory in the storage
-                Storage::disk('public')->makeDirectory($directory);
-                Log::info('Directory successfully created:', ['directory' => $directory]);
+            if (!Storage::disk('public')->exists($directoryPath)) {
+                // Create the directory in the local storage
+                Storage::disk('public')->makeDirectory($directoryPath);
+                Log::info('Directory successfully created:', ['directory' => $directoryPath]);
 
                 // Insert the subfolder into the `subfolders` table with subfolder_path
                 DB::table('subfolders')->insert([
                     'user_id' => $userId,
-                    'parent_folder_id' => $isRootFolder ? null : $parentId, // Set parent folder ID
+                    'parent_folder_id' => $parentId,
                     'name' => $request->title,
-                    'subfolder_path' => $directory, // Save the full path as subfolder_path
+                    'subfolder_path' => $directoryPath,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
 
                 return back()->with('message', 'Subfolder created successfully.');
             } else {
-                Log::warning('Subfolder already exists:', ['directory' => $directory]);
+                Log::warning('Subfolder already exists:', ['directory' => $directoryPath]);
                 return back()->withErrors('Subfolder already exists.');
             }
         } catch (\Exception $e) {
-            Log::error('Error inserting subfolder: ' . $e->getMessage());
+            Log::error('Error creating subfolder: ' . $e->getMessage());
             return back()->withErrors('Failed to create subfolder. Please try again.');
         }
     }
-
-
 
 
 
