@@ -187,7 +187,7 @@ private function shareFile(Request $request, $recipients)
     // Send emails and store shareable file references
     foreach ($recipients as $recipient) {
         // Create a unique storage path for each recipient
-        $recipientStoragePath = rtrim("public/users/{$recipient->id}/shared_folders/{$title}", '/');
+        $recipientStoragePath = rtrim("users/{$recipient->id}/shared_folders/{$title}", '/');
 
         // Check and create directory if it doesn't exist
         if (!Storage::exists($recipientStoragePath)) {

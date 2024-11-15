@@ -50,20 +50,41 @@ class UsersFolderShareableController extends Controller
         ]);
     }
     public function createSharedFolder(Request $request)
-    {
-        Log::info('Folder sharing request received', ['request' => $request->all()]);
+{
+    Log::info('Folder sharing request received', ['request' => $request->all()]);
 
-        try {
-            $request->validate([
-                'title' => 'required|string|max:255',
-                'email' => 'required|email',
-                'users_folder_id' => 'required|string|nullable',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::error('Validation failed', ['errors' => $e->errors()]);
-            return back()->withErrors($e->errors());
+    try {
+        $rules = [
+            'title' => 'required|string|max:255',
+            'users_folder_id' => 'required|string|nullable',
+        ];
+
+        if ($request->category === 'Individual') {
+            $rules['email'] = 'required|string|email';
         }
 
+        $request->validate($rules);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error('Validation failed', ['errors' => $e->errors()]);
+        return back()->withErrors($e->errors());
+    }
+
+    $recipients = [];
+
+    if ($request->category) {
+        $recipients = DB::table('users')->where('department', $request->category)->get();
+        
+        Log::info('Recipients found for department', ['recipients' => $recipients]);
+        
+        if ($recipients->isEmpty()) {
+            Log::warning('No recipients found in the department', ['department' => $request->category]);
+            return back()->with([
+                'message' => 'No recipients found in the selected department.',
+                'type' => 'error',
+                'title' => 'System Notification'
+            ]);
+        }
+    } elseif ($request->email) {
         $recipient = DB::table('users')->where('email', $request->email)->first();
         if (!$recipient) {
             Log::warning('Recipient not found', ['email' => $request->email]);
@@ -73,18 +94,23 @@ class UsersFolderShareableController extends Controller
                 'title' => 'System Notification'
             ]);
         }
+        $recipients = [$recipient];
+    }
 
-        try {
-            // Generate folder name and create directory
+    try {
+        foreach ($recipients as $recipient) {
             $folderName = $this->generateFolderName($recipient->id, $request->title);
             $storagePath = "users/{$recipient->id}/shared_folders/{$folderName}";
+
+            Log::info("Attempting to create storage directory at: {$storagePath}");
 
             if (!Storage::disk('public')->exists($storagePath)) {
                 Storage::disk('public')->makeDirectory($storagePath);
                 Log::info("Storage directory created at: {$storagePath}");
+            } else {
+                Log::info("Storage directory already exists at: {$storagePath}");
             }
 
-            // Create the shareable folder entry in the database
             $folderShareable = UsersFolderShareable::create([
                 'title' => $folderName,
                 'users_id' => $recipient->id,
@@ -92,34 +118,42 @@ class UsersFolderShareableController extends Controller
                 'can_delete' => $request->input('can_delete', false),
             ]);
 
-            Log::info('Shared folder created successfully', ['folder' => $folderShareable]);
+            Log::info('Shared folder entry created', ['folderShareable' => $folderShareable]);
 
             $originalFolderId = Crypt::decryptString($request->users_folder_id);
             Log::info('Decrypted original folder ID', ['originalFolderId' => $originalFolderId]);
 
             $originalFolder = DB::table('users_folder')->where('id', $originalFolderId)->first();
 
-            // Recursively copy all files and subfolders
+            if (!$originalFolder) {
+                Log::warning('Original folder not found', ['originalFolderId' => $originalFolderId]);
+                return back()->with([
+                    'message' => 'Original folder not found.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
             $this->copyFolderContents($originalFolder, $storagePath, $folderShareable->id, $recipient->id);
 
             Mail::to($recipient->email)->send(new Notification($recipient->email, 'folder'));
             Log::info('Notification sent to recipient', ['email' => $recipient->email]);
-
-            return back()->with([
-                'message' => 'Shared folder created successfully with files.',
-                'type' => 'success',
-                'title' => 'System Notification'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error creating shared folder', ['error' => $e->getMessage()]);
-            return back()->with([
-                'message' => 'An error occurred while creating the shared folder.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
         }
-    }
 
+        return back()->with([
+            'message' => 'Shared folder created successfully with files.',
+            'type' => 'success',
+            'title' => 'System Notification'
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Error creating shared folder', ['error' => $e->getMessage()]);
+        return back()->with([
+            'message' => 'An error occurred while creating the shared folder.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+}
     private function copyFolderContents($originalFolder, $destinationPath, $folderShareableId, $recipientId)
     {
         $files = DB::table('users_folder_files')->where('users_folder_id', $originalFolder->id)->get();
