@@ -507,18 +507,26 @@ class FilesController extends Controller
                 ]);
             }
 
-            // Encrypt the decrypted content again
+            // Encrypt the decrypted content again if protected
             if ($isProtected) {
-                // Encrypt the file contents with the provided password
                 $encryptedContents = $this->encryptionService->encrypt($decryptedContent, $password);
                 Log::info("File contents re-encrypted with password: " . $name);
             } else {
-                // Store the decrypted content as is if not protected
                 $encryptedContents = $decryptedContent;
             }
 
+            // Handle file name uniqueness
+            $baseName = pathinfo($name, PATHINFO_FILENAME);
+            $newName = $name;
+            $counter = 1;
+
+            while (Storage::disk('public')->exists($directory . '/' . $newName)) {
+                $newName = $baseName . "($counter)." . $extension;
+                $counter++;
+            }
+
             // Store the (re-encrypted or decrypted) file contents
-            $path = $directory . '/' . $name; // You can modify the name if needed
+            $path = $directory . '/' . $newName;
             Storage::disk('public')->put($path, $encryptedContents);
             Log::info('File stored at: ' . $path);
 
@@ -526,18 +534,18 @@ class FilesController extends Controller
             DB::table('users_folder_files')->insert([
                 'users_id' => $userId,
                 'users_folder_id' => $folderId,
-                'files' => $name,
+                'files' => $newName,
                 'extension' => $extension,
-                'protected' => $isProtected ? 'YES' : 'NO', // Mark as protected if encryption is applied
-                'password' => $isProtected ? $this->encryptionService->hashPassword($password) : null, // Hash the password if needed
+                'protected' => $isProtected ? 'YES' : 'NO',
+                'password' => $isProtected ? $this->encryptionService->hashPassword($password) : null,
                 'file_path' => $path,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            Log::info("File record inserted into database: " . $name);
+            Log::info("File record inserted into database: " . $newName);
         }
-        return back()->with([
+        return back()-> with([
             'message' => 'Files have been decrypted, re-encrypted, and stored successfully.',
             'type' => 'success',
             'title' => 'System Notification'
