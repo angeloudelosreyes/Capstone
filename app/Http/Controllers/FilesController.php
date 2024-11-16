@@ -81,35 +81,26 @@ class FilesController extends Controller
 
 
         // Decrypt folder_id
-
         $folderId = Crypt::decryptString($request->input('folder_id'));
-
         $subfolderId = null;
 
+        // Check if folderId belongs to the main folder first
+        $folder = DB::table('users_folder')->where('id', $folderId)->first();
 
-        // Check if folderId is a subfolder
-
-        $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
-
-        if ($subfolder) {
-
-            $subfolderId = $folderId;
-
-            $folderId = null;
-
-            Log::info("Folder ID belongs to a subfolder. Subfolder ID: $subfolderId");
-        } else {
-
-            $folder = DB::table('users_folder')->where('id', $folderId)->first();
-
-            if (!$folder) {
-
-                Log::error("Folder not found for ID: $folderId");
-
-                return response()->json(['error' => 'Folder not found'], 404);
-            }
-
+        if ($folder) {
             Log::info("Folder ID belongs to a main folder. Folder ID: $folderId");
+        } else {
+            // Check if folderId is a subfolder only if not found in users_folder
+            $subfolder = DB::table('subfolders')->where('id', $folderId)->first();
+
+            if ($subfolder) {
+                $subfolderId = $folderId;
+                $folderId = null;
+                Log::info("Folder ID belongs to a subfolder. Subfolder ID: $subfolderId");
+            } else {
+                Log::error("Folder or subfolder not found for ID: $folderId");
+                return response()->json(['error' => 'Folder or subfolder not found'], 404);
+            }
         }
 
 

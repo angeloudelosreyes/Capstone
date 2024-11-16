@@ -130,9 +130,9 @@ class SubfolderController extends Controller
 
         Log::info("Subfolder found:", ['subfolder' => $subfolder->toArray()]);
 
-        // Fetch nested subfolders related to the subfolder
-        $nestedSubfolders = $subfolder->subfolders()->get();
-        Log::info("Fetched nested subfolders:", ['count' => $nestedSubfolders->count()]);
+        // Fetch nested subfolders related to the subfolder, excluding the current subfolder
+        $nestedSubfolders = $subfolder->subfolders()->where('id', '!=', $decryptedId)->get();
+        Log::info("Fetched nested subfolders, excluding the current subfolder:", ['count' => $nestedSubfolders->count()]);
 
         // Fetch files related to this subfolder
         $files = DB::table('users_folder_files')
@@ -148,6 +148,7 @@ class SubfolderController extends Controller
             'folderId' => $id
         ]);
     }
+
 
 
 
