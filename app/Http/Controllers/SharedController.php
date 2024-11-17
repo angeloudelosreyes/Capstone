@@ -227,6 +227,7 @@ class SharedController extends Controller
             $newFileId = DB::table('users_folder_files')->insertGetId($newFileData);
             Log::info('New file reference created', ['newFileId' => $newFileId]);
 
+            Mail::to($recipient->email)->send(new Notification($recipient->email, 'file'));
             Log::info('Notification sent to recipient', ['email' => $recipient->email]);
 
             DB::table('users_shareable_files')->insert([

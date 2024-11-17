@@ -286,132 +286,6 @@ class FilesController extends Controller
         }
     }
 
-
-    public function store(Request $request)
-    {
-        Log::info('Store function called.');
-
-        $validator = Validator::make($request->all(), [
-            'files.*' => ['required', 'mimes:pdf,docx'],
-            'isEncrypted' => ['nullable', 'boolean'],
-            'password' => ['nullable', 'string']
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Validation failed: ' . json_encode($validator->errors()));
-            return back()->withErrors($validator)->withInput();
-        }
-
-        $userId = auth()->user()->id;
-        $folderId = Crypt::decryptString($request->folder_id);
-        $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
-        $password = $isEncrypted ? $request->password : null;
-
-        Log::info('User ID: ' . $userId);
-        Log::info('Folder ID: ' . $folderId);
-        Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
-
-        // Log password information
-        if ($isEncrypted) {
-            Log::info("Password provided for encryption: " . $password);
-            Log::info("Password length: " . strlen($password));
-        } else {
-            Log::info("Files will not be encrypted.");
-        }
-
-        // Base path for the user's files
-        $basePath = 'users/' . $userId;
-        $directory = $this->buildFullPath($folderId, $basePath);
-
-        // Check in the users_folder
-        if (DB::table('users_folder')->where('id', $folderId)->exists()) {
-            $directory = 'users/' . $userId . '/' . $folderId; // Folder found in users_folder
-        }
-        // Check in subfolders if not found in users_folder
-        elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
-            $directory = 'users/' . $userId . '/subfolders/' . $folderId; // Folder found in subfolders
-        } else {
-            Log::error("Folder ID $folderId not found or is invalid.");
-            return back()->with([
-                'message' => 'Folder not found. Please check if the folder or subfolder exists.',
-                'type' => 'error',
-                'title' => 'System Notification'
-            ]);
-        }
-
-        Log::info('Final directory path for file storage:', ['directory' => $directory]);
-
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $name = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-
-                // Check for duplicate file name
-                $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
-                if (DB::table('users_folder')->where('id', $folderId)->exists()) {
-                    $duplicateFileQuery->where('users_folder_id', $folderId);
-                } elseif (DB::table('subfolders')->where('id', $folderId)->exists()) {
-                    $duplicateFileQuery->where('subfolder_id', $folderId);
-                }
-                $duplicateFile = $duplicateFileQuery->exists();
-
-                if ($duplicateFile) {
-                    Log::warning("A file with the same name already exists: $name");
-                    return back()->with([
-                        'message' => 'A file with the same name already exists in this folder.',
-                        'type' => 'error',
-                        'title' => 'System Notification'
-                    ]);
-                }
-
-                Storage::disk('public')->makeDirectory($directory);
-
-                // Store the file directly to the desired path
-                $path = $directory . '/' . $name;
-
-                // Handle DOCX and PDF files differently if encryption is enabled
-                if ($isEncrypted && in_array($extension, ['docx', 'pdf'])) {
-                    // Read the file contents
-                    $fileContents = file_get_contents($file);
-
-                    // Encrypt the file contents using the encryption service
-                    $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
-                    Log::info("File contents encrypted for: " . $name);
-
-                    Storage::disk('public')->put($path, $encryptedContents);
-                    Log::info("Encrypted file uploaded: " . $name);
-                } else {
-                    // Store the file directly if it's not encrypted
-                    $file->storeAs($directory, $name);
-                    Log::info("File uploaded: " . $name);
-                }
-
-                DB::table('users_folder_files')->insert([
-                    'users_id' => $userId,
-                    'users_folder_id' => $folderId,
-                    'files' => $name,
-                    'extension' => $extension,
-                    'protected' => $isEncrypted ? 'YES' : 'NO',
-                    'password' => $isEncrypted ? $this->encryptionService->hashPassword($password) : null,
-                    'file_path' => $path,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-
-                Log::info("File record inserted into database: $name");
-            }
-        }
-
-        return back()->with([
-            'message' => 'Files uploaded successfully.',
-            'type' => 'success',
-            'title' => 'System Notification'
-        ]);
-    }
-
-    /**
-     * Helper function to recursively build the full path from a subfolder to the root.
-     */
     private function buildFullPath($folderId, $basePath)
     {
         // Check if it's a main folder in `users_folder`
@@ -433,6 +307,125 @@ class FilesController extends Controller
         return null;
     }
 
+
+
+    public function store(Request $request)
+{
+    Log::info('Store function called.');
+
+    $validator = Validator::make($request->all(), [
+        'files.*' => ['required', 'mimes:pdf,docx'],
+        'isEncrypted' => ['nullable', 'boolean'],
+        'password' => ['nullable', 'string']
+    ]);
+
+    if ($validator->fails()) {
+        Log::error('Validation failed: ' . json_encode($validator->errors()));
+        return back()->withErrors($validator)->withInput();
+    }
+
+    $userId = auth()->user()->id;
+    $folderId = Crypt::decryptString($request->folder_id);
+    $isEncrypted = $request->has('isEncrypted') && $request->isEncrypted;
+    $password = $isEncrypted ? $request->password : null;
+
+    Log::info('User  ID: ' . $userId);
+    Log::info('Folder ID: ' . $folderId);
+    Log::info('Is Encrypted: ' . ($isEncrypted ? 'YES' : 'NO'));
+
+    // Base path for the user's files
+    $basePath = 'users/' . $userId;
+
+    // Initialize the directory variable
+    $directory = null;
+
+    // Check in the users_folder
+    $folder = DB::table('users_folder')->where('id', $folderId)->first();
+    if ($folder) {
+        $directory = $basePath . '/' . $folder->title; // Use folder title
+    }
+    // Check in subfolders if not found in users_folder
+    elseif ($subfolder = DB::table('subfolders')->where('id', $folderId)->first()) {
+        $directory = $basePath . '/subfolders/' . $subfolder->name; // Use subfolder name
+    } else {
+        Log::error("Folder ID $folderId not found or is invalid.");
+        return back()->with([
+            'message' => 'Folder not found. Please check if the folder or subfolder exists.',
+            'type' => 'error',
+            'title' => 'System Notification'
+        ]);
+    }
+
+    Log::info('Final directory path for file storage:', ['directory' => $directory]);
+
+    if ($request->hasFile('files')) {
+        foreach ($request->file('files') as $file) {
+            $name = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+
+            // Check for duplicate file name
+            $duplicateFileQuery = DB::table('users_folder_files')->where('files', $name);
+            if ($folder) {
+                $duplicateFileQuery->where('users_folder_id', $folderId);
+            } elseif ($subfolder) {
+                $duplicateFileQuery->where('subfolder_id', $folderId);
+            }
+            $duplicateFile = $duplicateFileQuery->exists();
+
+            if ($duplicateFile) {
+                Log::warning("A file with the same name already exists: $name");
+                return back()->with([
+                    'message' => 'A file with the same name already exists in this folder.',
+                    'type' => 'error',
+                    'title' => 'System Notification'
+                ]);
+            }
+
+            // Create the directory if it doesn't exist
+            Storage::disk('public')->makeDirectory($directory);
+
+            // Store the file directly to the desired path
+            $path = $directory . '/' . $name;
+
+            // Handle DOCX and PDF files differently if encryption is enabled
+            if ($isEncrypted && in_array($extension, ['docx', 'pdf'])) {
+                // Read the file contents
+                $fileContents = file_get_contents($file);
+
+                // Encrypt the file contents using the encryption service
+                $encryptedContents = $this->encryptionService->encrypt($fileContents, $password);
+                Log::info("File contents encrypted for: " . $name);
+
+                Storage::disk('public')->put($path, $encryptedContents);
+                Log::info("Encrypted file uploaded: " . $name);
+            } else {
+                // Store the file directly if it's not encrypted
+                $file->storeAs($directory, $name);
+                Log::info("File uploaded: " . $name);
+            }
+
+            DB::table('users_folder_files')->insert([
+                'users_id' => $userId,
+                'users_folder_id' => $folderId,
+                'files' => $name,
+                'extension' => $extension,
+                'protected' => $isEncrypted ? 'YES' : 'NO',
+                'password' => $isEncrypted ? $this->encryptionService->hashPassword($password) : null,
+                'file_path' => $path,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Log::info("File record inserted into database: $name");
+        }
+    }
+
+    return back()->with([
+        'message' => 'Files uploaded successfully.',
+        'type' => 'success',
+        'title' => 'System Notification'
+    ]);
+}
 
 
     public function decryptStore(Request $request)
